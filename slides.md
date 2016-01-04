@@ -2,7 +2,7 @@
 % title_class:                  #empty, largeblend[123] or fullblend
 % subtitle: Extending the CDT Debugger
 % subtitle_class:
-% title_slide_class: dark
+% title_slide_class:
 % title_slide_image:
 % author: Marc Khouzam
 % author: Marc-Andre Laperle
@@ -23,112 +23,146 @@
 
 ---
 title: Agenda
-subtitle: Subtitle Placeholder
-class: dark
+class: nobackground
+build_lists: false
+content_class:
 
-- allo
-
-++Notes++
-- pressing 'f' toggle fullscreen
-- pressing 'w' toggles widescreen
-- pressing 'o' toggles overview mode
-- pressing 'p' toggles speaker notes (if any)
-- pressing 'h' highlights code snippets
-- pressing 'b' toggles blank screen
-- pressing 'c' toggles canvas to draw on the slide with the mouse
-    - Pressing 'shift' draws arrow
-    - Pressing 'alt' draws rectangle
-    - Pressing 'shift+alt' draws ellipse
-- pressing 'ESC' toggles of these goodies
-++++
+- DAY 1: Plugin development
+    - Module 1:
+    - Module 2:
+- DAY 2: Getting to know DSF and DSF-GDB
+    - Module 3:
+    - Module 4:
+- DAY 3: Optimizing performance
+    - Module 5:
+    - Module 6:
 
 ---
-title: Intro
-subtitle: Subtitle Placeholder
-class: dark
+title: Agenda (cont)
+build_lists: false
 
-
-This is a markdown
-
-use askterisk for *italic* and double for **bold**.  You see?
-Great for `writing code` and such
-
-- a
-- b
-    * (http://google.com)
-- c
-
-![alt text](marc.png)
-```
-if (i = 8) {
-  printf("allo%d\n", i);
-}
-```
----
-title: Intro
-content_class: smaller
-
-Test  |Column 1   |Column2    |Column 3   |Column 4         | mark
-------|-----------|-----------|-----------|----------       |---
-Row 1 |placeholder|placeholder|placeholder|placeholder      |     
-Row 2 |placeholder|placeholder|placeholder|placeholder     |
-Row 3 |placeholder|placeholder|placeholder|placeholder     | johnny
-Row 4 |placeholder|placeholder|placeholder|placeholder     |
-Row 5 |placeholder|placeholder|placeholder|placeholder     |
+- DAY 4: Keeping views synchronized
+    - Module 7:
+    - Module 8:
+- DAY 5: More debugging concepts and intro to Trace Compass
+    - Module 9:
+    - Module 10:
+    <br><br>
+##<center>Let's get started!</center>
+[//]: (This is a comment)
 
 ---
-title: Plugin development
+title: DAY 1
+subtitle: Plugin development
 
-- Creating a new plugin
-- Adding actions to the UI
-- Using extension points
-- Creating a new view
-- Using Listeners
-- Creating a new Launch
-- Extending the CDT Debug launch
-- Using preferences
-- The Adapter pattern
- 
 ---
-title: Getting to know DSF
-build_lists: true
+title: Module 1
 
-- The DSF Executor
+- intro
+- very basic explanation of eclipse architecture, use of SWT, single UI thread
+- create one plugin for the project
+- create a view
+- add SWT button that has a state (e.g., toggle or checkbox) to the view content with buttonPressed listener to print something in the view
+- replace SWT button with view toolbar button using command framework
+- add same action to view menu and context menu
+
+---
+title: Module 2
+
+- restarting eclipse -> state of button is forgotten but the view layout and such is remembered
+- using preferences to save state; using preference scope
+- reference: how to add a UI preference
+- Job and UIJob, Display.asyncExec and Display.syncExec by adding a blinking thingy that uses a Job + syncExec or asyncExec
+- the use of final and final arrays in async programming
+- Progress Monitor to allow cancelling the blinking job and showing progress
+
+---
+title: DAY 2
+subtitle: Getting to know DSF and DSF-GDB
+
+---
+title: Module 3
+
+- What is DSF?
 - The Services model
-- Asynchronous programming with DSF
-- Using DSF Events
- 
----
-title: Getting to know DSF-GDB
-
-- The DSF-GDB services
-- Adding a new service
-- Extending a service
-- Sending commands to GDB
-- Creating a new command
-- The CommandCache
-- Extending the FinalLaunchSequence
-- The Data Model Contexts and their hierarchy
-- GDB/MI events
-- Supporting All-Stop and Non-Stop
-- GDB version handling
-- The CommandFactory
-- IDebugContextListener
-- Workbench selection
+- ViewModel and DataModel
+- Calling into a DSF service using DsfServiceTracker and asynchronous programming (not on executor, not using -ea)
+- access to e.g. IStack from the view to do something cool
+- Mention how to find services i.e. F4 on IDsfService
+- enable assertions (-ea) and try again, then explain DSFExecutor
 
 ---
-title: Missing features
+title: Module 4
 
-- What is missing to make baseband developers more productive with eclipse
-                     2 hours session with invited end-users
+- What is DSF-GDB?
+- write a new service that gets published directly in the new plugin which will return the time of day
+- add a method to that service that will send a command to GDB to count the number of args of a frame using createMIStackListArguments()
+- use new service to display the number of args for each stack frame in their view
+- extend a DSF-GDB service e.g. IStack with getNumberLocals(IFrameDMContext, DataRequestMonitor<Integer>)
+- explain services factory and using criteria to choose a service 'version' e.g., we do that based on GDB version in DSF-GDB
+    - create new factory receiving the launchConfig and a param from to choose a service 'version' e.g. depending on chosen simulator
+- new delegate that override the servicesFactory.  We should provide the new delegate ourselves with tabs and all
 
 ---
-title: Latest implementations:
+title: DAY 3
+subtitle: Optimizing performance
 
-- The new CLI towards GDB
-- Advanced C/C++ Debugging features
-- The Visualizer
+---
+title: Module 5
+
+- show that the new -stack-list-arguments is being sent to GDB many times but nothing has changed
+- Adding CommandCache
+- Clearing commandCache
+- Listening to resumed event
+- Using suspend event to log stack trace on breakpoint hit
+- bp hit vs step completed event
+
+---
+title: Module 6
+
+- Meeting with end-users to discuss requirements
+- Discussion with team about requirements just received
+
+---
+title: DAY 4
+subtitle: Keeping views synchronized
+
+---
+title: Module 7
+
+- IDebugContextChangedListener
+- add support for changing selection in DV and our view updating properly using DMContext hierarchy to choose proper info to display
+- exercise about GDB mi events ...
+
+---
+title: Module 8
+
+- extending the FinalLaunchSequence ...
+
+---
+title: DAY 5
+subtitle: More debugging concepts and intro to Trace Compass
+
+---
+title: Module 9
+
+- If there is interest, show Advanced C/C++ debugging presentation, visualizer, new CLI
+- Explain all-stop vs non-stop and give a demo
+- explain multi-process in preparation for multi-arch support
+- Intro to Trace Compass usage
+- Intro to Trace Compass basic concepts and classes
+
+---
+title: Module 10
+
 - Extending the CDT editor
-- Trace Compass basics
-
+- writing a Codan check for code style of counting the number of lines in a method
+    
+++Notes++
+- If we have an extra afternoon we can do an advanced exercise:
+    - handle both all-stop and non-stop in their new view by logging the stack trace for every thread of the process that stopped in all-stop mode
+- Topics to mention but not very long:
+    - CommandFactory should called but is rarely change. Example of DSF-GDB
+    - adapter pattern
+++++
 
