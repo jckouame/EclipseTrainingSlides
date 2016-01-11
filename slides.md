@@ -72,7 +72,7 @@ title: Module 2
 - restarting eclipse -> state of button is forgotten but the view layout and such is remembered
 - using preferences to save state; using preference scope
 - reference: how to add a UI preference
-- Job and UIJob, Display.asyncExec and Display.syncExec by adding a blinking thingy that uses a Job + syncExec or asyncExec
+- Job and UIJob, Display.asyncExec and Display.syncExec by adding a blinking thingy, like a counting label, that uses a Job + syncExec or asyncExec
 - the use of final and final arrays in async programming
 - Progress Monitor to allow cancelling the blinking job and showing progress
 
@@ -90,6 +90,8 @@ title: Module 3
 - access to e.g. IStack from the view to do something cool
 - Mention how to find services i.e. F4 on IDsfService
 - enable assertions (-ea) and try again, then explain DSFExecutor
+- Using suspend event to log stack trace on breakpoint hit
+- bp hit vs step completed event
 
 ---
 title: Module 4
@@ -108,14 +110,11 @@ title: DAY 3
 subtitle: Optimizing performance
 
 ---
-title: Module 5
+title: Module 5 Should we skip this?
 
 - show that the new -stack-list-arguments is being sent to GDB many times but nothing has changed
 - Adding CommandCache
-- Clearing commandCache
-- Listening to resumed event
-- Using suspend event to log stack trace on breakpoint hit
-- bp hit vs step completed event
+- Clearing commandCache by listening to resumed event
 
 ---
 title: Module 6
