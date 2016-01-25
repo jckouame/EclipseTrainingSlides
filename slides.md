@@ -21,6 +21,11 @@
 % animate: true         #animate logoslide (chrome only)
 % aspect_ratio: 4:3     #16:9, 16:10 or 4:3
 
+[//]: (Start presentation in Presenter mode by adding ?presentme=true to URL)
+[//]: (Make sure pop-ups are allowed, then keep pop-up on my own screen)
+[//]: (then press 'p' for presenter mode for my screen while showing)
+[//]: (main browser window on projector)
+[//]: (turn off by adding ?presentme=false to URL)
 ---
 title: Agenda
 class: nobackground
@@ -100,15 +105,101 @@ title: Module 2
 title: DAY 2
 subtitle: Getting to know DSF and DSF-GDB
 
+[//]: (STARTED CLEANUP HERE)
 ---
 title: Module 3
 
-- Eclipse Debugging views
+- Eclipse Debug Platform
 - What is DSF?
-    - Overview
-    - View Model and Data Model
-    - Services
-    - DSF Session
+- DSF concepts applied
+
+---
+title: Eclipse Debug Platform
+
+- Eclipse provides a foundation for Debugging
+    - Debug perspective
+    - Debug views
+    - Debug Actions, Toolbar, Menus
+    - Debug Launching
+
+++Notes++
+- Debug perspective manual or automatic selection
+- *Windows->Show View->Other... and expand Debug folder*
+- Each view has toolbar actions, context-menu, view-menu
+- Launch configuration types, launch configurations
+++++
+
+---
+title: What is DSF?
+
+- Overview
+- View Model and Data Model
+- Services
+- DSF Session
+
+---
+title: DSF Overview
+
+- API for integrating debuggers in Eclipse
+- Also designed for efficiency (slow or remote targets)
+- Figure shows typical debugger integration using DSF
+
+<center><img src=img/DSFOverview.png></center>
+
+---
+title: View Model
+
+- View Model provides layer of abstraction for views
+    - *User-presentable* structure of the data
+    - Uses common debugger concepts
+        - Execution elements (e.g., processes, threads)
+        - Formatted values (e.g., variables, registers)
+        - Breakpoints (e.g., breakpoints, tracepoints, dprintf)
+        - etc
+---
+title: View Model
+
+- View Model allows to easily modify presentation e.g.,
+    - Hide running threads
+    - Limit number of stack frames
+    - Only show processes if there is more than one
+
+++Notes++
+- Show feature that hides running threads
+- Show feature that limits number of stack frames
+++++
+---
+title: Data Model
+
+- Data Model deals directly with the backend debugger
+    - *Natural* or *backend* structure of the data
+    - Independent of presentation to user
+    - Provides building blocks for the view model
+
+++Notes++
+- Mention frontend vs backend
+++++
+---
+title: DSF Services
+
+- DSF provides a service API to access the Data Model
+- Built on top of OSGi as is Eclipse
+- Services are entities managing logical subsets of the data model
+- Services are used to request information or to perform actions
+- For example, the Run Control service:
+    - Provides list of execution elements (e.g., threads, processes)
+    - Provides details about such elements (e.g., name, state)
+    - Supports step, resume, interrupt, etc
+- Other services: Memory, Breakpoint, Expressions, Disassembly, etc
+
+
+---
+title: DSF Session
+
+[//]: (ENDED CLEANUP HERE)
+---
+title:
+
 - Debug View and Debug Context
 - Adapter pattern
 => find dsf session using debug context
