@@ -67,6 +67,26 @@ title: Module 1
 - add same action to view menu and context menu
 
 ---
+title: Course Projects
+build_lists: true
+
+## Debug Frame Spy
+- New view displaying a history of every `function:line` at which the debugger stopped. 
+## Enable GDB verbosity
+- Extend debugger to enable verbosity in GDB when starting a debug session
+## Code Complexity Checker
+- Codan code checker warning when a method is too long
+- Codan code checker warning of incompatible return type of overriding method
+
+---
+title: Debug Frame Spy
+    1. Show list of function name and line number of each location program was interrupted
+    1. Show time of interrupt for each entry
+    1. Show the number of arguments of the function for each entry
+    1. Show the number of locals in that function for each entry
+    1. For multi-threaded programs, show the list only for the currently selected thread.
+
+---
 title: Module 2
 
 - restarting eclipse -> state of button is forgotten but the view layout and such is remembered
