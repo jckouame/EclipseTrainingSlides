@@ -103,19 +103,38 @@ subtitle: Getting to know DSF and DSF-GDB
 ---
 title: Module 3
 
+- Eclipse Debugging views
 - What is DSF?
-- The Services model
-- ViewModel and DataModel
-- Calling into a DSF service using DsfServiceTracker and asynchronous programming (not on executor, not using -ea)
-- access to e.g. IStack from the view to do something cool
-- Mention how to find services i.e. F4 on IDsfService
-- enable assertions (-ea) and try again, then explain DSFExecutor
+    - Overview
+    - View Model and Data Model
+    - Services
+    - DSF Session
+- Debug View and Debug Context
+- Adapter pattern
+=> find dsf session using debug context
+- Calling an existing DSF service
+=> find IStack instance using session and DsfServicesTracker
+- DSF Asynchronous programming pattern
+    - RequestMonitor and DataRequestMonitor
+=> call IStack.getTopFrame()
+- IDMContext and IDMData
+=> call IStack.getFrameData() and display result
+=> enable assertions
+- The DSF Executor
+=> Wrap IStack calls in Executor
+- DSF events - IDMEvent
+=> replace polling with ISuspendedDMEvent
+
+---
+title: Module 3 (old)
+
 - Using suspend event to log stack trace on breakpoint hit
 - bp hit vs step completed event
 
 ---
 title: Module 4
 
+- Mention how to find services i.e. F4 on IDsfService
 - What is DSF-GDB?
 - write a new service that gets published directly in the new plugin which will return the time of day
 - add a method to that service that will send a command to GDB to count the number of args of a frame using createMIStackListArguments()
