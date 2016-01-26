@@ -157,7 +157,7 @@ title: View Model
         - Breakpoints (e.g., breakpoints, tracepoints, dprintf)
         - etc
 ---
-title: View Model
+title: View Model (2)
 
 - View Model allows to easily modify presentation e.g.,
     - Hide running threads
@@ -167,6 +167,7 @@ title: View Model
 ++Notes++
 - Show feature that hides running threads
 - Show feature that limits number of stack frames
+- In practice, we don't change the view model very often.  So this course will not cover it.
 ++++
 ---
 title: Data Model
@@ -177,7 +178,7 @@ title: Data Model
     - Provides building blocks for the view model
 
 ++Notes++
-- Mention frontend vs backend
+- Mention frontend vs backend terminology
 ++++
 ---
 title: DSF Services
@@ -186,15 +187,41 @@ title: DSF Services
 - Built on top of OSGi as is Eclipse
 - Services are entities managing logical subsets of the data model
 - Services are used to request information or to perform actions
-- For example, the Run Control service:
+- For example, the IRunControl service:
     - Provides list of execution elements (e.g., threads, processes)
     - Provides details about such elements (e.g., name, state)
     - Supports step, resume, interrupt, etc
-- Other services: Memory, Breakpoint, Expressions, Disassembly, etc
-
+- Other services: IMemory, IRegisters, IExpressions, IDisassembly...
 
 ---
 title: DSF Session
+
+- Instances of DSF services are grouped into a DSF session
+- There can be multiple sessions running at the same time
+- Each session has it's own instance of each service
+- A session handles sending events to registered listeners
+
+---
+title: DsfSession class
+
+- A session instance is started and ended using:
+    - *startSession()*
+    - *endSession()*
+- DsfSession provides access to all running sessions:
+    - *getActiveSessions()*
+    - *getSession(id)*
+- DsfSession notifies registered listeners of start/end of all sessions
+    - *addSessionStartedListener()*, *removeSessionStartedListener()*
+    - *addSessionEndedListener()*, *removeSessionEndedListener()*
+
+---
+title: DsfSession class (2)
+
+- A session instance forwards debug event to registered listeners
+    - *addServiceEventListener()*, *removeServiceEventListener()*
+    - *dispatchEvent()* is called by services that want to send event
+- Allows to register adapters for all data model contexts
+    - *registerModelAdapter()*, *unregisterModelAdapter()*, *getModelAdapter()*
 
 [//]: (ENDED CLEANUP HERE)
 ---
@@ -227,6 +254,7 @@ title: Module 4
 
 - Mention how to find services i.e. F4 on IDsfService
 - What is DSF-GDB?
+- One can find all services by finding classes that extend *IDsfService*
 - write a new service that gets published directly in the new plugin which will return the time of day
 - add a method to that service that will send a command to GDB to count the number of args of a frame using createMIStackListArguments()
 - use new service to display the number of args for each stack frame in their view
