@@ -353,9 +353,52 @@ title: DSF Events details
     - *IRunControl*:
         - *ISuspendedDMEvent*, *IContainerSuspendedDMEvent*
         - *IResumedDMEvent*, *IContainerResumedDMEvent*
-
+- Not all services trigger events
+    - *IStack* has not events
 ---
-title: DSF Events
+title: Sending DSF Events
+
+- To send an event a service calls *DsfSession#dispatchEvent()*
+---
+title: Receiving DSF Events
+
+- To receive a DSF events a client must:
+    - Declare a **public** method of any name
+    - Method takes the event of interest as a parameter
+    - Annotate method with *@DsfServiceEventHandler*
+    - Register with the DSF Session using *DsfSession#addServiceEventListener()*
+    - Registration must be done on the Executor
+- The method is called on the DSF Executor
+
+
+++Notes++
+- *dispatchEvent()* calls event listeners in a **separate** Runnable on the Executor.
+    - This allows sender to finish its work before events are received by the listeners.
+    - Event listener methods always called in the Executor thread.
+++++
+---
+title: Receiving event example
+
+- The following method from *SomeClass* will be called for every suspended event
+
+~~~~
+    @DsfServiceEventHandler
+    public void anyName(ISuspendedDMEvent e) {
+        System.out.println("Received " + e.toString());
+    }
+~~~~
+
+- as long as we register the class with the session
+
+~~~~
+    getSession().addServiceEventListener(SomeClass.this, null);
+~~~~
+
+- Remember that registration must be done on Executor
+---
+title: Help with the DSF Executor
+
+- *@ConfinedToDsfExecutor* vs *@ThreadSafe*
 
 ---
 [//]: (ENDED CLEANUP HERE)
