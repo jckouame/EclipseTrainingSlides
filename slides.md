@@ -254,29 +254,112 @@ title: DSF practical review
 4. Executor can be found with *DsfSession#getExecutor()*
 5. *RequestMonitor* and *DataRequestMonitor* for callbacks
 
-[//]: (ENDED CLEANUP HERE)
 ---
 title: DSF Exercise 
 
-- FrameSpy to print <method:line> for current frame 
-- Reset branch to **DSF_Exercise_1**
+- FrameSpy to periodically print "method:line" for current frame 
+    - Reset branch to commit starting with
+        - **EX1_START** or **EX1_ADVANCED**
+    - To test, make sure you launch a C/C++ Debug session first
+    - **Go!**
+++Notes++
+- Show how to launch a C/C++ debug session (use non-stop first)
+++++
+---
+title: DSF Exercise review
 
-- Debug View and Debug Context
-- Adapter pattern
-=> find dsf session using debug context
+- Finding the DSF session using debug context
+    - Debug View and Debug Context
+    - Adapter pattern
 - Calling an existing DSF service
-=> find IStack instance using session and DsfServicesTracker
-- DSF Asynchronous programming pattern
-    - RequestMonitor and DataRequestMonitor
-=> call IStack.getTopFrame()
-- IDMContext and IDMData
-=> call IStack.getFrameData() and display result
-=> enable assertions
-- The DSF Executor
-=> Wrap IStack calls in Executor
-- DSF events - IDMEvent
-=> replace polling with ISuspendedDMEvent
+    - Using a DsfServicesTracker for the DSF session
+- Call the asynchronous IStack.getTopFrame()
+    - Using a new DataRequestMonitor
+    - Calling getData() in handledSuccess()
+---
+title: DSF Exercise review (2)
 
+- IDMContext vs IDMData
+    - call IStack.getFrameData()
+    - Using a new DataRequestMonitor
+    - Calling getData() in handledSuccess()
+    - Then finally display "method:line"
+
+---
+title: DSF Exercise follow-up
+
+- What if you select the process element?
+    - The top frame of which thread should we use?
+- For now, just handle the error
+    - Reset to **EX1_ANSWERS** if you need
+    - Override *handleError()*
+    - **Go!**
+
+---
+title: DSF Exercise follow-up (2)
+
+- Enable assertions in development eclipse for test eclipse
+    - In launch configuration, *Arguments* tab, *VM arguments*
+    - Add *-ea*
+    - Make sure you have a breakpoint for *AssertionError*
+    - Re-launch and try
+    - **Go!**
+
+---
+title: DSF Exercise follow-up (3)
+
+- Did you use the DSF Executor?
+    - Which calls on the Executor, which are not?
+- Wrap first call to DSF service in Executor
+    - Call *submit()* of the Executor
+    - Pass a *DsfRunnable()* whose *run()* does the work
+    - **Go!**
+
+---
+title: Which DSF concepts did we exercise?
+build_lists: true
+
+1. APIs to integrate a debugger 'more easily' e.g., GDB
+1. View Model for presentation layer
+1. Data Model to communicate with backend (GDB)
+1. Services API to access Data
+1. No synchronization: DSF Executor **must** be used to access Data
+1. Services for one backend are grouped in a Session
+1. Heavy use of asynchronous programming for responsiveness
+
+---
+title: DSF Events
+
+- DSF uses events to notify listeners of different things e.g.,
+    - Thread/Process started/exited
+    - Thread/Process suspend/resumed
+    - Breakpoint added/updated/removed
+    - etc
+
+---
+title: DSF Events (2)
+
+- Events are how the Data Model tells the View Model of changes
+    - e.g., Thread stops => Update Debug View
+    - This is an advanced topic not covered in this course
+- Events also notify services of other services' changes
+    - e.g., Clearing caches when execution resumes
+---
+title: DSF Events details
+
+- Most events implement *IDMEvent* which provides an *IDMContext*
+    - e.g., When thread suspends, event specifies which thread
+- Event types usually found in the different service interfaces e.g.,
+    - *IRunControl*:
+        - *ISuspendedDMEvent*, *IContainerSuspendedDMEvent*
+        - *IResumedDMEvent*, *IContainerResumedDMEvent*
+
+---
+title: DSF Events
+
+---
+[//]: (ENDED CLEANUP HERE)
+=> replace polling with ISuspendedDMEvent
 ---
 title: DsfSession class
 
