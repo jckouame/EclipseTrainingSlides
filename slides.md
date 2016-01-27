@@ -135,7 +135,10 @@ title: What is DSF?
 - Overview
 - View Model and Data Model
 - Services
+- Data Model contexts
+- DSF Executor thread
 - DSF Session
+- Asynchronous (callback) programming
 
 ---
 title: DSF Overview
@@ -151,14 +154,6 @@ title: View Model
 
 - View Model provides layer of abstraction for views
     - *User-presentable* structure of the data
-    - Uses common debugger concepts
-        - Execution elements (e.g., processes, threads)
-        - Formatted values (e.g., variables, registers)
-        - Breakpoints (e.g., breakpoints, tracepoints, dprintf)
-        - etc
----
-title: View Model (2)
-
 - View Model allows to easily modify presentation e.g.,
     - Hide running threads
     - Limit number of stack frames
@@ -176,6 +171,10 @@ title: Data Model
     - *Natural* or *backend* structure of the data
     - Independent of presentation to user
     - Provides building blocks for the view model
+    - Uses common debugger concepts
+        - Execution elements (e.g., processes, threads)
+        - Formatted values (e.g., variables, registers)
+        - etc
 
 ++Notes++
 - Mention frontend vs backend terminology
@@ -184,7 +183,7 @@ title: Data Model
 title: DSF Services
 
 - DSF provides a service API to access the Data Model
-- Built on top of OSGi as is Eclipse
+- Built on top of OSGi (as Eclipse is)
 - Services are entities managing logical subsets of the data model
 - Services are used to request information or to perform actions
 - For example, the IRunControl service:
@@ -192,40 +191,75 @@ title: DSF Services
     - Provides details about such elements (e.g., name, state)
     - Supports step, resume, interrupt, etc
 - Other services: IMemory, IRegisters, IExpressions, IDisassembly...
+- All services extend *IDsfService* (press *F4* on *IDsfService*)
+
+---
+title: Data Model Contexts
+
+- IDMContext class is a 'pointer' to any type of backend data
+    - IExecutionDMContext - thread, process, group
+    - IFrameDMContext - stack frames
+    - IBreakpointDMContext - breakpoint, tracepoint, dprintf
+    - All contexts extend *IDMContext* (use *F4*)
+- Contexts are hierachical
+    - *process* -> *thread* -> *frame* -> *expression*
+    - *DMContexts.getAncestorOfType()*
+- Contexts are used to retrieve data from services
+
+---
+title: DSF Executor thread
+
+- Accessing data from different threads requires synchronization
+- DSF uses a single-threaded executor to avoid synchronization
+<center>
+<img src=img/synchronization_1.png>
+<img src=img/synchronization_2.png>
+</center>
 
 ---
 title: DSF Session
 
 - Instances of DSF services are grouped into a DSF session
 - There can be multiple sessions running at the same time
-- Each session has it's own instance of each service
+- The session provides the DSF Executor (*DsfSession#getExecutor()*)
 - A session handles sending events to registered listeners
 
 ---
-title: DsfSession class
+title:  Asynchronous (callback) programming
 
-- A session instance is started and ended using:
-    - *startSession()*
-    - *endSession()*
-- DsfSession provides access to all running sessions:
-    - *getActiveSessions()*
-    - *getSession(id)*
-- DsfSession notifies registered listeners of start/end of all sessions
-    - *addSessionStartedListener()*, *removeSessionStartedListener()*
-    - *addSessionEndedListener()*, *removeSessionEndedListener()*
+- Most DSF APIs return void but indicate completion in a callback
+- *RequestMonitor* is the main callback class
+    - Remember to call *done()* when real work is finished
+    - This calls: *handleCompleted()*, *handleSuccess()*, *handleError()*
+- *DataRequestMonitor* to "return" a value
+    - *getData()* to get that value
 
 ---
-title: DsfSession class (2)
+title: DSF concepts review
 
-- A session instance forwards debug event to registered listeners
-    - *addServiceEventListener()*, *removeServiceEventListener()*
-    - *dispatchEvent()* is called by services that want to send event
-- Allows to register adapters for all data model contexts
-    - *registerModelAdapter()*, *unregisterModelAdapter()*, *getModelAdapter()*
+1. APIs to integrate a debugger 'more easily' e.g., GDB
+1. View Model for presentation layer
+1. Data Model to communicate with backend (GDB)
+1. Services API to access Data
+1. No synchronization: DSF Executor **must** be used to access Data
+1. Services for one backend are grouped in a Session
+1. Heavy use of asynchronous programming for responsiveness
+
+---
+title: DSF practical review
+
+1. Services extend *IDsfService*
+2. Contexts extend *IDMContext*
+3. Context hierarchy searched with *DMContexts*
+4. Executor can be found with *DsfSession#getExecutor()*
+5. *RequestMonitor* and *DataRequestMonitor* for callbacks
 
 [//]: (ENDED CLEANUP HERE)
 ---
-title:
+title: DSF Exercise 
+
+- FrameSpy to print <method:line> for current frame 
+- Reset branch to **DSF_Exercise_1**
 
 - Debug View and Debug Context
 - Adapter pattern
@@ -244,6 +278,28 @@ title:
 => replace polling with ISuspendedDMEvent
 
 ---
+title: DsfSession class
+
+- A session instance is started and ended using:
+    - *startSession()*
+    - *endSession()*
+- DsfSession provides access to all running sessions:
+    - *getActiveSessions()*
+    - *getSession(id)*
+- DsfSession notifies registered listeners of start/end of all sessions
+    - *addSessionStartedListener()*, *removeSessionStartedListener()*
+    - *addSessionEndedListener()*, *removeSessionEndedListener()*
+
+---
+title: DsfSession class (2)
+
+- Allows access to Services through *DsfServicesTracker*
+- A session instance forwards debug event to registered listeners
+    - *addServiceEventListener()*, *removeServiceEventListener()*
+    - *dispatchEvent()* is called by services that want to send event
+- Allows to register adapters for all data model contexts
+    - *registerModelAdapter()*, *unregisterModelAdapter()*, *getModelAdapter()*
+---
 title: Module 3 (old)
 
 - Using suspend event to log stack trace on breakpoint hit
@@ -252,9 +308,7 @@ title: Module 3 (old)
 ---
 title: Module 4
 
-- Mention how to find services i.e. F4 on IDsfService
 - What is DSF-GDB?
-- One can find all services by finding classes that extend *IDsfService*
 - write a new service that gets published directly in the new plugin which will return the time of day
 - add a method to that service that will send a command to GDB to count the number of args of a frame using createMIStackListArguments()
 - use new service to display the number of args for each stack frame in their view
