@@ -512,10 +512,56 @@ title: Event Exercise Follow-up
     - Reset to **EX2_ANSWERS**
     - **Go!**
 
+---
+title: Handling a new session
+
+- FrameSpy has an important limitation now
+    - enable FrameSpy
+    - stop the session and start a new one
+    - step the new session
+    - **FrameSpy no longer prints**
+
+---
+title: Handling a new session (2)
+
+<br><br>
+<br><br>
+<br><br>
+#<center>**Why?**</center>
+
+---
+title: Handling a new session (3)
+build_lists: true
+
+- When new session starts, we are not registered for its events
+<br><br>
+- How to know **when** new session starts so we can register?
+
+---
+title: DsfSession to the rescue
+
+- DsfSession notifies registered listeners of start/end of all sessions
+    - *addSessionStartedListener()*, *removeSessionStartedListener()*
+    - *addSessionEndedListener()*, *removeSessionEndedListener()*
+<br><br>
+- DsfSession provides access to all running sessions:
+    - *getActiveSessions()*, *getSession(id)*
+
+---
+title: Multiple Session Exercise
+
+- Register for event for each new DSF session
+    - Reset branch to commit starting with
+        - **EX3_START** or **EX3_ADVANCED**
+        - Listen for new session and register with them
+        - Unregister when FrameSpy gets disabled
+<br><br>
+    - **Go!**
 
 [//]: (ENDED CLEANUP HERE)
 ---
 title: Module 4
+build_lists: true
 
 - What is DSF-GDB?
 - write a new service that gets published directly in the new plugin which will return the time of day
@@ -586,3 +632,12 @@ title: Module 10
     - adapter pattern
 ++++
 
+---
+title: DsfSession class (2)
+
+- Allows access to Services through *DsfServicesTracker*
+- A session instance forwards debug event to registered listeners
+    - *addServiceEventListener()*, *removeServiceEventListener()*
+    - *dispatchEvent()* is called by services that want to send event
+- Allows to register adapters for all data model contexts
+    - *registerModelAdapter()*, *unregisterModelAdapter()*, *getModelAdapter()*
