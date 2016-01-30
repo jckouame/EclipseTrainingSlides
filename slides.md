@@ -115,6 +115,8 @@ title: Module 3
 - What is DSF?
 <br><br>
 - DSF concepts applied
+<br><br>
+- Exercises 1, 2 ,3
 
 ---
 title: Eclipse Debug Platform
@@ -295,7 +297,7 @@ build_lists: true
 - Show how to launch a C/C++ debug session (use non-stop first)
 ++++
 ---
-title: DSF Exercise review
+title: Exercise review
 build_lists: true
 
 - Finding the DSF session using debug context
@@ -309,7 +311,7 @@ build_lists: true
     - Using a new DataRequestMonitor
     - Calling getData() in handledSuccess()
 ---
-title: DSF Exercise review (2)
+title: Exercise review (2)
 
 - IDMContext vs IDMData
     - call IStack.getFrameData()
@@ -318,7 +320,7 @@ title: DSF Exercise review (2)
     - Then finally display "method:line"
 
 ---
-title: DSF Exercise follow-up
+title: Exercise follow-up part 1
 build_lists: true
 
 - What if you select the process element?
@@ -330,7 +332,10 @@ build_lists: true
     - **Go!**
 
 ---
-title: DSF Exercise follow-up (2)
+title: Follow-up part 1 review
+
+---
+title: Exercise follow-up part 2
 
 - Assertions are a great way to notice unexpected situations
 <br><br>
@@ -346,7 +351,7 @@ title: DSF Exercise follow-up (2)
 ++++
 
 ---
-title: DSF Exercise follow-up (3)
+title: Exercise follow-up part 2
 
 - Did you use the DSF Executor?
     - Which code runs on the Executor, which not?
@@ -355,6 +360,9 @@ title: DSF Exercise follow-up (3)
     - Call *submit()* of the Executor
     - Pass a *DsfRunnable()* whose *run()* does the work
     - **Go!**
+
+---
+title: Follow-up part 2 review
 
 ---
 title: Which DSF concepts did we exercise?
@@ -498,7 +506,7 @@ public void anyName(ISuspendedDMEvent event) {
 ~~~~
 
 ---
-title: Event Exercise Follow-up
+title: Event Exercise for All-Stop
 
 - *ISuspendedDMEvent* is used for Non-stop only
 <br><br>
@@ -511,6 +519,9 @@ title: Event Exercise Follow-up
     - (Look at declaration of *IContainerSuspendedDMEvent*)
     - Reset to **EX2_ANSWERS**
     - **Go!**
+
+---
+title: All-Stop Exercise Review
 
 ---
 title: Handling a new session
@@ -551,19 +562,93 @@ title: DsfSession to the rescue
 title: Multiple Session Exercise
 
 - Register for event for each new DSF session
-    - Reset branch to commit starting with
-        - **EX3_START** or **EX3_ADVANCED**
-        - Listen for new session and register with them
-        - Unregister when FrameSpy gets disabled
+    - Reset to **EX3_START** or **EX3_ADVANCED**
+<br><br>
+    - Listen for new session and register with them
+<br><br>
+    - Unregister when FrameSpy gets disabled
 <br><br>
     - **Go!**
+
+---
+title: Sessions Exercise Review
 
 [//]: (ENDED CLEANUP HERE)
 ---
 title: Module 4
 build_lists: true
 
-- What is DSF-GDB?
+- What is DSF-GDB
+<br><br>
+- 
+
+---
+title: What is DSF-GDB
+
+- Integration of GDB using DSF
+- A little history
+    - How it started
+    - Ericsson's involvement
+    - GDB's evolution
+    - Where we stand today
+
+---
+title: What is DSF-GDB
+
+---
+title: New Service Exercise
+build_lists: true
+
+- Write a new service providing the current time
+    - Reset to **EX4_START** or **EX4_ADVANCED**
+<br><br>
+    - **FrameSpyService.java** already created for you
+<br><br>
+    - Make it into a DSF service that can be found by name
+<br><br>
+    - Provide methods:
+        - Synchronous *getLocalTimeOfDayString* method
+        - Asynchronous *getTargetTimeOfDayString* method
+<br><br>
+    - **Go!**
+
+---
+title: New Service Review
+build_lists: true
+
+- *AbstractDsfService* can be used as a base class for services
+<br><br>
+    - Need to implement *getBundleContext()*
+<br><br>
+    - Need to advertise a service using *register()*
+        - Any name can be used but class or interface name is good
+<br><br>
+    - *initialize()* and *shutdown()* should be enhanced
+<br><br>
+    - Some method providing the service functionality is needed
+
+---
+title: Asynchronous vs Synchronous API
+
+- Slowest part of the CDT debugger is communication with GDB
+    - DSF provides infrastructure for async communication
+    - New async API can use that infrastructure
+    - New sync API **cannot**
+<br><br>
+- Async API can be used synchronously but not other way around
+
+++Notes++
+- Explain the difference between the two getTimeOfDay() version
+++++
+
+---
+title: Using Interfaces
+
+- Difference between *IStack* and *MIStack*
+
+---
+title: allo
+
 - write a new service that gets published directly in the new plugin which will return the time of day
 - add a method to that service that will send a command to GDB to count the number of args of a frame using createMIStackListArguments()
 - use new service to display the number of args for each stack frame in their view
