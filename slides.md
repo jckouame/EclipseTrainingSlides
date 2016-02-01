@@ -205,7 +205,7 @@ title: DSF Services (2)
 <br><br>
 - Other services: IMemory, IRegisters, IExpressions, IDisassembly...
 <br><br>
-- All services extend *IDsfService* (press *F4* on *IDsfService*)
+- All services extend <code>IDsfService</code> (press *F4* on <code>IDsfService</code>)
 
 ---
 title: Data Model Contexts
@@ -214,11 +214,11 @@ title: Data Model Contexts
     - IExecutionDMContext - thread, process, group
     - IFrameDMContext - stack frames
     - IBreakpointDMContext - breakpoint, tracepoint, dprintf
-    - All contexts extend *IDMContext* (use *F4*)
+    - All contexts extend <code>IDMContext</code> (use *F4*)
 <br><br>
 - Contexts are hierachical
     - *process* -> *thread* -> *frame* -> *expression*
-    - *DMContexts.getAncestorOfType()*
+    - <code>DMContexts.getAncestorOfType()</code>
 <br><br>
 - Contexts are used to retrieve data from services
 
@@ -239,7 +239,7 @@ title: DSF Session
 <br><br>
 - There can be multiple sessions running at the same time
 <br><br>
-- The session provides the DSF Executor (*DsfSession#getExecutor()*)
+- The session provides the DSF Executor (<code>DsfSession#getExecutor()</code>)
 <br><br>
 - A session handles sending events to registered listeners
 
@@ -248,13 +248,83 @@ title:  Asynchronous (callback) programming
 
 - Most DSF APIs return void but indicate completion in a callback
 <br><br>
-- *RequestMonitor* is the main callback class
-    - Remember to call *done()* when real work is finished
-    - This calls: *handleCompleted()*, *handleSuccess()*, *handleError()*
+- <code>RequestMonitor</code> is the main callback class
+    - Remember to call <code>done()</code> when real work is finished
+    - This calls: <code>handleCompleted()</code>, <code>handleSuccess()</code>, <code>handleError()</code>
 <br><br>
-- *DataRequestMonitor* to "return" a value
-    - *getData()* to get that value
+- <code>DataRequestMonitor</code> to "return" a value
+    - <code>getData()</code> to get that value
 
+---
+title: RequestMonitor example
+
+- To call an asynchronous method, such as:
+~~~~
+void asyncCall(IDMContext dmc, RequestMonitor rm);
+~~~~
+- there are two main coding styles
+~~~~
+Declarative:
+   RequestMonitor myRm =
+           new RequestMonitor(getExecutor(), parentRm);
+   asyncCall(dmc, myRm);
+
+In-line:
+   asyncCall(dmc, new RequestMonitor(getExecutor(), parentRm));
+~~~~
+---
+title: Declarative Style
+
+- First declare the RequestMonitor and what it should do
+<br><br>
+- Then call the asynchronous method, passing the RM
+~~~~
+   RequestMonitor myRm =
+           new RequestMonitor(getExecutor(), parentRm) {
+               @Override
+               void handleSuccess() {
+                   System.out.println("Async call succeeded");
+                   parentRm.done();
+               }
+           };
+
+   asyncCall(dmc, myRm);
+~~~~
+---
+title: In-line Style
+
+- Directly call the asynchronous method
+<br><br>
+- Declare and define the RM in-line 
+~~~~
+   asyncCall(dmc, 
+             new RequestMonitor(getExecutor(), parentRm) {
+                 @Override
+                 void handleSuccess() {
+                     System.out.println("Async call succeeded");
+                     parentRm.done();
+                 }
+             });
+
+~~~~
+- *In-line* has the benefit of showing the execution flow
+---
+title: DataRequestMonitor
+
+- Extention of <code>RequestMonitor</code> which *"returns"* data
+~~~~
+   DataRequestMonitor<String> parentRm =
+              new DataRequestMonitor<String>(getExecutor, null);
+   asyncCallWithData(
+      dmc, 
+      new DataRequestMonitor<String>(getExecutor(), parentRm) {
+      @Override
+      void handleSuccess() {
+          String resultString = "Success with result " + getData();
+          parentRm.done(resultString);
+      }
+   });
+~~~~
 ---
 title: DSF concepts review
 build_lists: true
@@ -271,15 +341,15 @@ build_lists: true
 title: DSF practical review
 build_lists: true
 
-1. Services extend *IDsfService*
+1. Services extend <code>IDsfService</code>
 <br><br>
-1. Contexts extend *IDMContext*
+1. Contexts extend <code>IDMContext</code>
 <br><br>
-1. Context hierarchy searched with *DMContexts*
+1. Context hierarchy searched with <code>DMContexts</code>
 <br><br>
-1. Executor can be found with *DsfSession#getExecutor()*
+1. Executor can be found with <code>DsfSession#getExecutor()</code>
 <br><br>
-1. *RequestMonitor* and *DataRequestMonitor* for callbacks
+1. <code>RequestMonitor</code> and <code>DataRequestMonitor</code> for callbacks
 
 ---
 title: DSF Exercise 
@@ -290,6 +360,8 @@ build_lists: true
         - **EX1_START** or **EX1_ADVANCED**
 <br><br>
     - To test, make sure you launch a C/C++ Debug session first
+<br><br>
+    - Use the **Tasks** view to see what needs to be done
 <br><br>
     - **Go!**
 
@@ -328,7 +400,7 @@ build_lists: true
 <br><br>
 - For now, just handle the error (as seen on console)
     - Reset to **EX1_ANSWERS** if you need
-    - Override *handleError()*
+    - Override <code>handleError()</code>
     - **Go!**
 
 ---
@@ -357,8 +429,8 @@ title: Exercise follow-up part 2
     - Which code runs on the Executor, which not?
 <br><br>
 - Wrap first call to DSF service in Executor
-    - Call *submit()* of the Executor
-    - Pass a *DsfRunnable()* whose *run()* does the work
+    - Call <code>submit()</code> of the Executor
+    - Pass a <code>DsfRunnable()</code> whose <code>run()</code> does the work
     - **Go!**
 
 ---
@@ -398,36 +470,36 @@ build_lists: true
 ---
 title: DSF Events details
 
-- Most events implement *IDMEvent* which provides an *IDMContext*
+- Most events implement <code>IDMEvent</code> which provides an <code>IDMContext</code>
     - e.g., When thread suspends, event specifies which thread
 <br><br>
 - Event types usually found in the different service interfaces e.g.,
-    - *IRunControl*:
-        - *ISuspendedDMEvent*, *IContainerSuspendedDMEvent*
-        - *IResumedDMEvent*, *IContainerResumedDMEvent*
+    - <code>IRunControl</code>:
+        - <code>ISuspendedDMEvent</code>, <code>IContainerSuspendedDMEvent</code>
+        - <code>IResumedDMEvent</code>, <code>IContainerResumedDMEvent</code>
 <br><br>
 - Not all services trigger events
-    - *IStack* has not events
+    - <code>IStack</code> has not events
 ---
 title: Sending DSF Events
 
 <br><br><br>
-- To send an event a service calls *DsfSession#dispatchEvent()*
+- To send an event a service calls <code>DsfSession#dispatchEvent()</code>
 ---
 title: Receiving DSF Events
 
 - To receive a DSF events a client must:
     - Declare a **public** method of any name
     - Method takes the event of interest as a parameter
-    - Annotate method with *@DsfServiceEventHandler*
-    - Register with the DSF Session using *DsfSession#addServiceEventListener()*
+    - Annotate method with <code>@DsfServiceEventHandler</code>
+    - Register with the DSF Session using <code>DsfSession#addServiceEventListener()</code>
     - Registration must be done on the Executor
 <br><br>
 - The method is called on the DSF Executor
 
 
 ++Notes++
-- *dispatchEvent()* calls event listeners in a **separate** Runnable on the Executor.
+- <code>dispatchEvent()</code> calls event listeners in a **separate** Runnable on the Executor.
     - This allows sender to finish its work before events are received by the listeners.
     - Event listener methods always called in the Executor thread.
 ++++
@@ -455,11 +527,11 @@ title: Help with the Executor
 build_lists: true
 
 - DSF provides Java Annotations to guide with Executor use 
-    - *@ThreadSafe*
+    - <code>@ThreadSafe</code>
         - Safe for any thread (synchronization used)
-    - *@ConfinedToDsfExecutor(executor)*
+    - <code>@ConfinedToDsfExecutor(executor)</code>
         - Must use specified executor
-    - *@ThreadSafeAndProhibitedFromDsfExecutor(executor)*
+    - <code>@ThreadSafeAndProhibitedFromDsfExecutor(executor)</code>
         - Safe for any thread **except** the specified executor
 <br><br>
 - They are hierarchical, so apply to children (e.g., methods of class)
@@ -486,11 +558,11 @@ title: Event Exercise Review
 
 - Registering for DSF events
     - addServiceEventListener() **using** the Executor
-    - Must pass *FrameSpyView.this* (or another listener class)
+    - Must pass <code>FrameSpyView.this</code> (or another listener class)
 <br><br>
 - Unregister for DSF events when FrameSpy disabled
     - removeServiceEventListener() **using** the Executor
-    - Must pass *FrameSpyView.this* (or listener used)
+    - Must pass <code>FrameSpyView.this</code> (or listener used)
     
 ---
 title: Event Exercise Review (2)
@@ -508,15 +580,15 @@ public void anyName(ISuspendedDMEvent event) {
 ---
 title: Event Exercise for All-Stop
 
-- *ISuspendedDMEvent* is used for Non-stop only
+- <code>ISuspendedDMEvent</code> is used for Non-stop only
 <br><br>
-- *IContainerSuspendedDMEvent* for All-stop
+- <code>IContainerSuspendedDMEvent</code> for All-stop
     - Represents the process stopping
     - The top frame of which thread should we use?
 <br><br>
 - This event specifies which thread caused the stop
     - Use that **triggerring** thread (context)
-    - (Look at declaration of *IContainerSuspendedDMEvent*)
+    - (Look at declaration of <code>IContainerSuspendedDMEvent</code>)
     - Reset to **EX2_ANSWERS**
     - **Go!**
 
@@ -552,11 +624,11 @@ build_lists: true
 title: DsfSession to the rescue
 
 - DsfSession notifies registered listeners of start/end of all sessions
-    - *addSessionStartedListener()*, *removeSessionStartedListener()*
-    - *addSessionEndedListener()*, *removeSessionEndedListener()*
+    - <code>addSessionStartedListener()</code>, <code>removeSessionStartedListener()</code>
+    - <code>addSessionEndedListener()</code>, <code>removeSessionEndedListener()</code>
 <br><br>
 - DsfSession provides access to all running sessions:
-    - *getActiveSessions()*, *getSession(id)*
+    - <code>getActiveSessions()</code>, <code>getSession(id)</code>
 
 ---
 title: Multiple Session Exercise
@@ -573,27 +645,55 @@ title: Multiple Session Exercise
 ---
 title: Sessions Exercise Review
 
-[//]: (ENDED CLEANUP HERE)
 ---
 title: Module 4
 build_lists: true
 
 - What is DSF-GDB
 <br><br>
-- 
+- A little history
+<br><br>
+- DSF-GDB's service structure
+<br><br>
+- Hands-on with DSF-GDB
 
 ---
 title: What is DSF-GDB
 
 - Integration of GDB using DSF
-- A little history
-    - How it started
-    - Ericsson's involvement
-    - GDB's evolution
-    - Where we stand today
+    - Cannot use run DSF by itself
+<br><br>
+- Extra features on top of base DSF
+    - Tracepoints
+    - Visualizer
+    - OS Resources
 
 ---
-title: What is DSF-GDB
+title: History of DSF-GDB
+
+- How it started
+<br><br>
+- Ericsson's involvement
+<br><br>
+- GDB's evolution
+<br><br>
+- Default CDT Debugger integration
+<br><br>
+- Where we stand today
+
+---
+title: DSF-GDB's services
+
+- DSF provides API for services
+    - <code>IStack</code>, <code>IBreakpoints</code>, <code>IExpressions</code>, etc
+<br><br>
+- DSF-GDB provides an implementation
+<br><br>
+- Hierarchy of DSF-GDB services
+    - Press *F4* on <code>IDsfService</code>
+    - <code>MI[service]</code> vs <code>GDB[service]</code> (historical)
+    - <code>GDB[service][version]</code>
+    - <code>GDB[service]_HEAD</code>
 
 ---
 title: New Service Exercise
@@ -607,8 +707,8 @@ build_lists: true
     - Make it into a DSF service that can be found by name
 <br><br>
     - Provide methods:
-        - Synchronous *getLocalTimeOfDayString* method
-        - Asynchronous *getTargetTimeOfDayString* method
+        - Synchronous <code>getLocalTimeOfDayString</code> method
+        - Asynchronous <code>getTargetTimeOfDayString</code> method
 <br><br>
     - **Go!**
 
@@ -616,14 +716,14 @@ build_lists: true
 title: New Service Review
 build_lists: true
 
-- *AbstractDsfService* can be used as a base class for services
+- <code>AbstractDsfService</code> can be used as a base class for services
 <br><br>
-    - Need to implement *getBundleContext()*
+    - Need to implement <code>getBundleContext()</code>
 <br><br>
-    - Need to advertise a service using *register()*
+    - Need to advertise a service using <code>register()</code>
         - Any name can be used but class or interface name is good
 <br><br>
-    - *initialize()* and *shutdown()* should be enhanced
+    - <code>initialize()</code> and <code>shutdown()</code> should be enhanced
 <br><br>
     - Some method providing the service functionality is needed
 
@@ -638,16 +738,101 @@ title: Asynchronous vs Synchronous API
 - Async API can be used synchronously but not other way around
 
 ++Notes++
-- Explain the difference between the two getTimeOfDay() version
+- Explain when to implement the different two getTimeOfDay() versions
 ++++
 
 ---
+title: Using new service
+
+- Prepend every printout in FrameSpyView with the time of day
+    - Reset to **EX4_UPDATE_START**
+<br><br>
+    - FrameSpyView to show:  [time] method:line
+<br><br>
+    - If you test it, it will **not** work (yet)
+<br><br>
+    - **Go!**
+
+---
+title: Instantiating new service
+build_lists: true
+
+- We can't find the service because we didn't instantiate it
+<br><br>
+- We need one instance for **each** DSF session
+<br><br>
+- A DSF-GDB session instantiates its services
+    - We haven't hooked into a DSF-GDB session (yet)
+    - We need to manager our new service ourselves
+    - Remember <code>addSessionStartedListener()</code> and friends?
+
+---
+title: Instantiation Exercise
+
+- Implement a managing class to create/dispose of the new service
+    - Reset to **EX5_START** or **EX5_ADVANCED**
+<br><br>
+    - Done for you:
+        - Singleton **FrameSpyServiceManager.java**
+        - <code>initialize()</code> and <code>dispose()</code> called by <code>Activator</code>
+<br><br>
+    - Instantiate and <code>initialize()</code> a FrameSpyService for each new DSF session
+<br><br>
+    - When done FrameSpyView should show:  [time] method:line
+<br><br>
+    - **Go!**
+
+---
+title: Service Shutdown
+
+- We instantiate a service for each new DSF session
+<br><br>
+- What about shutting down those instances?
+    - Each time a DSF session ends
+- DSF-GDB automatically shutsdown **all** DSF services
+    - Anything registered and implementing <code>IDsfService</code>
+    - We don't need to take care of it ourselves
+    - Refer to DSF-GDB's **ShutdownSequence.java**
+
+---
+title: Building on DSF-GDB
+
+- New service does not do anything *debugging*
+<br><br>
+- For a new debugging feature
+    - Use existing DSF-GDB services
+    - Re-work obtained information
+    - Provide new information to view
+<br><br>
+- Services can use other services
+
+---
+title: Frame Argument count
+build_lists: true
+
+- Provide the number of arguments when printing "method:line"
+    - Reset to **EX6_START** or **EX6_ADVANCED**
+<br><br>
+    - Provide API (method) in your service for arguments count
+    - Async or Sync? 
+        - Is the info needed in GDB?
+        - Are you going to call any async APIs?
+<br><br>
+    - Use <code>IStack</code> service to get list of frame arguments
+<br><br>
+    - Update FrameSpyView to show:  [time] method:line (# args)
+<br><br>
+    - **Go!**
+
+[//]: (ENDED CLEANUP HERE)
+---
 title: Using Interfaces
 
-- Difference between *IStack* and *MIStack*
+- Difference between <code>IStack</code> and <code>MIStack</code>
 
 ---
 title: allo
+build_lists: true
 
 - write a new service that gets published directly in the new plugin which will return the time of day
 - add a method to that service that will send a command to GDB to count the number of args of a frame using createMIStackListArguments()
