@@ -75,13 +75,14 @@ title: Module 1
 title: Course Projects
 build_lists: true
 
-## Debug Frame Spy
-- New view displaying a history of every `function:line` at which the debugger stopped. 
-## Enable GDB verbosity
-- Extend debugger to enable verbosity in GDB when starting a debug session
-## Code Complexity Checker
-- Codan code checker warning when a method is too long
-- Codan code checker warning of incompatible return type of overriding method
+1. Debug Frame Spy
+    - New view logging each `method:line` at which the debugger stopped. 
+1. Replace "main" with "entry" in Debug view
+    - When using a new type of debug session called FrameSpy
+1. Enable GDB verbosity when starting a FrameSpy session
+1. Code Complexity Checker
+    - Codan code checker warning when a method is too long
+    - Codan code checker warning of incompatible return type of overriding method
 
 ---
 title: Debug Frame Spy
@@ -838,19 +839,131 @@ build_lists: true
 title: Extending a service
 build_lists: true
 
-- For stack frames, replace method name "main" with "EMCAMain"
+- For stack frames, replace method name "main" with "entry"
     - Reset to **EX7_START** or **EX7_ADVANCED**
 <br><br>
     - **FrameSpyStackService.java** extend existing Stack service
 <br><br>
     - Override <code>getFrameData()</code> 
 <br><br>
-    - "Return" an <code>IFrameDMData</code> whose <code>getFunction()</code> returns "EMCAMain" instead of "main"
+    - "Return" an <code>IFrameDMData</code> whose <code>getFunction()</code> returns "entry" instead of "main"
 <br><br>
     - **Go!**
 ---
+title: New Service Instantiation
+
+- Like before we now have a new class we must instantiate
+<br><br>
+- Can we use <code>FrameSpyServiceManager?</code>
+    - <code>FrameSpyStackService</code> extends existing <code>GDBStack_HEAD</code> service
+    - <code>GDBStack_HEAD</code> is already being instantiated by DSF-GDB
+    - Instantiating ours would create **two** IStack services
+<br><br>
+- We need to instantiate our service *instead* of the original one
+
+---
+title: The two approaches
+
+1. Creating a new view and a new service
+    - Does not affect the rest of the debugging views
+    - We can do this to any DSF-GDB session
+<br><br>
+1. Replacing a service and changing an existing view
+    - Does affect normal debugger behaviour
+    - Should be chosen by user explicitly
+    - Aimed at specific scenarios
+
+---
+title: First solution
+
+- New *Launch Configuration Type*
+    - Current ones
+        i. *C/C++ Application*
+        i. *C/C++ Attach to Application*
+        i. *C/C++ Postmortem Debugger*
+        i. *C/C++ Remote Application*
+<br><br>
+    - Add a new one such as "IMA2l-Chip Debugger"
+<br><br>
+    - When chosen by user, we know to replace IStack service
+         
+---
+title: Second solution
+
+- New *Launch Delegate* to existing *Launch Configuration Type*
+    - Current ones for *C/C++ Application*
+        i. *GDB (DSF) Debug Process Launcher*
+        i. *Legacy Create Process Launcher* (will be removed)
+<br><br>
+    - Add a new one such as "IMA2l-Chip Local Launcher"
+<br><br>
+    - When chosen by user, we know to replace IStack service
+
+---
+title: Differences
+
+- Both solutions are almost the same
+<br><br>
+- Difference is in the UI presented to the user
+    - Let's go over the two UIs
+<br><br>
+- Code differences are minor
+
+---
+title: Launch Delegate exercise
+build_lists: true
+
+- Create a new Launch Delegate for *C/C++ Application*
+    - Reset to **EX7.1_START**
+<br><br>
+    - **FrameSpyLaunchDelegate.java** extends <code>GdbLaunchDelegate</code>
+<br><br>
+    - Update *Extensions* tab of *plugin.xml*
+        - Fill-in <code>org.eclipse.debug.core.launchDelegates</code>
+        - "Main" Launch tab has been provided for you
+<br><br>
+    - **Go!**
+
+---
+title: New Services Factory
+
+- New Delegate does exactly what DSF-GDB does
+<br><br>
+- Let's create a new *Services Factory* to instantiate the new IStack service
+    - Let's have a look at <code>GdbDebugServicesFactory</code>
+<br><br>
+- When user will choose new delegate, they will get new IStack service
+
+---
+title: Services Factory Exercise
+build_lists: true
+
+- Create a new Services Factory for our Launch Delegate
+    - Reset to **EX7.2_START**
+<br><br>
+    - **FrameSpyServicesFactory.java** extends <code>GdbDebugServicesFactory</code>
+<br><br>
+    - This new service factory instantiates <code>FrameSpyStackService</code>
+<br><br>
+    - Our delegate uses <code>FrameSpyServicesFactory</code>
+<br><br>
+    - **Go!**
+
+---
+title: Launch Config Type exercise
+
+- Create a new launch configuration type for our delegate
+
+---
 title: Service_HEAD pattern
 
+- Recent improvement allows extenders to stay on newest GDB version
+<br><br>
+- <code>GDBService_HEAD</code> always points at newest service version
+<br><br>
+- Favors stability of latest GDB version at the detriment of older ones
+---
+title: 
 ---
 title: Using Interfaces
 
