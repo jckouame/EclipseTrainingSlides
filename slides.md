@@ -834,7 +834,6 @@ build_lists: true
 <br><br>
     - **Go!**
 
-[//]: (ENDED CLEANUP HERE)
 ---
 title: Extending a service
 build_lists: true
@@ -862,16 +861,20 @@ title: New Service Instantiation
 - We need to instantiate our service *instead* of the original one
 
 ---
-title: The two approaches
+title: The two approaches to extend DSF-GDB
 
 1. Creating a new view and a new service
     - Does not affect the rest of the debugging views
     - We can do this to any DSF-GDB session
+    - This was our first set of exercises
 <br><br>
 1. Replacing a service and changing an existing view
     - Does affect normal debugger behaviour
     - Should be chosen by user explicitly
     - Aimed at specific scenarios
+    - This is what we need now
+<br><br>
+- So, how do we *replace* a service?
 
 ---
 title: First solution
@@ -884,6 +887,8 @@ title: First solution
         i. *C/C++ Remote Application*
 <br><br>
     - Add a new one such as "IMA2l-Chip Debugger"
+<br><br>
+    - Launch Config Types need a Launch Delegate
 <br><br>
     - When chosen by user, we know to replace IStack service
          
@@ -903,8 +908,11 @@ title: Second solution
 title: Differences
 
 - Both solutions are almost the same
+    - Both need a new launch delegate
+    - The first also provide a new launch config type
+    - The second re-uses existing launch config types
 <br><br>
-- Difference is in the UI presented to the user
+- Base choice on the UI presented to the user
     - Let's go over the two UIs
 <br><br>
 - Code differences are minor
@@ -925,14 +933,23 @@ build_lists: true
     - **Go!**
 
 ---
+title: Launch Delegate Review
+
+- When creating a "C/C++ Application" launch, we can now select our delegate
+<br><br>
+- But the new delegate does exactly what DSF-GDB does
+<br><br>
+- It still does not instantiate <code>FrameSpyStackService</code>
+
+---
 title: New Services Factory
 
-- New Delegate does exactly what DSF-GDB does
+- Now that we have a new delegate, we can create a new *Services Factory*
 <br><br>
-- Let's create a new *Services Factory* to instantiate the new IStack service
+- A DSF Service Factory is used to create the different services
     - Let's have a look at <code>GdbDebugServicesFactory</code>
 <br><br>
-- When user will choose new delegate, they will get new IStack service
+- When user chooses new delegate, they will get new IStack service
 
 ---
 title: Services Factory Exercise
@@ -946,54 +963,62 @@ build_lists: true
     - This new service factory instantiates <code>FrameSpyStackService</code>
 <br><br>
     - Our delegate uses <code>FrameSpyServicesFactory</code>
+        - by overridding <code>newServiceFactory()</code>
 <br><br>
     - **Go!**
+<br><br>
+    - You should be able to see "entry" instead of "main"
 
 ---
-title: Launch Config Type exercise
+title: Current status
 
-- Create a new launch configuration type for our delegate
+- We have a new delegate <code>FrameSpyLaunchDelegate</code>
+<br><br>
+- We have a new service factory <code>FrameSpyServicesFactory</code>
+<br><br>
+- We have a new service <code>FrameSpyStackService</code>
+<br><br>
+- New delegate uses new service which replaces "main" with "entry"
 
 ---
 title: Service_HEAD pattern
 
+- Why did our new service extend <code>GDBStack_HEAD</code>?
+<br><br>
 - Recent improvement allows extenders to stay on newest GDB version
 <br><br>
+- Let's look at an example
+    - F4 on <code>GDBControl_HEAD</code>
 - <code>GDBService_HEAD</code> always points at newest service version
 <br><br>
 - Favors stability of latest GDB version at the detriment of older ones
+
 ---
-title: 
+title: Launch Config Type exercise
+
+- Create a new Launch Configuration Type for our delegate
+    - Reset to **EX8_START**
+<br><br>
+    - Use extension points in *plugin.xml*
+    - <code>o.e.debug.core.launchConfigurationTypes</code>
+    - <code>o.e.debug.core.launchConfigurationTypeImages</code>
+    - <code>o.e.debug.core.launchConfigurationTabGroups</code>
+<br><br>
+    - Assign our launch delegate to new launch config type
+<br><br>
+    - Assign our launch tab to new launch tab group
+<br><br>
+    - **Go!**
+
 ---
 title: Using Interfaces
 
 - Difference between <code>IStack</code> and <code>MIStack</code>
 
 ---
-title: allo
-build_lists: true
+title: Other topics
 
-- extend a DSF-GDB service e.g. IStack with getNumberLocals(IFrameDMContext, DataRequestMonitor<Integer>)
-- explain services factory and using criteria to choose a service 'version' e.g., we do that based on GDB version in DSF-GDB
-    - create new factory receiving the launchConfig and a param from to choose a service 'version' e.g. depending on chosen simulator
-- new delegate that override the servicesFactory.  We should provide the new delegate ourselves with tabs and all
-
----
-title: DAY 3
-subtitle: Optimizing performance
-
----
-title: Module 5 Should we skip this?
-
-- show that the new -stack-list-arguments is being sent to GDB many times but nothing has changed
-- Adding CommandCache
-- Clearing commandCache by listening to resumed event
-
----
-title: Module 6
-
-- Meeting with end-users to discuss requirements
-- Discussion with team about requirements just received
+- CommandCache usage
 
 ---
 title: DAY 4
