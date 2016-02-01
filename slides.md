@@ -252,7 +252,7 @@ title:  Asynchronous (callback) programming
     - Remember to call <code>done()</code> when real work is finished
     - This calls: <code>handleCompleted()</code>, <code>handleSuccess()</code>, <code>handleError()</code>
 <br><br>
-- <code>DataRequestMonitor</code> to "return" a value
+- <code>DataRequestMonitor</code> to *"return"* a value
     - <code>getData()</code> to get that value
 
 ---
@@ -325,6 +325,15 @@ title: DataRequestMonitor
       }
    });
 ~~~~
+---
+title: Other RequestMonitors
+
+- <code>CountingRequestMonitor</code> and <code>MultiRequestMonitor</code>
+    - For multiple asynchronous request in parallel
+<br><br>
+- <code>ImmediateRequestMonitor</code> and similar
+    - <code>handleSuccess()</code> and others are called on the thread where the ImmediateRM was created.
+
 ---
 title: DSF concepts review
 build_lists: true
@@ -826,6 +835,23 @@ build_lists: true
 
 [//]: (ENDED CLEANUP HERE)
 ---
+title: Extending a service
+build_lists: true
+
+- For stack frames, replace method name "main" with "EMCAMain"
+    - Reset to **EX7_START** or **EX7_ADVANCED**
+<br><br>
+    - **FrameSpyStackService.java** extend existing Stack service
+<br><br>
+    - Override <code>getFrameData()</code> 
+<br><br>
+    - "Return" an <code>IFrameDMData</code> whose <code>getFunction()</code> returns "EMCAMain" instead of "main"
+<br><br>
+    - **Go!**
+---
+title: Service_HEAD pattern
+
+---
 title: Using Interfaces
 
 - Difference between <code>IStack</code> and <code>MIStack</code>
@@ -834,9 +860,6 @@ title: Using Interfaces
 title: allo
 build_lists: true
 
-- write a new service that gets published directly in the new plugin which will return the time of day
-- add a method to that service that will send a command to GDB to count the number of args of a frame using createMIStackListArguments()
-- use new service to display the number of args for each stack frame in their view
 - extend a DSF-GDB service e.g. IStack with getNumberLocals(IFrameDMContext, DataRequestMonitor<Integer>)
 - explain services factory and using criteria to choose a service 'version' e.g., we do that based on GDB version in DSF-GDB
     - create new factory receiving the launchConfig and a param from to choose a service 'version' e.g. depending on chosen simulator
