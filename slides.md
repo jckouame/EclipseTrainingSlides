@@ -1011,6 +1011,16 @@ title: Launch Config Type exercise
     - **Go!**
 
 ---
+title: What we've seen
+
+- We've created a new view that used existing services
+<br><br>
+- We've created a new service that the new view can use
+<br><br>
+- We've created a replacement service for our own delegate
+<br><br>
+
+---
 title: Using Interfaces
 
 - Difference between <code>IStack</code> and <code>MIStack</code>
