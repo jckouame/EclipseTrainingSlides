@@ -61,6 +61,437 @@ title: DAY 1
 subtitle: Plugin development
 
 ---
+title: The Eclipse Platform
+content_class: smaller
+
+Intro text
+
+---
+title: The Eclipse Platform
+content_class: smaller
+
+<img src="images/sdk-arch.jpg"/>
+
+---
+
+title: Eclipse Runtime
+content_class: smaller
+
+Mainly composed of the Eclipse Equinox project.
+
+Eclipse Equinox:
+
+- Implements the OSGI specification (modules, services, etc)
+- P2: Provisioning framework. Installs new plug-ins, resolves dependencies, etc.
+- Miscellaneous Core functionallity like the extension registry (plugins), Jobs, Preferences, etc.
+- Eclipse launcher (native)
+
+---
+
+title: Workspace
+content_class: smaller
+
+- The workspace is a view of the user's data files: the resources.
+- Types of resources: projects, folders, and files
+- Only one workspace per running platform
+- Structure: Workspace root > Projects > IFolders or IFiles
+- Common classes:
+	- IResource
+	- IWorkspace
+	- IFile
+ 	- IFolder
+	- IProject
+- Resoure names and their paths in the workspace to not have to match the location on the filesystem
+
+---
+title: Workspace
+content_class: smaller
+
+Other features than navigation/listing:
+
+- Markers: to display problems like compilation errors
+- Properties: per-file storage. Think flags like "read-only" but more customizable.
+- Virtual folders: for greater flexibility when organizing projects
+- Project natures: to differentiate between different kind of projects (Java, C/C++)
+- Resource deltas: Listen to file modification, creation, deletion, etc.
+
+---
+title: EFS
+
+Eclipse File System (EFS).
+
+- An abstract file system API
+- The Workspace resources sit on top of EFS
+- The default implementations is for Local file systems
+- Other implementations: SSH, FTP, dstore, ZIP, etc.
+
+
+---
+title: Eclipse Team
+
+Framework to integrate SCMs.
+
+- Repository configuration
+- Resource management: Hooks for delete, move, add. Decorators in the UI.
+- Synchronization: tracks whether or not resources are in sync. Local history.
+- Logical Model Integration: Operate at the model level instead of per-file.
+- Views: Synchronize, History, etc.
+
+EGit, CVS, Subversion, Perforce use this.
+
+---
+title: Eclipse Help
+
+
+- Table of content, Search, indexed
+- Context sensitive (F1). Plugins can set context "ids"
+- Runs on a local server, either in internal browser (SWT wiget) or external
+
+Other "User Assistance" features
+
+- Cheat cheets
+- Welcome page
+- Tutorials
+---
+title: SWT
+
+Standard Widget Toolkit (org.eclipse.swt.*)
+
+<img src="images/vis-example.png"/>
+<img src="images/lin-example.png"/>
+<img src="images/mac-example.png"/>
+
+A Java library of widgets aimed at providing efficient, portable access to the user-interface facilities of the operating systems on which it is implemented.
+
+This is typically the lowest level of UI programming done in Eclipse development.
+
+---
+title: SWT
+
+- Native look
+- Single UI thread
+- Implemented using JNI calling the OS native library (which means SWT has some native glue code)
+	- Windows: Win32, Mac: Cocoa, Linux: GTK2 and GTK3
+- Button, Text, Browser, Group, Table, Tree, etc. Parent is specified in constructor
+- Browser widget is integrated with different libraries: Webkit, Internet Explorer, XULRunner (Firefox)
+- Most crashes (i.e. segmentation fault) in Eclipse due to native libraries called by SWT
+	- GTK, WebKitGTK+, Ubuntu-specific libraries (Unity)
+---
+title: JFace
+
+JFace is a UI toolkit with classes for handling many common UI programming tasks. It is designed to work with SWT without hiding it.
+
+org.eclipse.jface.*
+
+Common uses:
+
+- Viewers: TreeViewer, TableViewer, etc.
+- Dialogs: Message dialog, error dialog, etc.
+- Wizards: Wizard dialog, pages
+
+---
+title: Workbench
+
+org.eclipse.ui.*
+
+This is where classes more related to the common IDE UI fonctionality reside.
+
+---
+title: Workbench
+
+<img src="images/workbench_decomposed.png"/>
+
+---
+title: Workbench
+
+A <b>workbench</b> has one or more workbench windows.
+
+Each <b>workbench window</b> has workbench pages.
+
+Each workbench page has <b>workbench parts</b>, of which there are two kinds: views and editors.
+x
+Each workbench part is either a view or an editor.
+
+---
+title: Workbench
+
+Common uses:
+
+- Views: IViewPart and the extension point org.eclipse.ui.views
+- Commands and Handlers: org.eclipse.ui.commands, org.eclipse.ui.handlers extension points.
+- Preference pages: org.eclipse.ui.preferencePages extension point
+- Editors: org.eclipse.ui.editors extension point. IEditorPart and useful classes like TextEditor
+
+---
+title: The Eclipse SDK
+
+To be able to work program with the Eclipse Platform, you need tools.
+
+The Eclipse SDK = Platform (including source) + JDT + PDE
+
+---
+title: JDT: Eclipse Java development tools
+
+Those are the tools suitable for any Java-based programming
+
+<img src="images/editor_vectortest.png"/>
+
+---
+title: PDE: Plug-in Development Environment
+
+Provides tools to create, develop, test, debug, build and deploy Eclipse plug-ins.
+
+<img src="images/eclipse-pde.png"/>
+
+---
+title: Project for exercices
+
+We will create a new view that will display a log of every function:line that the debugger stops at.
+
+---
+title: What IS an Eclipse plugin?
+
+It's an OSGI bundle, a java module.
+But with an Eclipse flavor. Among other things:
+
+- Specifies dependencies to other plugins
+- Uses extensions to plug into existing extension points
+- Can define new extension points for others to extend 
+- Specifies what to package in the (Jar)
+- Specifies the execution environment (Java 7, 8, etc).
+
+Difference between extension and extension point?
+
+Extension = plug
+Extension point = socket
+
+A lot of things are done through extension points. For that, we need a plugin.
+
+---
+title: Step 1: Create a plugin
+
+- Go to Plug-in Development perspective
+- File > New > Plug-in project
+- Name your plugin (org.eclipse.cdt.example.framespy)
+- Press Next then Finish
+
+What are all the tabs for?
+
+---
+title: Step 2: Create a view
+
+Since we want to use the Git repo, delete the project and import existing one.
+
+- Add a new view by adding an extension (plugin.xml)
+- Create the view class (tip: click the hyperlink to bring up the New Class wizard)
+- Make sure the view has an id, name
+
+Test it!
+
+Next, we should add a widget to the view, so that it's not empty.
+
+---
+title: SWT Basic widget creation
+
+~~~~{java}
+Text textBox = new Text(parentComposite, SWT.SOMESTYLE | SWT.OTHERSTYLE);
+textBox.set*Somesetter*
+textBox.add*Somelistener*
+~~~~
+
+Composite are containers of widgets that can be layed out.
+
+Composites can be in composites!
+
+---
+title: Step 3: Add button to view
+
+Let's add a Button. Let's make it a checkbox button.
+
+- In view class, in createPartControl() add new Button with a "checkbox style"
+- Add selection listener to detect when it's pressed
+- Output something to the console
+
+Test it!
+
+But the button does not belong in view itself, it would be nicer in the toolbar.
+---
+title: Eclipse commands and handlers
+
+The Commands framework is a way to add user actions to the user interface.
+A command has:
+
+- An id that declares a semantic behavior
+- One or more handlers
+
+For example, the Copy command has the id org.eclipse.ui.edit.copy. But it has many handlers that behave differently depending on the context (selection, view)
+
+---
+title: Step 4: Create the command and handler
+
+- Add a command extension to toggle log on/off
+- Create a defaultHandler class (tip: use hyperlink to create class). Make it extend AbstractHandler
+- Implement the execute method to make it print something to the console
+
+Test it!
+---
+title: The menus extension point
+
+The org.eclipse.ui.menus extension point can add commands to:
+
+- Main menu (menu)
+- Main toolbars (toolbar)
+- View context menus (popup)
+- View toolbars (toolbar)
+- View menus (menu)
+
+It has an odd **locationURI** field:
+
+[Scheme]:[ID]?[placement]"
+
+For example:
+
+menu:org.eclipse.ui.main.menu?after=additions
+
+---
+
+title: Step 5: Add toolbar button
+
+Let's add the command to the toolbar.
+
+- Create the menus extension
+- Add a menuContribution, set the locationURI so that it gets displayed in the view toolbar, after additions
+- Add a command under the contribution. Set the id, icon and style (push)
+
+Test it!
+
+It would be nice in the context menu as well.
+
+---
+title: Step 6: Add context menu
+
+Let's add the same command in the context menu.
+
+- Add a new menuContribution. Because it needs different locationURI. 
+- Add the command. Set the id, icon and style (push)
+- Create a context menu in the view:
+~~~~{java}
+fMenuManager = new MenuManager();
+Menu menu = fMenuManager.createContextMenu(composite);
+composite.setMenu(menu);
+getViewSite().registerContextMenu(fMenuManager, null);
+...
+fMenuManager.dispose();
+~~~~
+
+Test it!
+---
+title: Step 7: Show the toggle state
+
+The user needs to see whether logging is enabled or not.
+
+Let's add a label that displays that.
+
+- Add a Label (a SWT widget) at the view creation.
+- When the command executes:
+	- Set the toggle state (you can add a method to the view)
+	- Update the label text
+
+Test it!
+
+
+If you enable logging and close/reopen the view, what happens?
+---
+title: The Preference Store
+
+We should make sure that the toggle state is remembered when the view is closed (or Eclipse is restarted). There are multiple ways to do this. A useful one is the Preference Store. 
+
+- Works like a key/value map
+- Can be applied to different scopes:
+	- DefaultScope: When the user presses "restore defaults" it restores to this.
+	- InstanceScope: Saved at the workspace level. Overrides Default.
+	- ProjectScope: Saved at the project level. Overrides Instance.
+	- Custom!
+- Organized in nodes (think namespaces). Typically the plugin id.
+---
+title: Step 8: Persist the toggle state
+
+- When the toggle state is set:
+	- Get the InstanScope
+	- Get the node
+	- Set the key/value
+- When the view is created:
+	- Get the InstanScope
+	- Get the node
+	- Get value using key, set the label text
+
+Test it!
+
+
+---
+title: Eclipse Jobs
+
+Jobs are similar to Java Thread but have Eclipse flavor.
+
+Some differences:
+
+- Scheduling rules: determine which jobs can run concurrently
+- Deadlock detection: and recovery (ILock)
+- Shown in the Progress View to the user (or not) with progress (IProgressMonitor)
+- Can be made cancellable by the user
+- Returns a status (IStatus)
+
+In Eclipse code, Jobs and Threads are both commonly used, depending on the situation.
+
+For the first implementation of our logging feature, we will poll every one second using a job.
+
+---
+title: Step 9: Creating a polling job
+
+- When toggle state is on, create and schedule a job
+	- Give the job a nice name to be shown in the Progress View
+- In the job run() method, sleep for 1 sec
+- After the 1 sec, reschedule the job (only if the toggle state is still on!).
+- Print something to the console every tick "polling..."
+
+---
+title: Step 10: Print to view
+
+Every tick, we would like to show the elapsed time in the view. It can just be a 
+
+- Create a counter (a simple int) that is incremented each tick.
+- Set the text label with the value of the counter
+
+What happens?
+---
+title: SWT Display and the UI thread
+
+Changes to the UI (widgets) should always be done on the UI thread.
+
+The Display implements the event loop. There is only one instance in a running Eclipse.
+ 
+~~~~
+Display.getDefault().asyncExec // Execute code at the next reasonable opportunity. Caller continues in parallel.
+Display.getDefault().syncExec // Blocks calling thread until executed on UI thread
+~~~~
+
+With this knowledge we can fix the Invalid Thread Access. We can use asyncExec in this case.
+---
+title: Step 11: Handle cancel
+
+An IProgressMonitor is passed to the job.
+
+We can use it to know if the user canceled the logging.
+
+- Use monitor.isCanceled() to know when user canceled
+- Set the toggle state to off when canceled
+
+Test it!
+
+What happens? Do you have a problem with the job starting again?
+If you need results from UI thread right away -> syncExec
+
+---
 title: Module 1
 
 - intro
