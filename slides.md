@@ -839,7 +839,7 @@ title: Extending a service
 build_lists: true
 
 - For stack frames, replace method name "main" with "entry"
-    - Reset to **EX7_START** or **EX7_ADVANCED**
+    - Reset to **EX7.1_START** or **EX7.1_ADVANCED**
 <br><br>
     - **FrameSpyStackService.java** extend existing Stack service
 <br><br>
@@ -922,7 +922,7 @@ title: Launch Delegate exercise
 build_lists: true
 
 - Create a new Launch Delegate for *C/C++ Application*
-    - Reset to **EX7.1_START**
+    - Reset to **EX7.2_START**
 <br><br>
     - **FrameSpyLaunchDelegate.java** extends <code>GdbLaunchDelegate</code>
 <br><br>
@@ -956,7 +956,7 @@ title: Services Factory Exercise
 build_lists: true
 
 - Create a new Services Factory for our Launch Delegate
-    - Reset to **EX7.2_START**
+    - Reset to **EX7.3_START**
 <br><br>
     - **FrameSpyServicesFactory.java** extends <code>GdbDebugServicesFactory</code>
 <br><br>
@@ -1020,6 +1020,65 @@ title: What we've seen
 - We've created a replacement service for our own delegate
 <br><br>
 
+---
+title: Modifying GDB initialization
+
+- DSF-GDB initializes GDB based on parameters of the launch config, e.g., 
+    - Enable non-stop mode
+    - Connect to a remote target
+    - Open a core file
+<br><br>
+- In some situations, we may want to modify how GDB is initialized, e.g.,
+    - Remove step that connects to remote target
+    - Modify which .gdbinit file is read
+    - Send a new command before connecting to target
+
+---
+title: DSF-GDB launch sequence
+
+1.
+1.
+1.
+1.
+
+---
+title: Adding a step at initialization
+
+- **Goal**: Turn on GDB verbosity (debug printouts) from the beginning
+    1. Need to send GDB the MI command: <code>-gdb-set verbose on</code>
+    1. Need to send it before other commands sent to GDB
+<br><br>
+- **Exercises**:
+    1. Provide API in <code>FrameSpyService</code> to send new command
+    1. Extend DSF-GDB's initialization class: (<code>FinalLaunchSequence</code>)
+    1. Use extended initialization class instead of DSF-GDB's one
+
+---
+title: Communicating with GDB
+
+- <code>ICommandControlService</code>
+
+---
+title: Sending a command to GDB
+
+- Add a method to FrameSpyService that will send the command "-gdb-set verbose on"
+    - Reset to **EX9.1_START** or **EX9.1_ADVANCED**
+<br><br>
+    - **Go!**
+---
+title: Extending GDB Initialization Sequence
+
+- 
+    - Reset to **EX9.2_START** or **EX9.2_ADVANCED**
+<br><br>
+    - **Go!**
+---
+title: Using new initialization Sequence
+
+- 
+    - Reset to **EX9.3_START** or **EX9.3_ADVANCED**
+<br><br>
+    - **Go!**
 ---
 title: Using Interfaces
 
