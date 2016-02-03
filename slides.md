@@ -798,7 +798,7 @@ build_lists: true
 
 - FrameSpy to periodically print "method:line" for current frame 
     - Reset branch to commit starting with
-        - **EX1_START** or **EX1_ADVANCED**
+        - **DSF1_START** or **DSF1_ADVANCED**
 <br><br>
     - To test, make sure you launch a C/C++ Debug session first
 <br><br>
@@ -840,7 +840,7 @@ build_lists: true
     - The top frame of which thread should we use?
 <br><br>
 - For now, just handle the error (as seen on console)
-    - Reset to **EX1_ANSWERS** if you need
+    - Reset to **DSF1_ANSWERS** if you need
     - Override <code>handleError()</code>
     - **Go!**
 
@@ -984,7 +984,7 @@ title: DSF Event Exercise
 
 - Show "method:line" each time a thread stops instead of polling
     - Reset branch to commit starting with
-        - **EX2_START** or **EX2_ADVANCED**
+        - **DSF2_START** or **DSF2_ADVANCED**
         - Polling job has been removed for you
         - "method:line" only shown when FrameSpy first enabled
 <br><br>
@@ -1030,7 +1030,7 @@ title: Event Exercise for All-Stop
 - This event specifies which thread caused the stop
     - Use that **triggerring** thread (context)
     - (Look at declaration of <code>IContainerSuspendedDMEvent</code>)
-    - Reset to **EX2_ANSWERS**
+    - Reset to **DSF2_ANSWERS**
     - **Go!**
 
 ---
@@ -1075,7 +1075,7 @@ title: DsfSession to the rescue
 title: Multiple Session Exercise
 
 - Register for event for each new DSF session
-    - Reset to **EX3_START** or **EX3_ADVANCED**
+    - Reset to **DSF3_START** or **DSF3_ADVANCED**
 <br><br>
     - Listen for new session and register with them
 <br><br>
@@ -1141,7 +1141,7 @@ title: New Service Exercise
 build_lists: true
 
 - Write a new service providing the current time
-    - Reset to **EX4_START** or **EX4_ADVANCED**
+    - Reset to **DSF4_START** or **DSF4_ADVANCED**
 <br><br>
     - **FrameSpyService.java** already created for you
 <br><br>
@@ -1186,7 +1186,7 @@ title: Asynchronous vs Synchronous API
 title: Using new service
 
 - Prepend every printout in FrameSpyView with the time of day
-    - Reset to **EX4_UPDATE_START**
+    - Reset to **DSF4_UPDATE_START**
 <br><br>
     - FrameSpyView to show:  [time] method:line
 <br><br>
@@ -1211,7 +1211,7 @@ build_lists: true
 title: Instantiation Exercise
 
 - Implement a managing class to create/dispose of the new service
-    - Reset to **EX5_START** or **EX5_ADVANCED**
+    - Reset to **DSF5_START** or **DSF5_ADVANCED**
 <br><br>
     - Done for you:
         - Singleton **FrameSpyServiceManager.java**
@@ -1252,7 +1252,7 @@ title: Frame Argument count
 build_lists: true
 
 - Provide the number of arguments when printing "method:line"
-    - Reset to **EX6_START** or **EX6_ADVANCED**
+    - Reset to **DSF6_START** or **DSF6_ADVANCED**
 <br><br>
     - Provide API (method) in your service for arguments count
     - Async or Sync? 
@@ -1270,7 +1270,7 @@ title: Extending a service
 build_lists: true
 
 - For stack frames, replace method name "main" with "entry"
-    - Reset to **EX7.1_START** or **EX7.1_ADVANCED**
+    - Reset to **DSF7.1_START** or **DSF7.1_ADVANCED**
 <br><br>
     - **FrameSpyStackService.java** extend existing Stack service
 <br><br>
@@ -1353,7 +1353,7 @@ title: Launch Delegate exercise
 build_lists: true
 
 - Create a new Launch Delegate for *C/C++ Application*
-    - Reset to **EX7.2_START**
+    - Reset to **DSF7.2_START**
 <br><br>
     - **FrameSpyLaunchDelegate.java** extends <code>GdbLaunchDelegate</code>
 <br><br>
@@ -1387,7 +1387,7 @@ title: Services Factory Exercise
 build_lists: true
 
 - Create a new Services Factory for our Launch Delegate
-    - Reset to **EX7.3_START**
+    - Reset to **DSF7.3_START**
 <br><br>
     - **FrameSpyServicesFactory.java** extends <code>GdbDebugServicesFactory</code>
 <br><br>
@@ -1428,7 +1428,7 @@ title: Service_HEAD pattern
 title: Launch Config Type exercise
 
 - Create a new Launch Configuration Type for our delegate
-    - Reset to **EX8_START**
+    - Reset to **DSF8_START**
 <br><br>
     - Use extension points in *plugin.xml*
     - <code>o.e.debug.core.launchConfigurationTypes</code>
@@ -1493,21 +1493,21 @@ title: Communicating with GDB
 title: Sending a command to GDB
 
 - Add a method to FrameSpyService that will send the command "-gdb-set verbose on"
-    - Reset to **EX9.1_START** or **EX9.1_ADVANCED**
+    - Reset to **DSF9.1_START** or **DSF9.1_ADVANCED**
 <br><br>
     - **Go!**
 ---
 title: Extending GDB Initialization Sequence
 
 - 
-    - Reset to **EX9.2_START** or **EX9.2_ADVANCED**
+    - Reset to **DSF9.2_START** or **DSF9.2_ADVANCED**
 <br><br>
     - **Go!**
 ---
 title: Using new initialization Sequence
 
 - 
-    - Reset to **EX9.3_START** or **EX9.3_ADVANCED**
+    - Reset to **DSF9.3_START** or **DSF9.3_ADVANCED**
 <br><br>
     - **Go!**
 ---
