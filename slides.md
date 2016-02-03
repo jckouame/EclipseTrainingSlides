@@ -26,39 +26,69 @@
 [//]: (then press 'p' for presenter mode for my screen while showing)
 [//]: (main browser window on projector)
 [//]: (turn off by adding ?presentme=false to URL)
+
+---
+title: Who we are
+
+- Marc-André Laperle
+    - Software Developer at Ericsson since 2013
+    - Worked in various software development positions (Web, Gaming)
+    - Eclipse Committer for Trace Compass, CDT Linux Tools and Orbit
+    - Occasional contributor to other projects (Platform UI, SWT, EGit, Mylyn, PDE, Oomph)
+
+- Marc Khouzam
+    -
+
 ---
 title: Agenda
 class: nobackground
 build_lists: false
 content_class:
 
-- DAY 1: Plugin development
-    - Module 1:
-    - Module 2:
-- DAY 2: Getting to know DSF and DSF-GDB
-    - Module 3:
-    - Module 4:
-- DAY 3: Optimizing performance
-    - Module 5:
-    - Module 6:
+- Monday: Plugin development
+    - Module 1: Eclipse Platform and plug-in development
+    - Module 2: Implementing first plug-in
+- Tuesday: Getting to know DSF
+    - Module 3: DSF concepts and exercises
+    - Module 4: DSF events and exercises
+- Wednesday: Getting to know DSF-GDB
+    - Module 5: DSF-GDB concepts and exercises
+    - User meeeting
 
 ---
 title: Agenda (cont)
 build_lists: false
 
-- DAY 4: Keeping views synchronized
-    - Module 7:
-    - Module 8:
-- DAY 5: More debugging concepts and intro to Trace Compass
-    - Module 9:
-    - Module 10:
+- Thursday: Modifying DSF-GDB's behaviour
+    - Module 6: Changing the Debug View
+    - Module 7: Changing GDB's initialization
+- Friday: Trace Compass + CDT Editor/Codan
+    - Module 8: Trace Compass introduction and demo
+    - Module 9: Extending the CDT Editor using Codan
     <br><br>
 ##<center>Let's get started!</center>
 [//]: (This is a comment)
 
 ---
+title: Approach to course
+
+- Much hands-on
+- Teams of 2
+- Presentation of exercise result by a team
+- Ask questions
+- We will adapt to feedback
+- 9h to 16h
+- 15 minute break morning and afternoon
+
+---
 title: DAY 1
 subtitle: Plugin development
+
+- Intro to Eclipse Platform
+<br><br>
+- Plug-in development
+<br><br>
+- Exercises
 
 ---
 title: The Eclipse Platform
@@ -247,7 +277,9 @@ Provides tools to create, develop, test, debug, build and deploy Eclipse plug-in
 title: Project for exercices
 
 We will create a new view that will display a log of every function:line that the debugger stops at.
-
+<center>
+<img src=images/FrameSpy.png>
+</center>
 ---
 title: What IS an Eclipse plugin?
 
@@ -492,52 +524,12 @@ What happens? Do you have a problem with the job starting again?
 If you need results from UI thread right away -> syncExec
 
 ---
-title: Module 1
-
-- intro
-- very basic explanation of eclipse architecture, use of SWT, single UI thread
-- create one plugin for the project
-- create a view
-- add SWT button that has a state (e.g., toggle or checkbox) to the view content with buttonPressed listener to print something in the view
-- replace SWT button with view toolbar button using command framework
-- add same action to view menu and context menu
-
----
-title: Course Projects
-build_lists: true
-
-1. Debug Frame Spy
-    - New view logging each `method:line` at which the debugger stopped. 
-1. Replace "main" with "entry" in Debug view
-    - When using a new type of debug session called FrameSpy
-1. Enable GDB verbosity when starting a FrameSpy session
-1. Code Complexity Checker
-    - Codan code checker warning when a method is too long
-    - Codan code checker warning of incompatible return type of overriding method
-
----
-title: Debug Frame Spy
-    1. Show list of function name and line number of each location program was interrupted
-    1. Show time of interrupt for each entry
-    1. Show the number of arguments of the function for each entry
-    1. Show the number of locals in that function for each entry
-    1. For multi-threaded programs, show the list only for the currently selected thread.
-
----
-title: Module 2
-
-- restarting eclipse -> state of button is forgotten but the view layout and such is remembered
-- using preferences to save state; using preference scope
-- reference: how to add a UI preference
-- Job and UIJob, Display.asyncExec and Display.syncExec by adding a blinking thingy, like a counting label, that uses a Job + syncExec or asyncExec
-- the use of final and final arrays in async programming
-- Progress Monitor to allow cancelling the blinking job and showing progress
+title: Exercise Review
 
 ---
 title: DAY 2
-subtitle: Getting to know DSF and DSF-GDB
+subtitle: Getting to know DSF
 
-[//]: (STARTED CLEANUP HERE)
 ---
 title: Module 3
 
@@ -548,7 +540,20 @@ title: Module 3
 <br><br>
 - DSF concepts applied
 <br><br>
-- Exercises 1, 2 ,3
+- DSF Exercise 1
+
+---
+title: Building on our new view
+
+1. Debug Frame Spy
+    - New view logging each `method:line` at which the debugger stopped. 
+
+---
+title: Debug Frame Spy Details
+
+1. Show list of method name and line number of each location program was interrupted
+1. Show time of interrupt for each entry
+1. Show the number of arguments of the function for each entry
 
 ---
 title: Eclipse Debug Platform
@@ -890,6 +895,12 @@ build_lists: true
 1. Heavy use of asynchronous programming for responsiveness
 
 ---
+title: Module 4
+build_lists: true
+
+- DSF Exercises 2 and 3
+
+---
 title: DSF Events
 
 - DSF uses events to notify listeners of different things e.g.,
@@ -1087,7 +1098,11 @@ title: Multiple Session Exercise
 title: Sessions Exercise Review
 
 ---
-title: Module 4
+title: DAY 3:
+subtitle: Getting to know DSF-GDB
+
+---
+title: Module 5
 build_lists: true
 
 - What is DSF-GDB
@@ -1096,7 +1111,7 @@ build_lists: true
 <br><br>
 - DSF-GDB's service structure
 <br><br>
-- Hands-on with DSF-GDB
+- DSF Exercises 5 and 5
 
 ---
 title: What is DSF-GDB
@@ -1235,6 +1250,9 @@ title: Service Shutdown
     - We don't need to take care of it ourselves
     - Refer to DSF-GDB's **ShutdownSequence.java**
 
+--- 
+title: Module 6
+
 ---
 title: Building on DSF-GDB
 
@@ -1264,6 +1282,9 @@ build_lists: true
     - Update FrameSpyView to show:  [time] method:line (# args)
 <br><br>
     - **Go!**
+
+---
+title: Exercise Review
 
 ---
 title: Extending a service
