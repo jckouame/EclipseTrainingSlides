@@ -1,6 +1,6 @@
 % title: Exploring CDT Core
 % title_class:                      #empty, largeblend[123] or fullblend
-% subtitle: C/C++ Editor
+% subtitle: The brain behind the C/C++ Editor
 % subtitle_class:
 % title_slide_class:
 % title_slide_image:
@@ -18,7 +18,6 @@
 
 ---
 title: The C/C++ Editor
-content_class: smaller
 
 Has many features:
 
@@ -32,12 +31,13 @@ Has many features:
 - Markers
 - etc
 
-(screenshot of the editor on the side)
+<div style="position: absolute; left: 450px; top: 150px;">
+<img src="images/cdt-editor.png" height="400" width="400"/>
+</div>
 
 ---
 
 title: Editor feature implementation
-content_class: smaller
 
 Most features use these frameworks:
 
@@ -49,23 +49,21 @@ Most features use these frameworks:
 ---
 
 title: CODAN
-content_class: smaller
 
-CODe ANalysis
+**COD**e **AN**alysis
 
-A static code analysis framework. A *checker* reports errors in the Problems view and editor.
+A static code analysis framework. A **checker** reports errors in the Problems view and editor.
 
 Can be invoked in various ways:
 
 - On demand (right-click Run analysis)
 - On Open/Save in the editor (good for external tool integration)
-- As you type *quite useful*
-- Other??
+- As you type (quite useful)
+- Build (incremental, full)
 
 ---
 
 title: Can be implemented at various approaches:
-content_class: smaller
 
 - File level ("plain text"): Use path of file to read line by line using Java APIs
 - AST: Use CDT's AST to analyze the source file at a structural level.
@@ -77,7 +75,6 @@ We will make use of all three approaches in the exercises.
 ---
 
 title: Exercices
-content_class: smaller
 
 Project 1: We will create a checker that will warn if the file is longer than a set number of lines. This will only use normal Java libraries to analyze the code.
 
@@ -89,7 +86,6 @@ Project 3: We will create a checker that will display an error if a method overr
 ---
 
 title: Project 1
-content_class: smaller
 
 Description:
 
@@ -98,7 +94,6 @@ Create a checker that will warn if the file is longer than a set number of lines
 ---
 
 title: Project 1
-content_class: smaller
 subtitle: Step 1: Creating the checker skeleton
 
 - Create a new plugin with cdt.codan.core dependency
@@ -107,7 +102,6 @@ subtitle: Step 1: Creating the checker skeleton
 ---
 
 title: Project 1
-content_class: smaller
 subtitle: Step 2:
 
 - Check if it should report problem with shouldProduceProblems
@@ -119,7 +113,6 @@ Test it: Run it and check console
 ---
 
 title: Project 1
-content_class: smaller
 subtitle: Step 3:
 
 - Create a problem to will be reported (extension)
@@ -130,7 +123,6 @@ Test it: Run it and a warning should appear!
 ---
 
 title: Project 1
-content_class: smaller
 subtitle: Step 4:
 
 - Add a preference for the number of lines (addPreference). Use it
@@ -139,48 +131,58 @@ subtitle: Step 4:
 ---
 
 title: What is the AST?
-content_class: smaller
 
 Abstract Syntax Tree.
 
 Tree of nodes representing the "physical" structure of a source file. Example:
 
-int main() {
-return 0;
-}
-*screenshot of tree*
+<div style="float: left; background-color: #eeeeee; margin-left:50px; width:300px;">
+#include <stdio.h><br/>
+<br/>
+int main() {<br/>
+return 0;<br/>
+}<br/>
+<br/>
+void foo() {<br/>
+<br/>
+}<br/>
+</div>
+
+<div style="float: right;">
+<img src="images/dom.png" width="400"/>
+</div>
 
 ---
 
 title: Navigating the AST
-content_class: smaller
 
 2 ways to navigate the AST:
 
 - get() methods
 - Visitor pattern (the recommended way)
 
-You create a visitor object and specify what you would like to visit.
-When a desired node is visited, the visit() method is called on the visitor with the node passed as argument; this is where things can be analyzed. The visitor can choose to skip the children of that node or continue.
+How to use a visitor:
+
+- You create a visitor and specify what you would like to visit (types of nodes)
+- When a desired node type is visited, the visit() method is called on your visitor with the node passed as argument
+- Inside the visit method this is where the node can be analysed
+- The visitor can choose to skip the children of that node or continue
 
 ---
 
 title: AST Example
-content_class: smaller
 
 *Tiny example*
 
 ---
 
 title: Project 2
-content_class: smaller
 
 Create a checker that will warn if code is too complex. We will consider code too complex when it has deep nesting of if/else/for/while. This time, we will make use of CDT's AST to analyze the code. We will be able to analyze based on nodes in a tree instead of plain text.
 
 ---
 
 title: Project 2
-content_class: smaller
 subtitle: Step 1:
 
 - Create a new checker (extension). This time we can use AbstractIndexAstChecker
@@ -190,7 +192,6 @@ subtitle: Step 1:
 ---
 
 title: Project 2
-content_class: smaller
 subtitle: Step 2:
 
 - Increment level of complexity when visiting a chosen node, decrement on leave
@@ -199,7 +200,6 @@ subtitle: Step 2:
 ---
 
 title: Project 2
-content_class: smaller
 subtitle: Step 3:
 
 - Prevent more errors in deeper levels of children. I.e. do not "continue" after reporting
@@ -208,7 +208,6 @@ subtitle: Step 3:
 ---
 
 title: What is the DOM?
-content_class: smaller
 
 Document Object Model.
 
@@ -226,7 +225,6 @@ Example of AST nodes vs binding: In a source file, printf is used in several pla
 ---
 
 title: The index (PDOM)
-content_class: smaller
 
 DOM bindings are stored on disk to prevent re-parsing.
 
@@ -240,7 +238,6 @@ This data is called the Persistent DOM (PDOM) and often referred as just "the in
 ---
 
 title: Project 3
-content_class: smaller
 
 We will create a checker that will display an error if a method override another method but with the wrong return type.
 
@@ -249,7 +246,6 @@ Example: *picture or code*
 ---
 
 title: Project 3
-content_class: smaller
 subtitle: Step 1:
 
 - Create a new checker (extension). This time we can use AbstractIndexAstChecker
@@ -258,7 +254,6 @@ subtitle: Step 1:
 
 ---
 title: Project 3
-content_class: smaller
 subtitle: Approaches
 
 There are multiple ways. 
@@ -275,7 +270,6 @@ We would like to report errors where the method declarators are but a ICPPMethod
 
 ---
 title: Project 3
-content_class: smaller
 
 Approach B
 
@@ -288,7 +282,6 @@ Approach B
 
 ---
 title: Project 3
-content_class: smaller
 subtitle: Step 2:
 
 Find a potential method to analyze
@@ -297,16 +290,14 @@ Find a potential method to analyze
 
 ---
 title: Project 3
-content_class: smaller
 subtitle: Step 3:
 
 Find all potential conflicts
 - Get the owner (class type) of the method
-- Get *all* the base methods in the class. Cheat: Copy from ClassTypeHelper. Like ClassTypeHelper.getAllDeclaredMethods, but without getDeclaredMethods (the class own methods).
+- Get **all** the base methods in the class. Cheat: Copy from ClassTypeHelper. Like ClassTypeHelper.getAllDeclaredMethods, but without getDeclaredMethods (the class own methods).
 
 ---
 title: Project 3
-content_class: smaller
 subtitle: Step 4:
 
 Detect the conflict
@@ -316,7 +307,6 @@ Detect the conflict
 
 ---
 title: Project 3
-content_class: smaller
 subtitle: Step 5:
 
 - Create and report the problem. Use the node's location to report at the correct line.
@@ -325,7 +315,6 @@ subtitle: Step 5:
 ---
 title: Code Examples
 subtitle: Source Hover (CSourceHover.java)
-content_class: smaller
 
 ~~~~{java}
 public IStatus runOnAST(ILanguage lang, IASTTranslationUnit ast) {
