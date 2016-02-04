@@ -92,20 +92,17 @@ subtitle: Plugin development
 
 ---
 title: The Eclipse Platform
-content_class: smaller
 
-Intro text
+The Platform defines the set of frameworks and common services that collectively make up infrastructure required to support the use of Eclipse as a component model, as a **Rich Client Platform (RCP)** and as a comprehensive tool integration platform.
 
 ---
 title: The Eclipse Platform
-content_class: smaller
 
 <img src="images/sdk-arch.jpg"/>
 
 ---
 
 title: Eclipse Runtime
-content_class: smaller
 
 Mainly composed of the Eclipse Equinox project.
 
@@ -119,7 +116,6 @@ Eclipse Equinox:
 ---
 
 title: Workspace
-content_class: smaller
 
 - The workspace is a view of the user's data files: the resources.
 - Types of resources: projects, folders, and files
@@ -135,7 +131,6 @@ content_class: smaller
 
 ---
 title: Workspace
-content_class: smaller
 
 Other features than navigation/listing:
 
@@ -389,7 +384,7 @@ menu:org.eclipse.ui.main.menu?after=additions
 
 title: Step 5: Add toolbar button
 
-Let's add the command to the toolbar.
+Let's add the command to the view toolbar.
 
 - Create the menus extension
 - Add a menuContribution, set the locationURI so that it gets displayed in the view toolbar, after additions
