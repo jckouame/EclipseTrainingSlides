@@ -81,6 +81,13 @@ title: Approach to course
 - 15 minute break morning and afternoon
 
 ---
+title: Final setup
+
+- *~/workspace-training/start.tcsh*
+- Select workspace: *~/workspace-training*
+
+
+---
 title: DAY 1
 subtitle: Plugin development
 
@@ -305,9 +312,28 @@ title: Step 1: Create a plugin
 What are all the tabs for?
 
 ---
-title: Step 2: Create a view
+title: Step to prepare
 
-Since we want to use the Git repo, delete the project and import existing one.
+- Since we want to use the Git repo, delete the project and import existing one.
+    - Right-click on your project and press Delete then press OK
+- Go to *Git perspective*
+    - In *Git Repositories* right-click and choose *Remove Repository from View*
+
+---
+title: Step to prepare (2)
+
+- Go to *Plug-in Development perspective*:
+    - *File->Import...->General->Existing Projects into Workspace*
+    - Press *Next*
+    - Press *Browse...*
+    - Choose *~/workspace-training/EclipseTraining/org.eclipse.cdt.example.framespy*
+    - Make sure a single project is showing and is selected
+    - Press *Finish*
+
+- Right-click on project and choose *Team->Fetch from Upstream*
+
+---
+title: Step 2: Create a view
 
 - Add a new view by adding an extension (plugin.xml)
 - Create the view class (tip: click the hyperlink to bring up the New Class wizard)
