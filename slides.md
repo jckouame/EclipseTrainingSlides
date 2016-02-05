@@ -1592,65 +1592,18 @@ title: Using new initialization Sequence
     - Reset to **DSF9.3_START** or **DSF9.3_ADVANCED**
 <br><br>
     - **Go!**
----
-title: Using Interfaces
-
-- Difference between <code>IStack</code> and <code>MIStack</code>
 
 ---
-title: Other topics
+title: Extra topics
 
+- Debug features
+    - dynamic-printf
+    - visualizer
+    - new CLI
+    - Tracepoints
+    - OS Resources
 - CommandCache usage
-
----
-title: DAY 4
-subtitle: Keeping views synchronized
-
----
-title: Module 7
-
+- Using Interfaces
+- DsfSession#registerModelAdapter()
+- CommandFactory of DSF-GDB
 - IDebugContextChangedListener
-- add support for changing selection in DV and our view updating properly using DMContext hierarchy to choose proper info to display
-- exercise about GDB mi events ...
-
----
-title: Module 8
-
-- extending the FinalLaunchSequence ...
-
----
-title: DAY 5
-subtitle: More debugging concepts and intro to Trace Compass
-
----
-title: Module 9
-
-- If there is interest, show Advanced C/C++ debugging presentation, visualizer, new CLI
-- Explain all-stop vs non-stop and give a demo
-- explain multi-process in preparation for multi-arch support
-- Intro to Trace Compass usage
-- Intro to Trace Compass basic concepts and classes
-
----
-title: Module 10
-
-- Extending the CDT editor
-- writing a Codan check for code style of counting the number of lines in a method
-    
-++Notes++
-- If we have an extra afternoon we can do an advanced exercise:
-    - handle both all-stop and non-stop in their new view by logging the stack trace for every thread of the process that stopped in all-stop mode
-- Topics to mention but not very long:
-    - CommandFactory should called but is rarely change. Example of DSF-GDB
-    - adapter pattern
-++++
-
----
-title: DsfSession class (2)
-
-- Allows access to Services through *DsfServicesTracker*
-- A session instance forwards debug event to registered listeners
-    - *addServiceEventListener()*, *removeServiceEventListener()*
-    - *dispatchEvent()* is called by services that want to send event
-- Allows to register adapters for all data model contexts
-    - *registerModelAdapter()*, *unregisterModelAdapter()*, *getModelAdapter()*
