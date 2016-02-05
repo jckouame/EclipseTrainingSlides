@@ -44,7 +44,7 @@ class: nobackground
 build_lists: false
 content_class:
 
-- Monday: Plugin development
+- Monday: Plug-in development
     - Module 1: Eclipse Platform and plug-in development
     - Module 2: Implementing a first plug-in
 - Tuesday: Getting to know DSF
@@ -92,7 +92,7 @@ title: Start your Eclipse
 <br><br>
 <br><br>
 <br><br>
-#<center>Plugin development</center>
+#<center>Plug-in development</center>
 
 ---
 title: Module 1
@@ -124,7 +124,7 @@ Eclipse Equinox:
 
 - Implements the OSGI specification (modules, services, etc)
 - P2: Provisioning framework. Installs new plug-ins, resolves dependencies, etc.
-- Miscellaneous Core functionallity like the extension registry (plugins), Jobs, Preferences, etc.
+- Miscellaneous Core functionallity like the extension registry (plug-ins), Jobs, Preferences, etc.
 - Eclipse launcher (native)
 
 <center><img src="images/EclipseRT.png"/></center>
@@ -188,7 +188,7 @@ title: Eclipse Help
 
 
 - Table of content, Search, indexed
-- Context sensitive (F1). Plugins can set context "ids"
+- Context sensitive (F1). Plug-ins can set context "ids"
 - Runs on a local server, either in internal browser (SWT wiget) or external
 
 Other "User Assistance" features
@@ -315,12 +315,12 @@ We will create a new view that will display a log of every function:line that th
 <img src=images/FrameSpy.png>
 </center>
 ---
-title: What IS an Eclipse plugin?
+title: What IS an Eclipse plug-in?
 
 It's an OSGI bundle, a java module.
 But with an Eclipse flavor. Among other things:
 
-- Specifies dependencies to other plugins
+- Specifies dependencies to other plug-ins
 - Uses extensions to plug into existing extension points
 - Can define new extension points for others to extend 
 - Specifies what to package in the (Jar)
@@ -331,14 +331,14 @@ Difference between extension and extension point?
 Extension = plug<br/>
 Extension point = socket
 
-A lot of things are done through extension points. For that, we need a plugin.
+A lot of things are done through extension points. For that, we need a plug-in.
 
 ---
-title: Exercise: Create a plugin
+title: Exercise: Create a plug-in
 
 - Go to Plug-in Development perspective
 - File > New > Plug-in project
-- Name your plugin (org.eclipse.cdt.example.framespy)
+- Name your plug-in (org.eclipse.cdt.example.framespy)
 - Press Next then Finish
 - <b>Go!</b>
 
@@ -503,7 +503,7 @@ We should make sure that the toggle state is remembered when the view is closed 
 	- InstanceScope: Saved at the workspace level. Overrides Default.
 	- ProjectScope: Saved at the project level. Overrides Instance.
 	- Custom!
-- Organized in nodes (think namespaces). Typically the plugin id.
+- Organized in nodes (think namespaces). Typically the plug-in id.
 ---
 title: Exercise: Persist the toggle state
 
