@@ -71,24 +71,32 @@ build_lists: false
 ---
 title: Approach to course
 
-- Much hands-on
+- A mix of theory and hands-on exercises
 - Teams of 2
-- Presentation of exercise result by a team
-- Ask questions
-- We will adapt to feedback
-- 9h to 16h
-- 15 minute break morning and afternoon
+- After exercise, a team will describe their result
+- Ask questions often and give feeback
+- 9h to 16h schedule
+- One hour lunch?
+- 15 minute break, morning and afternoon
+- Please tell us if you are confused during the course
 
 ---
-title: Final setup
+title: Start your Eclipse
 
 - *~/workspace-training/start.tcsh*
 - Select workspace: *~/workspace-training*
 
+---
+
+<br><br>
+<br><br>
+<br><br>
+<br><br>
+#<center>Plugin development</center>
 
 ---
-title: DAY 1
-subtitle: Plugin development
+title: Module 1
+subtitle: Eclipse Platform and Plug-in Development
 
 - Intro to Eclipse Platform
 <br><br>
@@ -294,6 +302,10 @@ title: PDE: Plug-in Development Environment
 Provides tools to create, develop, test, debug, build and deploy Eclipse plug-ins.
 
 <img src="images/eclipse-pde.png"/>
+
+---
+title: Module 2
+subtitle: Implementing a first plug-in
 
 ---
 title: Project for exercices
@@ -588,11 +600,11 @@ subtitle: What we accomplished
 - Use Jobs and Progress Monitors
 
 ---
-title: DAY 2
-subtitle: Getting to know DSF
+title: Getting to know DSF
 
 ---
 title: Module 3
+subtitle: DSF concepts and exercises
 
 <br><br>
 - Eclipse Debug Platform
@@ -957,9 +969,13 @@ build_lists: true
 
 ---
 title: Module 4
-build_lists: true
+subtitle: DSF events and exercises
 
-- DSF Exercises 2 and 3
+- What are DSF events
+<br><br>
+- Sending and receving DSF events
+<br><br>
+- DSF Exercises 2 abd 3
 
 ---
 title: DSF Events
@@ -1159,7 +1175,7 @@ title: Multiple Session Exercise
 title: Sessions Exercise Review
 
 ---
-title: DAY 3:
+title: Wednesday
 subtitle: Getting to know DSF-GDB
 
 ---
