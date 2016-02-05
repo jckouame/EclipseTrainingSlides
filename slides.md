@@ -5,7 +5,7 @@
 % title_slide_class:
 % title_slide_image:
 % author: Marc Khouzam
-% author: Marc-Andre Laperle
+% author: Marc-André Laperle
 % thankyou_blend: largeblend3       #largeblend[123] or fullblend
 % thankyou_details:
 % mail1: marc.khouzam@ericsson.com
@@ -13,9 +13,8 @@
 % phone:
 % sms:
 % lync:
-% footer: Ericsson Internal
-% footer: Rev PA1
-% footer: 2015-12-15
+% footer: Ericsson
+% footer: 2016-02-08
 % logoslide: false      # Show a logo slide as the first slide. Also affected by % animate
 % useBuilds: true
 % animate: true         #animate logoslide (chrome only)
@@ -47,7 +46,7 @@ content_class:
 
 - Monday: Plugin development
     - Module 1: Eclipse Platform and plug-in development
-    - Module 2: Implementing first plug-in
+    - Module 2: Implementing a first plug-in
 - Tuesday: Getting to know DSF
     - Module 3: DSF concepts and exercises
     - Module 4: DSF events and exercises
@@ -100,7 +99,7 @@ subtitle: Plugin development
 ---
 title: The Eclipse Platform
 
-The Platform defines the set of frameworks and common services that collectively make up infrastructure required to support the use of Eclipse as a component model, as a **Rich Client Platform (RCP)** and as a comprehensive tool integration platform.
+The Platform defines the set of frameworks and common services that collectively make up infrastructure required to support the use of Eclipse as a component model, as a **Rich Client Platform (RCP)** and as a comprehensive **tool integration platform**.
 
 ---
 title: The Eclipse Platform
@@ -119,6 +118,8 @@ Eclipse Equinox:
 - P2: Provisioning framework. Installs new plug-ins, resolves dependencies, etc.
 - Miscellaneous Core functionallity like the extension registry (plugins), Jobs, Preferences, etc.
 - Eclipse launcher (native)
+
+<center><img src="images/EclipseRT.png"/></center>
 
 ---
 
@@ -157,6 +158,7 @@ Eclipse File System (EFS).
 - The default implementations is for Local file systems
 - Other implementations: SSH, FTP, dstore, ZIP, etc.
 
+<center><img src="images/efs_project.png" width="50%" height="50%"/></center>
 
 ---
 title: Eclipse Team
@@ -171,6 +173,8 @@ Framework to integrate SCMs.
 
 EGit, CVS, Subversion, Perforce use this.
 
+<center><img src="images/egit.png"/></center>
+
 ---
 title: Eclipse Help
 
@@ -184,6 +188,8 @@ Other "User Assistance" features
 - Cheat cheets
 - Welcome page
 - Tutorials
+
+<div style="position: absolute; left:400px; top: 400px;"><img src="images/welcome.png" width="70%" height="70%"/></div>
 ---
 title: SWT
 
@@ -199,15 +205,27 @@ This is typically the lowest level of UI programming done in Eclipse development
 
 ---
 title: SWT
+subtitle: Features
 
 - Native look
+- Quite fast!
+- Button, Text, Browser, Group, Table, Tree, etc.
+- Parent is specified in constructor (versus add child to parent container explicitly)<
+- Can be used as a stand-alone Java library (without anything else Eclipse)
+
+---
+title: SWT
+subtitle: Implementation
+
 - Single UI thread
 - Implemented using JNI calling the OS native library (which means SWT has some native glue code)
-	- Windows: Win32, Mac: Cocoa, Linux: GTK2 and GTK3
-- Button, Text, Browser, Group, Table, Tree, etc. Parent is specified in constructor
+	- Windows: Win32
+	- Mac: Cocoa
+	- Linux: GTK2 and GTK3
 - Browser widget is integrated with different libraries: Webkit, Internet Explorer, XULRunner (Firefox)
 - Most crashes (i.e. segmentation fault) in Eclipse due to native libraries called by SWT
 	- GTK, WebKitGTK+, Ubuntu-specific libraries (Unity)
+- A bit hard (but fun) to debug. Java + Native C
 ---
 title: JFace
 
@@ -228,21 +246,21 @@ org.eclipse.ui.*
 
 This is where classes more related to the common IDE UI fonctionality reside.
 
----
-title: Workbench
-
-<img src="images/workbench_decomposed.png"/>
+<center><img src="images/workbench_decomposed.png" width="500" height="400"/></center>
 
 ---
 title: Workbench
 
-A <b>workbench</b> has one or more workbench windows.
+- A <b>Workbench</b> has one or more workbench windows.
 
-Each <b>workbench window</b> has workbench pages.
+- Each Workbench <b>Window</b> has workbench pages.
 
-Each workbench page has <b>workbench parts</b>, of which there are two kinds: views and editors.
-x
-Each workbench part is either a view or an editor.
+- Each Workbench <b>Page</b> has workbench parts, of which there are two kinds: views and editors.
+
+- Each Workbench <b>Part</b> is either a <b>View</b> or an <b>Editor</b>.
+
+<br/>
+<center><img src="images/workbench_dia.png"/></center>
 
 ---
 title: Workbench
@@ -259,6 +277,8 @@ title: The Eclipse SDK
 
 To be able to work program with the Eclipse Platform, you need tools.
 
+<img src="images/eclipse-logo-without-text.png" width="64" height="64"/>=<img src="images/jdt.png"  width="64" height="64"/>+<img src="images/plugins.png"  width="64" height="64"/><br/>
+
 The Eclipse SDK = Platform (including source) + JDT + PDE
 
 ---
@@ -266,7 +286,7 @@ title: JDT: Eclipse Java development tools
 
 Those are the tools suitable for any Java-based programming
 
-<img src="images/editor_vectortest.png"/>
+<center><img src="images/editor_vectortest.png"/></center>
 
 ---
 title: PDE: Plug-in Development Environment
@@ -296,20 +316,23 @@ But with an Eclipse flavor. Among other things:
 
 Difference between extension and extension point?
 
-Extension = plug
+Extension = plug<br/>
 Extension point = socket
 
 A lot of things are done through extension points. For that, we need a plugin.
 
 ---
-title: Step 1: Create a plugin
+title: Exercise: Create a plugin
 
 - Go to Plug-in Development perspective
 - File > New > Plug-in project
 - Name your plugin (org.eclipse.cdt.example.framespy)
 - Press Next then Finish
+- <b>Go!</b>
 
 What are all the tabs for?
+
+<center><img src="images/manifest_tabs.png"/></center>
 
 ---
 title: Step to prepare
@@ -333,13 +356,14 @@ title: Step to prepare (2)
 - Right-click on project and choose *Team->Fetch from Upstream*
 
 ---
-title: Step 2: Create a view
+title: Exercise: Create a view
+
+- Reset to **PLUG1**
 
 - Add a new view by adding an extension (plugin.xml)
 - Create the view class (tip: click the hyperlink to bring up the New Class wizard)
 - Make sure the view has an id, name
-
-Test it!
+- <b>Go!</b>
 
 Next, we should add a widget to the view, so that it's not empty.
 
@@ -357,17 +381,17 @@ Composite are containers of widgets that can be layed out.
 Composites can be in composites!
 
 ---
-title: Step 3: Add button to view
+title: Exercise: Add button to view
 
 Let's add a Button. Let's make it a checkbox button.
 
+- Reset to **PLUG2**
 - In view class, in createPartControl() add new Button with a "checkbox style"
 - Add selection listener to detect when it's pressed
 - Output something to the console
+- <b>Go!</b>
 
-Test it!
-
-But the button does not belong in view itself, it would be nicer in the toolbar.
+But the button does not belong in view itself, it would be nicer in the toolbar. <img src="images/quick_fix.png" width="50" height="40"/>
 ---
 title: Eclipse commands and handlers
 
@@ -377,16 +401,16 @@ A command has:
 - An id that declares a semantic behavior
 - One or more handlers
 
-For example, the Copy command has the id org.eclipse.ui.edit.copy. But it has many handlers that behave differently depending on the context (selection, view)
+For example, the Copy command has the id *org.eclipse.ui.edit.copy*. But it has many handlers that behave differently depending on the context (selection, view)
 
 ---
-title: Step 4: Create the command and handler
+title: Exercise: Create the command and handler
 
+- Reset to **PLUG3**
 - Add a command extension to toggle log on/off
 - Create a defaultHandler class (tip: use hyperlink to create class). Make it extend AbstractHandler
 - Implement the execute method to make it print something to the console
-
-Test it!
+- <b>Go!</b>
 ---
 title: The menus extension point
 
@@ -398,33 +422,33 @@ The org.eclipse.ui.menus extension point can add commands to:
 - View toolbars (toolbar)
 - View menus (menu)
 
-It has an odd **locationURI** field:
-
-[Scheme]:[ID]?[placement]"
+It has an odd **locationURI** field: &nbsp;<span style="background-color:#eeeeee;">[Scheme]:[ID]?[placement]</span>
 
 For example:
 
+~~~~
 menu:org.eclipse.ui.main.menu?after=additions
+~~~~
 
 ---
-
-title: Step 5: Add toolbar button
+title: Exercise: Add toolbar button
 
 Let's add the command to the view toolbar.
 
+- Reset to **PLUG4**
 - Create the menus extension
 - Add a menuContribution, set the locationURI so that it gets displayed in the view toolbar, after additions
 - Add a command under the contribution. Set the id, icon and style (push)
+- <b>Go!</b>
 
-Test it!
-
-It would be nice in the context menu as well.
+It would be nice in the context menu as well. <img src="images/quick_fix.png" width="50" height="40"/>
 
 ---
-title: Step 6: Add context menu
+title: Exercise: Context menu
 
 Let's add the same command in the context menu.
 
+- Reset to **PLUG5**
 - Add a new menuContribution. Because it needs different locationURI. 
 - Add the command. Set the id, icon and style (push)
 - Create a context menu in the view:
@@ -437,20 +461,21 @@ getViewSite().registerContextMenu(fMenuManager, null);
 fMenuManager.dispose();
 ~~~~
 
-Test it!
+- <b>Go!</b>
 ---
-title: Step 7: Show the toggle state
+title: Exercise: Show the toggle state
 
 The user needs to see whether logging is enabled or not.
 
 Let's add a label that displays that.
 
+- Reset to **PLUG6**
 - Add a Label (a SWT widget) at the view creation.
 - When the command executes:
 	- Set the toggle state (you can add a method to the view)
 	- Update the label text
 
-Test it!
+- <b>Go!</b>
 
 
 If you enable logging and close/reopen the view, what happens?
@@ -467,8 +492,9 @@ We should make sure that the toggle state is remembered when the view is closed 
 	- Custom!
 - Organized in nodes (think namespaces). Typically the plugin id.
 ---
-title: Step 8: Persist the toggle state
+title: Exercise: Persist the toggle state
 
+- Reset to **PLUG7**
 - When the toggle state is set:
 	- Get the InstanScope
 	- Get the node
@@ -478,7 +504,7 @@ title: Step 8: Persist the toggle state
 	- Get the node
 	- Get value using key, set the label text
 
-Test it!
+- <b>Go!</b>
 
 
 ---
@@ -499,21 +525,25 @@ In Eclipse code, Jobs and Threads are both commonly used, depending on the situa
 For the first implementation of our logging feature, we will poll every one second using a job.
 
 ---
-title: Step 9: Creating a polling job
+title: Exercise: Creating a polling job
 
+- Reset to **PLUG8**
 - When toggle state is on, create and schedule a job
 	- Give the job a nice name to be shown in the Progress View
 - In the job run() method, sleep for 1 sec
 - After the 1 sec, reschedule the job (only if the toggle state is still on!).
 - Print something to the console every tick "polling..."
+- <b>Go!</b>
 
 ---
-title: Step 10: Print to view
+title: Exercise: Print to view
 
 Every tick, we would like to show the elapsed time in the view. It can just be a 
 
+- Reset to **PLUG9**
 - Create a counter (a simple int) that is incremented each tick.
 - Set the text label with the value of the counter
+- <b>Go!</b>
 
 What happens?
 ---
@@ -528,24 +558,33 @@ Display.getDefault().asyncExec // Execute code at the next reasonable opportunit
 Display.getDefault().syncExec // Blocks calling thread until executed on UI thread
 ~~~~
 
-With this knowledge we can fix the Invalid Thread Access. We can use asyncExec in this case.
+With this knowledge we can fix the Invalid Thread Access. We can use asyncExec in this case. (**PLUG10**)
 ---
-title: Step 11: Handle cancel
+title: Exercise: Handle cancel
 
 An IProgressMonitor is passed to the job.
 
 We can use it to know if the user canceled the logging.
 
+- Reset to **PLUG10**
 - Use monitor.isCanceled() to know when user canceled
 - Set the toggle state to off when canceled
-
-Test it!
+- <b>Go!</b>
 
 What happens? Do you have a problem with the job starting again?
 If you need results from UI thread right away -> syncExec
 
 ---
 title: Exercise Review
+subtitle: What we accomplished
+
+- Create a plug-in
+- Create a view
+- Use SWT widgets
+- Use commands and handlers
+- Use menu extension (context menu and toolbar)
+- Use the preference store
+- Use Jobs and Progress Monitors
 
 ---
 title: DAY 2
