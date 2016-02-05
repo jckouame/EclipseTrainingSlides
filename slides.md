@@ -305,7 +305,7 @@ Provides tools to create, develop, test, debug, build and deploy Eclipse plug-in
 
 ---
 title: Module 2
-subtitle: Implementing a first plug-in
+subtitle: Implementing a First Plug-in
 
 ---
 title: Project for exercices
@@ -600,11 +600,16 @@ subtitle: What we accomplished
 - Use Jobs and Progress Monitors
 
 ---
-title: Getting to know DSF
+
+<br><br>
+<br><br>
+<br><br>
+<br><br>
+#<center>Getting to know DSF</center>
 
 ---
 title: Module 3
-subtitle: DSF concepts and exercises
+subtitle: DSF Concepts and Exercises
 
 <br><br>
 - Eclipse Debug Platform
@@ -969,13 +974,13 @@ build_lists: true
 
 ---
 title: Module 4
-subtitle: DSF events and exercises
+subtitle: DSF Events and Exercises
 
 - What are DSF events
 <br><br>
 - Sending and receving DSF events
 <br><br>
-- DSF Exercises 2 abd 3
+- DSF Exercises 2 and 3
 
 ---
 title: DSF Events
@@ -1175,12 +1180,15 @@ title: Multiple Session Exercise
 title: Sessions Exercise Review
 
 ---
-title: Wednesday
-subtitle: Getting to know DSF-GDB
+
+<br><br>
+<br><br>
+<br><br>
+<br><br>
+#<center>Getting to know DSF-GDB</center>
 
 ---
 title: Module 5
-build_lists: true
 
 - What is DSF-GDB
 <br><br>
@@ -1188,7 +1196,7 @@ build_lists: true
 <br><br>
 - DSF-GDB's service structure
 <br><br>
-- DSF Exercises 5 and 5
+- DSF Exercises 4, 5 and 6
 
 ---
 title: What is DSF-GDB
@@ -1327,20 +1335,9 @@ title: Service Shutdown
     - We don't need to take care of it ourselves
     - Refer to DSF-GDB's **ShutdownSequence.java**
 
---- 
-title: Module 6
-
----
-title: Building on DSF-GDB
-
-- New service does not do anything *debugging*
-<br><br>
-- For a new debugging feature
-    - Use existing DSF-GDB services
-    - Re-work obtained information
-    - Provide new information to view
-<br><br>
-- Services can use other services
+++Notes++
+Ideal to finish a day here
+++++
 
 ---
 title: Frame Argument count
@@ -1362,6 +1359,37 @@ build_lists: true
 
 ---
 title: Exercise Review
+---
+
+<br><br>
+<br><br>
+<br><br>
+#<center>Modifying DSF-GDB's behaviour</center>
+
+
+---
+title: Module 6
+subtitle: Changing the Debug View
+
+- Extending an existing service
+<br><br>
+- Launch Delegates and Launch Configuration Types
+<br><br>
+- Service Factories
+<br><br>
+- DSF Exercises 7 and 8
+
+---
+title: Building on DSF-GDB
+
+- New service does not do anything *debugging*
+<br><br>
+- For a new debugging feature
+    - Use existing DSF-GDB services
+    - Re-work obtained information
+    - Provide new information to view
+<br><br>
+- Services can use other services
 
 ---
 title: Extending a service
@@ -1550,6 +1578,18 @@ title: What we've seen
 <br><br>
 
 ---
+title: Module 7
+subtitle: Changing GDB's Initialization
+
+- Launch order
+<br><br>
+- FinalLaunchSequence
+<br><br>
+- Extending the FinalLaunchSequence
+<br><br>
+- DSF Exercise 9
+
+---
 title: Modifying GDB initialization
 
 - DSF-GDB initializes GDB based on parameters of the launch config, e.g., 
@@ -1612,14 +1652,14 @@ title: Using new initialization Sequence
 ---
 title: Extra topics
 
-- Debug features
-    - dynamic-printf
-    - visualizer
-    - new CLI
-    - Tracepoints
-    - OS Resources
-- CommandCache usage
-- Using Interfaces
-- DsfSession#registerModelAdapter()
-- CommandFactory of DSF-GDB
-- IDebugContextChangedListener
+- More advanced topics
+
+++Notes++
+Debug features: Dynamic-printf, Visualizer, New CLI, Tracepoints, OS Resources, CommandCache usage
+
+Using Interfaces, DsfSession#registerModelAdapter()
+
+CommandFactory of DSF-GDB
+
+IDebugContextChangedListener
+++++
