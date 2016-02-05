@@ -359,13 +359,14 @@ title: Step to prepare (2)
 title: Exercise: Create a view
 
 - Reset to **PLUG1**
-
 - Add a new view by adding an extension (plugin.xml)
 - Create the view class (tip: click the hyperlink to bring up the New Class wizard)
 - Make sure the view has an id, name
-- <b>Go!</b>
+- To test your progress 
 
-Next, we should add a widget to the view, so that it's not empty.
+<center> <img src="images/LaunchCourse.png" width="400"/></center>
+
+- <b>Go!</b>
 
 ---
 title: SWT Basic widget creation
