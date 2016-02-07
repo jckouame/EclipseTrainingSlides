@@ -1740,7 +1740,7 @@ title: Using new initialization Sequence
 <br><br>
 1. Override <code>getCompleteInitializationSequence()</code> to choose new launch sequence
 <br><br>
-    - Reset to **DSF9.3_START** or **DSF9.3_ADVANCED**
+    - Reset to **DSF9.3_ADVANCED**
 <br><br>
     - **Go!**
 
