@@ -31,12 +31,14 @@ title: Who we are
 
 - Marc-André Laperle
     - Software Developer at Ericsson since 2013
-    - Worked in various software development positions (Web, Gaming)
     - Eclipse Committer for Trace Compass, CDT Linux Tools and Orbit
     - Occasional contributor to other projects (Platform UI, SWT, EGit, Mylyn, PDE, Oomph)
-
+<br><br>
 - Marc Khouzam
-    -
+    - Software Developer at Ericsson since 1998
+    - Jambala, TSP, CDMA2000, MediaGwSim, CDT/Debug
+    - 4-months in Älvsjö in 1999 working for Dicos
+    - CDT project co-lead, CDT Debug lead
 
 ---
 title: Agenda
