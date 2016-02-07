@@ -1,0 +1,3186 @@
+<!--
+erislides: A modification of the Google IO 2012 HTML5 slide template
+Author: Eric Andersson <eric.andersson@ericsson.com>
+
+Based on slidedeck, URL: https://github.com/rmcgibbo/slidedeck, and
+ultimately:
+
+Google IO 2012 HTML5 Slide Template
+Authors: Eric Bidelman <ebidel@gmail.com>
+         Luke Mahe <lukem@google.com>
+URL: https://code.google.com/p/io-2012-slides
+-->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Eclipse Plug-in Development</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <!--<link rel="shortcut icon" href="figure/template/favicon.ico"/>-->
+  <link rel="shortcut icon" href="data:image/ico;base64, AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAQAQAABMLAAATCwAAAAAAAAAAAAAAAAAAAAAAAF0mDExdJgyqXSYMf10mDCsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABdJgzsXSYM/10mDP9dJgz0XSYMuF0mDGJdJgwaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAXSYM1F0mDP9dJgz/XSYM/10mDP9dJgz/XSYM610mDKBdJgxNXSYMCgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAF0mDCNdJgyFXSYM1V0mDP9dJgz/XSYM/10mDP9dJgz/XSYM/10mDN1dJgyFXSYMGgAAAAAAAAAAAAAAAAAAAAAAAAAAXSYMIl0mDB9dJgxGXSYMnV0mDOpdJgz/XSYM/10mDP9dJgz/XSYM/10mDJQAAAAAAAAAAAAAAAAAAAAAXSYMql0mDPVdJgzcXSYMg10mDDRdJgwcXSYMW10mDLRdJgz6XSYM/10mDP9dJgyMAAAAAAAAAAAAAAAAAAAAAF0mDPxdJgz/XSYM/10mDP9dJgz9XSYMxF0mDGpdJgwqXSYMJl0mDG5dJgxoXSYMEQAAAAAAAAAAAAAAAAAAAABdJgyEXSYM9V0mDP9dJgz/XSYM/10mDP9dJgz/XSYM8V0mDK9dJgxRXSYMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAF0mDBxdJgxvXSYMxF0mDP9dJgz/XSYM/10mDP9dJgz/XSYM/10mDORdJgxTAAAAAAAAAAAAAAAAAAAAAF0mDDtdJgyIXSYMW10mDCJdJgwwXSYMhF0mDNddJgz/XSYM/10mDP9dJgz/XSYMqAAAAAAAAAAAAAAAAAAAAABdJgzpXSYM/10mDP9dJgzmXSYMnV0mDEJdJgwfXSYMRl0mDJ1dJgzmXSYM4l0mDFEAAAAAAAAAAAAAAAAAAAAAXSYM4F0mDP9dJgz/XSYM/10mDP9dJgz/XSYM110mDIFdJgwvXSYMHV0mDAwAAAAAAAAAAAAAAAAAAAAAAAAAAF0mDDFdJgyiXSYM5l0mDP9dJgz/XSYM/10mDP9dJgz/XSYM/10mDMZdJgxrXSYMEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAF0mDBtdJgxiXSYMul0mDPZdJgz/XSYM/10mDP9dJgz/XSYM/10mDIsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABdJgwrXSYMeV0mDNBdJgz/XSYM/10mDP9dJgyVAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABdJgwEXSYMPV0mDJFdJgyDXSYMGAAAAAAAAAAAw/8AAMB/AADADwAAwAMAAOADAADAAwAAwAMAAMAHAADgAwAAwAMAAMADAADABwAAwAMAAPADAAD+AwAA/4MAAA=="/>
+  <link rel="stylesheet" media="all" href="css/default.css"/>
+  <link rel="stylesheet" media="all" href="css/custom.css"/>
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->
+  <script type="text/javascript" src="js/lib/highlight.pack.js"></script>
+  <script type="text/javascript" src="js/slidedeck.js"></script>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      extensions: ["tex2jax.js"],
+      jax: ["input/TeX", "output/HTML-CSS"],
+      showProcessingMessages: false,
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+        processEscapes: true
+      },
+      "HTML-CSS": {
+        availableFonts: ["TeX"],
+        preferredFont: "TeX"
+      }
+    });
+  </script>
+  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+  <!-- MathJax: Fall back to local if CDN offline -->
+  <script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script type="text/javascript" src="js/lib/MathJax/MathJax.js?config=TeX-AMS_HTML"><\/script>')</script>
+</head>
+
+<body style="opacity: 0">
+
+<svg>
+  <defs>
+    <linearGradient id="fullBlend-svg">
+      <stop offset="0%" stop-color="#A1C517"></stop>
+      <stop offset="25%" stop-color="#009045"></stop>
+      <stop offset="50%" stop-color="#0082B6"></stop>
+      <stop offset="75%" stop-color="#151F77"></stop>
+      <stop offset="100%" stop-color="#DB004F"></stop>
+    </linearGradient>
+    <linearGradient id="largeBlend1-svg">
+      <stop offset="0%" stop-color="#A1C517"></stop>
+      <stop offset="100%" stop-color="#009F80"></stop>
+    </linearGradient>
+    <linearGradient id="largeBlend2-svg">
+      <stop offset="0%" stop-color="#009F80"></stop>
+      <stop offset="100%" stop-color="#00529B"></stop>
+    </linearGradient>
+    <linearGradient id="largeBlend3-svg">
+      <stop offset="0%" stop-color="#151F77"></stop>
+      <stop offset="100%" stop-color="#DB004F"></stop>
+    </linearGradient>
+  </defs>
+</svg>
+
+
+
+<slides  >
+
+
+
+
+<slide class="title-slide segue " >
+  <hgroup class="auto-fadein">
+    <h1 >
+    Eclipse Plug-in Development
+    </h1>
+    <h2 >Extending the CDT Debugger</h2>
+    <p>Marc Khouzam<br/>Marc-André Laperle</p>
+  </hgroup>
+</slide>
+
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Who we are
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>Marc-André Laperle<ul>
+<li>Software Developer at Ericsson since 2013</li>
+<li>Eclipse Committer for Trace Compass, CDT Linux Tools and Orbit</li>
+<li>Occasional contributor to other projects (Platform UI, SWT, EGit, Mylyn, PDE, Oomph)
+<br><br></li>
+</ul>
+</li>
+<li>Marc Khouzam<ul>
+<li>Software Developer at Ericsson since 1998</li>
+<li>Jambala, TSP, CDMA2000, MediaGwSim, CDT/Debug</li>
+<li>4-months in Älvsjö in 1999 working for Dicos</li>
+<li>CDT project co-lead, CDT Debug lead</li>
+</ul>
+</li>
+</ul></article>
+  
+</slide>
+
+<slide class="nobackground" data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Agenda
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>Monday: Plug-in development<ul>
+<li>Module 1: Eclipse Platform and plug-in development</li>
+<li>Module 2: Implementing a first plug-in</li>
+</ul>
+</li>
+<li>Tuesday: Getting to know DSF<ul>
+<li>Module 3: DSF concepts and exercises</li>
+<li>Module 4: DSF events and exercises</li>
+</ul>
+</li>
+<li>Wednesday: Getting to know DSF-GDB<ul>
+<li>Module 5: DSF-GDB concepts and exercises</li>
+<li>User meeeting</li>
+</ul>
+</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Agenda (cont)
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>Thursday: Modifying DSF-GDB's behaviour<ul>
+<li>Module 6: Changing the Debug View</li>
+<li>Module 7: Changing GDB's initialization</li>
+</ul>
+</li>
+<li>Friday: Trace Compass + CDT Editor/Codan<ul>
+<li>Module 8: Trace Compass introduction and demo</li>
+<li>Module 9: Extending the CDT Editor using Codan
+<br><br></li>
+</ul>
+</li>
+</ul>
+<h2><center>Let's get started!</center></h2></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Approach to course
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>A mix of theory and hands-on exercises</li>
+<li>Teams of 2</li>
+<li>After exercise, a team will describe their result</li>
+<li>Ask questions often and give feeback</li>
+<li>9h to 16h schedule</li>
+<li>One hour lunch?</li>
+<li>15 minute break, morning and afternoon</li>
+<li>Please tell us if you are confused during the course</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Start your Eclipse
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li><em>~/workspace-training/start.tcsh</em></li>
+<li>Select workspace: <em>~/workspace-training</em></li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><p><br><br>
+<br><br>
+<br><br>
+<br><br></p>
+<h1><center>Plug-in development</center></h1></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Module 1
+    </h2>
+    <h3 >Eclipse Platform and Plug-in Development</h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>Intro to Eclipse Platform
+<br><br></li>
+<li>Plug-in development
+<br><br></li>
+<li>Exercises</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    The Eclipse Platform
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><p>Frameworks and Common services for:</p>
+<ul>
+<li>Rich Client Platform (RCP)</li>
+<li>Tool integration</li>
+</ul>
+<p><br/>
+Examples of rich client applications:</p>
+<ul>
+<li>Eclipse for Java Developpers, Eclipse SDK, Stand-alone C/C++ Debugger, Trace Compass, etc.</li>
+</ul>
+<p>Examples of tool integrations:</p>
+<ul>
+<li>CDT, EGit, Trace Compass plugins</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    The Eclipse Platform
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><p><center><img src="images/sdk-arch.jpg"/></center></p></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Eclipse Runtime
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><p>Mainly composed of the Eclipse Equinox project.</p>
+<p>Eclipse Equinox:</p>
+<ul>
+<li>Implements the OSGI specification (modules, services, etc)</li>
+<li>P2: Provisioning framework. Installs new plug-ins, resolves dependencies, etc.</li>
+<li>Miscellaneous Core functionallity like the extension registry (plug-ins), Jobs, Preferences, etc.</li>
+<li>Eclipse launcher (native)</li>
+</ul>
+<p><center><img src="images/EclipseRT.png"/></center></p></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Workspace
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>The workspace is a view of the user's data files: the resources.</li>
+<li>Types of resources: projects, folders, and files</li>
+<li>Only one workspace per running platform</li>
+<li>Structure: Workspace root &gt; Projects &gt; IFolders or IFiles</li>
+<li>Common classes:<ul>
+<li>IResource</li>
+<li>IWorkspace</li>
+<li>IFile</li>
+<li>IFolder</li>
+<li>IProject</li>
+</ul>
+</li>
+<li>Resoure names and their paths in the workspace to not have to match the location on the filesystem</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Workspace
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><p>Other features than navigation/listing:</p>
+<ul>
+<li>Markers: to display problems like compilation errors</li>
+<li>Properties: per-file storage. Think flags like "read-only" but more customizable.</li>
+<li>Virtual folders: for greater flexibility when organizing projects</li>
+<li>Project natures: to differentiate between different kind of projects (Java, C/C++)</li>
+<li>Resource deltas: Listen to file modification, creation, deletion, etc.</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    EFS
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><p>Eclipse File System (EFS).</p>
+<ul>
+<li>An abstract file system API</li>
+<li>The Workspace resources sit on top of EFS</li>
+<li>The default implementations is for Local file systems</li>
+<li>Other implementations: SSH, FTP, dstore, ZIP, etc.</li>
+</ul>
+<p><center><img src="images/efs_project.png" width="50%" height="50%"/></center></p></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Eclipse Team
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><p>Framework to integrate SCMs.</p>
+<ul>
+<li>Repository configuration</li>
+<li>Resource management: Hooks for delete, move, add. Decorators in the UI.</li>
+<li>Synchronization: tracks whether or not resources are in sync. Local history.</li>
+<li>Logical Model Integration: Operate at the model level instead of per-file.</li>
+<li>Views: Synchronize, History, etc.</li>
+</ul>
+<p>EGit, CVS, Subversion, Perforce use this.</p>
+<p><center><img src="images/egit.png"/></center></p></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Eclipse Help
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>Table of content, Search, indexed</li>
+<li>Context sensitive (F1). Plug-ins can set context "ids"</li>
+<li>Runs on a local server, either in internal browser (SWT wiget) or external</li>
+</ul>
+<p>Other "User Assistance" features</p>
+<ul>
+<li>Cheat cheets</li>
+<li>Welcome page</li>
+<li>Tutorials</li>
+</ul>
+<div style="position: absolute; left:400px; top: 400px;"><img src="images/welcome.png" width="70%" height="70%"/></div></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    SWT
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><p>Standard Widget Toolkit (org.eclipse.swt.*)</p>
+<p><img src="images/vis-example.png"/>
+<img src="images/lin-example.png"/>
+<img src="images/mac-example.png"/></p>
+<p>A Java library of widgets aimed at providing efficient, portable access to the user-interface facilities of the operating systems on which it is implemented.</p>
+<p>This is typically the lowest level of UI programming done in Eclipse development.</p></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    SWT
+    </h2>
+    <h3 >Features</h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>Native look</li>
+<li>Quite fast!</li>
+<li>Button, Text, Browser, Group, Table, Tree, etc.</li>
+<li>Parent is specified in constructor (versus add child to parent container explicitly)</li>
+<li>Can be used as a stand-alone Java library (without anything else Eclipse)</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    SWT
+    </h2>
+    <h3 >Implementation</h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>Single UI thread</li>
+<li>Implemented using JNI calling the OS native library (which means SWT has some native glue code)<ul>
+<li>Windows: Win32</li>
+<li>Mac: Cocoa</li>
+<li>Linux: GTK2 and GTK3</li>
+</ul>
+</li>
+<li>Browser widget is integrated with different libraries: Webkit, Internet Explorer, XULRunner (Firefox)</li>
+<li>Most crashes (i.e. segmentation fault) in Eclipse due to native libraries called by SWT<ul>
+<li>GTK, WebKitGTK+, Ubuntu-specific libraries (Unity)</li>
+</ul>
+</li>
+<li>A bit hard (but fun) to debug. Java + Native C</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    JFace
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><p>JFace is a UI toolkit with classes for handling many common UI programming tasks. It is designed to work with SWT without hiding it.</p>
+<p>org.eclipse.jface.*</p>
+<p>Common uses:</p>
+<ul>
+<li>Viewers: TreeViewer, TableViewer, etc.</li>
+<li>Dialogs: Message dialog, error dialog, etc.</li>
+<li>Wizards: Wizard dialog, pages</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Workbench
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><p>org.eclipse.ui.*</p>
+<p>This is where classes more related to the common IDE UI fonctionality reside.</p>
+<p><center><img src="images/workbench_decomposed.png" width="500" height="400"/></center></p></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Workbench
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>
+<p>A <b>Workbench</b> has one or more workbench windows.</p>
+</li>
+<li>
+<p>Each Workbench <b>Window</b> has workbench pages.</p>
+</li>
+<li>
+<p>Each Workbench <b>Page</b> has workbench parts, of which there are two kinds: views and editors.</p>
+</li>
+<li>
+<p>Each Workbench <b>Part</b> is either a <b>View</b> or an <b>Editor</b>.</p>
+</li>
+</ul>
+<p><br/>
+<center><img src="images/workbench_dia.png"/></center></p></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Workbench
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><p>Common uses:</p>
+<ul>
+<li>Views: IViewPart and the extension point org.eclipse.ui.views</li>
+<li>Commands and Handlers: org.eclipse.ui.commands, org.eclipse.ui.handlers extension points.</li>
+<li>Preference pages: org.eclipse.ui.preferencePages extension point</li>
+<li>Editors: org.eclipse.ui.editors extension point. IEditorPart and useful classes like TextEditor</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    The Eclipse SDK
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><p>To be able to work program with the Eclipse Platform, you need tools.</p>
+<p><img src="images/eclipse-logo-without-text.png" width="64" height="64"/>=<img src="images/jdt.png"  width="64" height="64"/>+<img src="images/plugins.png"  width="64" height="64"/><br/></p>
+<p>The Eclipse SDK = Platform (including source) + JDT + PDE</p></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    JDT: Eclipse Java development tools
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><p>Those are the tools suitable for any Java-based programming</p>
+<p><center><img src="images/editor_vectortest.png"/></center></p></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    PDE: Plug-in Development Environment
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><p>Provides tools to create, develop, test, debug, build and deploy Eclipse plug-ins.</p>
+<p><img src="images/eclipse-pde.png"/></p></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Module 2
+    </h2>
+    <h3 >Implementing a First Plug-in</h3>
+  </hgroup>
+  
+  <article ></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Project for exercices
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><p>We will create a new view that will display a log of every function:line that the debugger stops at.
+<center>
+<img src=images/FrameSpy.png>
+</center></p></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    What IS an Eclipse plug-in?
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><p>It's an OSGI bundle, a java module.
+But with an Eclipse flavor. Among other things:</p>
+<ul>
+<li>Specifies dependencies to other plug-ins</li>
+<li>Uses extensions to plug into existing extension points</li>
+<li>Can define new extension points for others to extend </li>
+<li>Specifies what to package in the (Jar)</li>
+<li>Specifies the execution environment (Java 7, 8, etc).</li>
+</ul>
+<p>Difference between extension and extension point?</p>
+<p>Extension = plug<br/>
+Extension point = socket</p>
+<p>A lot of things are done through extension points. For that, we need a plug-in.</p></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Exercise: Create a plug-in
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>Go to Plug-in Development perspective</li>
+<li>File &gt; New &gt; Plug-in project</li>
+<li>Name your plug-in (org.eclipse.cdt.example.framespy)</li>
+<li>Press Next then Finish</li>
+<li><b>Go!</b></li>
+</ul>
+<p>What are all the tabs for?</p>
+<p><center><img src="images/manifest_tabs.png"/></center></p></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Step to prepare
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>Since we want to use the Git repo, delete the project and import existing one.<ul>
+<li>Right-click on your project and press Delete then press OK</li>
+</ul>
+</li>
+<li>Go to <em>Git perspective</em><ul>
+<li>In <em>Git Repositories</em> right-click and choose <em>Remove Repository from View</em></li>
+</ul>
+</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Step to prepare (2)
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>
+<p>Go to <em>Plug-in Development perspective</em>:</p>
+<ul>
+<li><em>File-&gt;Import...-&gt;General-&gt;Existing Projects into Workspace</em></li>
+<li>Press <em>Next</em></li>
+<li>Press <em>Browse...</em></li>
+<li>Choose <em>~/workspace-training/EclipseTraining/org.eclipse.cdt.example.framespy</em></li>
+<li>Make sure a single project is showing and is selected</li>
+<li>Press <em>Finish</em></li>
+</ul>
+</li>
+<li>
+<p>Right-click on project and choose <em>Team-&gt;Fetch from Upstream</em></p>
+</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Exercise: Create a view
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>Reset to <strong>PLUG1</strong></li>
+<li>Add a new view by adding an extension (plugin.xml)</li>
+<li>Create the view class (tip: click the hyperlink to bring up the New Class wizard)</li>
+<li>Make sure the view has an id, name</li>
+<li>To test your progress </li>
+</ul>
+<p><center> <img src="images/LaunchCourse.png" width="400"/></center></p>
+<ul>
+<li><b>Go!</b></li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    SWT Basic widget creation
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><pre data-lang="java"><code class="lang-java">Text textBox = new Text(parentComposite, SWT.SOMESTYLE | SWT.OTHERSTYLE);
+textBox.set*Somesetter*
+textBox.add*Somelistener*
+</code></pre>
+
+<p>Composite are containers of widgets that can be layed out.</p>
+<p>Composites can be in composites!</p></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Exercise: Add button to view
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><p>Let's add a Button. Let's make it a checkbox button.</p>
+<ul>
+<li>Reset to <strong>PLUG2</strong></li>
+<li>In view class, in createPartControl() add new Button with a "checkbox style"</li>
+<li>Add selection listener to detect when it's pressed</li>
+<li>Output something to the console</li>
+<li><b>Go!</b></li>
+</ul>
+<p>But the button does not belong in view itself, it would be nicer in the toolbar. <img src="images/quick_fix.png" width="50" height="40"/></p></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Eclipse commands and handlers
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><p>The Commands framework is a way to add user actions to the user interface.
+A command has:</p>
+<ul>
+<li>An id that declares a semantic behavior</li>
+<li>One or more handlers</li>
+</ul>
+<p>For example, the Copy command has the id <em>org.eclipse.ui.edit.copy</em>. But it has many handlers that behave differently depending on the context (selection, view)</p></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Exercise: Create the command and handler
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>Reset to <strong>PLUG3</strong></li>
+<li>Add a command extension to toggle log on/off</li>
+<li>Create a defaultHandler class (tip: use hyperlink to create class). Make it extend AbstractHandler</li>
+<li>Implement the execute method to make it print something to the console</li>
+<li><b>Go!</b></li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    The menus extension point
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><p>The org.eclipse.ui.menus extension point can add commands to:</p>
+<ul>
+<li>Main menu (menu)</li>
+<li>Main toolbars (toolbar)</li>
+<li>View context menus (popup)</li>
+<li>View toolbars (toolbar)</li>
+<li>View menus (menu)</li>
+</ul>
+<p>It has an odd <strong>locationURI</strong> field: &nbsp;<span style="background-color:#eeeeee;">[Scheme]:[ID]?[placement]</span></p>
+<p>For example:</p>
+<pre><code>menu:org.eclipse.ui.main.menu?after=additions
+</code></pre></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Exercise: Add toolbar button
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><p>Let's add the command to the view toolbar.</p>
+<ul>
+<li>Reset to <strong>PLUG4</strong></li>
+<li>Create the menus extension</li>
+<li>Add a menuContribution, set the locationURI so that it gets displayed in the view toolbar, after additions</li>
+<li>Add a command under the contribution. Set the id, icon and style (push)</li>
+<li><b>Go!</b></li>
+</ul>
+<p>It would be nice in the context menu as well. <img src="images/quick_fix.png" width="50" height="40"/></p></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Exercise: Context menu
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><p>Let's add the same command in the context menu.</p>
+<ul>
+<li>Reset to <strong>PLUG5</strong></li>
+<li>Add a new menuContribution. Because it needs different locationURI. </li>
+<li>Add the command. Set the id, icon and style (push)</li>
+<li>Create a context menu in the view:</li>
+</ul>
+<pre data-lang="java"><code class="lang-java">fMenuManager = new MenuManager();
+Menu menu = fMenuManager.createContextMenu(composite);
+composite.setMenu(menu);
+getViewSite().registerContextMenu(fMenuManager, null);
+...
+fMenuManager.dispose();
+</code></pre>
+
+<ul>
+<li><b>Go!</b></li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Exercise: Show the toggle state
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><p>The user needs to see whether logging is enabled or not.</p>
+<p>Let's add a label that displays that.</p>
+<ul>
+<li>Reset to <strong>PLUG6</strong></li>
+<li>Add a Label (a SWT widget) at the view creation.</li>
+<li>
+<p>When the command executes:</p>
+<ul>
+<li>Set the toggle state (you can add a method to the view)</li>
+<li>Update the label text</li>
+</ul>
+</li>
+<li>
+<p><b>Go!</b></p>
+</li>
+</ul>
+<p>If you enable logging and close/reopen the view, what happens?</p></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    The Preference Store
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><p>We should make sure that the toggle state is remembered when the view is closed (or Eclipse is restarted). There are multiple ways to do this. A useful one is the Preference Store. </p>
+<ul>
+<li>Works like a key/value map</li>
+<li>Can be applied to different scopes:<ul>
+<li>DefaultScope: When the user presses "restore defaults" it restores to this.</li>
+<li>InstanceScope: Saved at the workspace level. Overrides Default.</li>
+<li>ProjectScope: Saved at the project level. Overrides Instance.</li>
+<li>Custom!</li>
+</ul>
+</li>
+<li>Organized in nodes (think namespaces). Typically the plug-in id.</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Exercise: Persist the toggle state
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>Reset to <strong>PLUG7</strong></li>
+<li>When the toggle state is set:<ul>
+<li>Get the InstanScope</li>
+<li>Get the node</li>
+<li>Set the key/value</li>
+</ul>
+</li>
+<li>
+<p>When the view is created:</p>
+<ul>
+<li>Get the InstanScope</li>
+<li>Get the node</li>
+<li>Get value using key, set the label text</li>
+</ul>
+</li>
+<li>
+<p><b>Go!</b></p>
+</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Eclipse Jobs
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><p>Jobs are similar to Java Thread but have Eclipse flavor.</p>
+<p>Some differences:</p>
+<ul>
+<li>Scheduling rules: determine which jobs can run concurrently</li>
+<li>Deadlock detection: and recovery (ILock)</li>
+<li>Shown in the Progress View to the user (or not) with progress (IProgressMonitor)</li>
+<li>Can be made cancellable by the user</li>
+<li>Returns a status (IStatus)</li>
+</ul>
+<p>In Eclipse code, Jobs and Threads are both commonly used, depending on the situation.</p>
+<p>For the first implementation of our logging feature, we will poll every one second using a job.</p></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Exercise: Creating a polling job
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>Reset to <strong>PLUG8</strong></li>
+<li>When toggle state is on, create and schedule a job<ul>
+<li>Give the job a nice name to be shown in the Progress View</li>
+</ul>
+</li>
+<li>In the job run() method, sleep for 1 sec</li>
+<li>After the 1 sec, reschedule the job (only if the toggle state is still on!).</li>
+<li>Print something to the console every tick "polling..."</li>
+<li><b>Go!</b></li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Exercise: Print to view
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><p>Every tick, we would like to show the elapsed time in the view. It can just be a </p>
+<ul>
+<li>Reset to <strong>PLUG9</strong></li>
+<li>Create a counter (a simple int) that is incremented each tick.</li>
+<li>Set the text label with the value of the counter</li>
+<li><b>Go!</b></li>
+</ul>
+<p>What happens?</p></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    SWT Display and the UI thread
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><p>Changes to the UI (widgets) should always be done on the UI thread.</p>
+<p>The Display implements the event loop. There is only one instance in a running Eclipse.</p>
+<pre><code>Display.getDefault().asyncExec // Execute code at the next reasonable opportunity. Caller continues in parallel.
+Display.getDefault().syncExec // Blocks calling thread until executed on UI thread
+</code></pre>
+
+<p>With this knowledge we can fix the Invalid Thread Access. We can use asyncExec in this case. (<strong>PLUG10</strong>)</p></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Exercise: Handle cancel
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><p>An IProgressMonitor is passed to the job.</p>
+<p>We can use it to know if the user canceled the logging.</p>
+<ul>
+<li>Reset to <strong>PLUG10</strong></li>
+<li>Use monitor.isCanceled() to know when user canceled</li>
+<li>Set the toggle state to off when canceled</li>
+<li><b>Go!</b></li>
+</ul>
+<p>What happens? Do you have a problem with the job starting again?
+If you need results from UI thread right away -&gt; syncExec</p></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Exercise Review
+    </h2>
+    <h3 >What we accomplished</h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>Create a plug-in</li>
+<li>Create a view</li>
+<li>Use SWT widgets</li>
+<li>Use commands and handlers</li>
+<li>Use menu extension (context menu and toolbar)</li>
+<li>Use the preference store</li>
+<li>Use Jobs and Progress Monitors</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><p><br><br>
+<br><br>
+<br><br>
+<br><br></p>
+<h1><center>Getting to know DSF</center></h1></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Module 3
+    </h2>
+    <h3 >DSF Concepts and Exercises</h3>
+  </hgroup>
+  
+  <article ><p><br><br>
+- Eclipse Debug Platform
+<br><br>
+- What is DSF?
+<br><br>
+- DSF concepts applied
+<br><br>
+- DSF Exercise 1</p></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Building on our new view
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ol>
+<li>Debug Frame Spy<ul>
+<li>New view logging each <code>method:line</code> at which the debugger stopped. </li>
+</ul>
+</li>
+</ol></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Debug Frame Spy Details
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ol>
+<li>Show list of method name and line number of each location program was interrupted</li>
+<li>Show time of interrupt for each entry</li>
+<li>Show the number of arguments of the function for each entry</li>
+</ol></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Eclipse Debug Platform
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>Eclipse provides a foundation for Debugging<ul>
+<li>Debug perspective</li>
+<li>Debug views</li>
+<li>Debug Actions, Toolbar, Menus</li>
+<li>Debug Launching</li>
+</ul>
+</li>
+</ul>
+<aside class="note"><section>
+
+<ul>
+<li>Debug perspective manual or automatic selection</li>
+<li><em>Windows-&gt;Show View-&gt;Other... and expand Debug folder</em></li>
+<li>Each view has toolbar actions, context-menu, view-menu</li>
+<li>Launch configuration types, launch configurations</li>
+</ul>
+</aside></section></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    What is DSF?
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>Overview</li>
+<li>View Model and Data Model</li>
+<li>Services</li>
+<li>Data Model contexts</li>
+<li>DSF Executor thread</li>
+<li>DSF Session</li>
+<li>Asynchronous (callback) programming</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    DSF Overview
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>API for integrating debuggers in Eclipse</li>
+<li>Also designed for efficiency (slow or remote targets)</li>
+<li>Figure shows typical debugger integration using DSF</li>
+</ul>
+<p><center><img src=img/DSFOverview.png></center></p></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    View Model
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>View Model provides layer of abstraction for views<ul>
+<li><em>User-presentable</em> structure of the data
+<br><br></li>
+</ul>
+</li>
+<li>View Model allows to easily modify presentation e.g.,<ul>
+<li>Hide running threads</li>
+<li>Limit number of stack frames</li>
+<li>Only show processes if there is more than one</li>
+</ul>
+</li>
+</ul>
+<aside class="note"><section>
+
+<ul>
+<li>Show feature that hides running threads</li>
+<li>Show feature that limits number of stack frames</li>
+<li>In practice, we don't change the view model very often.  So this course will not cover it.</li>
+</ul>
+</aside></section></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Data Model
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>Data Model deals directly with the backend debugger<ul>
+<li><em>Natural</em> or <em>backend</em> structure of the data</li>
+<li>Independent of presentation to user</li>
+<li>Provides building blocks for the view model</li>
+<li>Uses common debugger concepts<ul>
+<li>Execution elements (e.g., processes, threads)</li>
+<li>Formatted values (e.g., variables, registers)</li>
+<li>etc</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<aside class="note"><section>
+
+<ul>
+<li>Mention frontend vs backend terminology</li>
+</ul>
+</aside></section></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    DSF Services
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>DSF provides a service API to access the Data Model
+<br><br></li>
+<li>Built on top of OSGi (as Eclipse is)
+<br><br></li>
+<li>Services are entities managing logical subsets of the data model
+<br><br></li>
+<li>Services are used to request information or to perform actions</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    DSF Services (2)
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>For example, the IRunControl service:<ul>
+<li>Provides list of execution elements (e.g., threads, processes)</li>
+<li>Provides details about such elements (e.g., name, state)</li>
+<li>Supports step, resume, interrupt, etc
+<br><br></li>
+</ul>
+</li>
+<li>Other services: IMemory, IRegisters, IExpressions, IDisassembly...
+<br><br></li>
+<li>All services extend <code>IDsfService</code> (press <em>F4</em> on <code>IDsfService</code>)</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Data Model Contexts
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>IDMContext class is a 'pointer' to any type of backend data<ul>
+<li>IExecutionDMContext - thread, process, group</li>
+<li>IFrameDMContext - stack frames</li>
+<li>IBreakpointDMContext - breakpoint, tracepoint, dprintf</li>
+<li>All contexts extend <code>IDMContext</code> (use <em>F4</em>)
+<br><br></li>
+</ul>
+</li>
+<li>Contexts are hierachical<ul>
+<li><em>process</em> -&gt; <em>thread</em> -&gt; <em>frame</em> -&gt; <em>expression</em></li>
+<li><code>DMContexts.getAncestorOfType()</code>
+<br><br></li>
+</ul>
+</li>
+<li>Contexts are used to retrieve data from services</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    DSF Executor thread
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>Accessing data from different threads requires synchronization</li>
+<li>DSF uses a single-threaded executor to avoid synchronization
+<center>
+<img src=img/synchronization_1.png>
+<img src=img/synchronization_2.png>
+</center></li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    DSF Session
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>Instances of DSF services are grouped into a DSF session
+<br><br></li>
+<li>There can be multiple sessions running at the same time
+<br><br></li>
+<li>The session provides the DSF Executor (<code>DsfSession#getExecutor()</code>)
+<br><br></li>
+<li>A session handles sending events to registered listeners</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Asynchronous (callback) programming
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>Most DSF APIs return void but indicate completion in a callback
+<br><br></li>
+<li><code>RequestMonitor</code> is the main callback class<ul>
+<li>Remember to call <code>done()</code> when real work is finished</li>
+<li>This calls: <code>handleCompleted()</code>, <code>handleSuccess()</code>, <code>handleError()</code>
+<br><br></li>
+</ul>
+</li>
+<li><code>DataRequestMonitor</code> to <em>"return"</em> a value<ul>
+<li><code>getData()</code> to get that value</li>
+</ul>
+</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    RequestMonitor example
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>To call an asynchronous method, such as:</li>
+</ul>
+<pre><code>void asyncCall(IDMContext dmc, RequestMonitor rm);
+</code></pre>
+
+<ul>
+<li>there are two main coding styles</li>
+</ul>
+<pre><code>Declarative:
+   RequestMonitor myRm =
+           new RequestMonitor(getExecutor(), parentRm);
+   asyncCall(dmc, myRm);
+
+In-line:
+   asyncCall(dmc, new RequestMonitor(getExecutor(), parentRm));
+</code></pre></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Declarative Style
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>First declare the RequestMonitor and what it should do
+<br><br></li>
+<li>Then call the asynchronous method, passing the RM</li>
+</ul>
+<pre><code>   RequestMonitor myRm =
+           new RequestMonitor(getExecutor(), parentRm) {
+               @Override
+               void handleSuccess() {
+                   System.out.println(&quot;Async call succeeded&quot;);
+                   parentRm.done();
+               }
+           };
+
+   asyncCall(dmc, myRm);
+</code></pre></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    In-line Style
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>Directly call the asynchronous method
+<br><br></li>
+<li>Declare and define the RM in-line </li>
+</ul>
+<pre><code>   asyncCall(dmc, 
+             new RequestMonitor(getExecutor(), parentRm) {
+                 @Override
+                 void handleSuccess() {
+                     System.out.println(&quot;Async call succeeded&quot;);
+                     parentRm.done();
+                 }
+             });
+
+</code></pre>
+
+<ul>
+<li><em>In-line</em> has the benefit of showing the execution flow</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    DataRequestMonitor
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>Extention of <code>RequestMonitor</code> which <em>"returns"</em> data</li>
+</ul>
+<pre><code>   DataRequestMonitor&lt;String&gt; parentRm =
+              new DataRequestMonitor&lt;String&gt;(getExecutor, null);
+   asyncCallWithData(
+      dmc, 
+      new DataRequestMonitor&lt;String&gt;(getExecutor(), parentRm) {
+      @Override
+      void handleSuccess() {
+          String resultString = &quot;Success with result &quot; + getData();
+          parentRm.done(resultString);
+      }
+   });
+</code></pre></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Other RequestMonitors
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li><code>CountingRequestMonitor</code> and <code>MultiRequestMonitor</code><ul>
+<li>For multiple asynchronous request in parallel
+<br><br></li>
+</ul>
+</li>
+<li><code>ImmediateRequestMonitor</code> and similar<ul>
+<li><code>handleSuccess()</code> and others are called on the thread where the ImmediateRM was created.</li>
+</ul>
+</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    DSF concepts review
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ol class="build">
+<li>APIs to integrate a debugger 'more easily' e.g., GDB</li>
+<li>View Model for presentation layer</li>
+<li>Data Model to communicate with backend (GDB)</li>
+<li>Services API to access Data</li>
+<li>No synchronization: DSF Executor <strong>must</strong> be used to access Data</li>
+<li>Services for one backend are grouped in a Session</li>
+<li>Heavy use of asynchronous programming for responsiveness</li>
+</ol></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    DSF practical review
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ol class="build">
+<li>Services extend <code>IDsfService</code>
+<br><br></li>
+<li>Contexts extend <code>IDMContext</code>
+<br><br></li>
+<li>Context hierarchy searched with <code>DMContexts</code>
+<br><br></li>
+<li>Executor can be found with <code>DsfSession#getExecutor()</code>
+<br><br></li>
+<li><code>RequestMonitor</code> and <code>DataRequestMonitor</code> for callbacks</li>
+</ol></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    DSF Exercise
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul class="build">
+<li>FrameSpy to periodically print "method:line" for current frame <ul class="build">
+<li>Reset branch to commit starting with<ul class="build">
+<li><strong>DSF1_START</strong> or <strong>DSF1_ADVANCED</strong>
+<br><br></li>
+</ul>
+</li>
+<li>To test, make sure you launch a C/C++ Debug session first
+<br><br></li>
+<li>Use the <strong>Tasks</strong> view to see what needs to be done
+<br><br></li>
+<li><strong>Go!</strong></li>
+</ul>
+</li>
+</ul>
+<aside class="note"><section>
+
+<ul class="build">
+<li>Show how to launch a C/C++ debug session (use non-stop first)</li>
+</ul>
+</aside></section></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Exercise review
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul class="build">
+<li>Finding the DSF session using debug context<ul class="build">
+<li>Debug View and Debug Context</li>
+<li>Adapter pattern
+<br><br></li>
+</ul>
+</li>
+<li>Calling an existing DSF service<ul class="build">
+<li>Using a DsfServicesTracker for the DSF session
+<br><br></li>
+</ul>
+</li>
+<li>Call the asynchronous IStack.getTopFrame()<ul class="build">
+<li>Using a new DataRequestMonitor</li>
+<li>Calling getData() in handledSuccess()</li>
+</ul>
+</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Exercise review (2)
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>IDMContext vs IDMData<ul>
+<li>call IStack.getFrameData()</li>
+<li>Using a new DataRequestMonitor</li>
+<li>Calling getData() in handledSuccess()</li>
+<li>Then finally display "method:line"</li>
+</ul>
+</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Exercise follow-up part 1
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul class="build">
+<li>What if you select the process element?<ul class="build">
+<li>The top frame of which thread should we use?
+<br><br></li>
+</ul>
+</li>
+<li>For now, just handle the error (as seen on console)<ul class="build">
+<li>Reset to <strong>DSF1_ANSWERS</strong> if you need</li>
+<li>Override <code>handleError()</code></li>
+<li><strong>Go!</strong></li>
+</ul>
+</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Follow-up part 1 review
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Exercise follow-up part 2
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>Assertions are a great way to notice unexpected situations
+<br><br></li>
+<li>Enable assertions in development eclipse for test eclipse<ul>
+<li>In launch configuration, <em>Arguments</em> tab, <em>VM arguments</em></li>
+<li>Add <em>-ea</em></li>
+<li>Make sure you have a breakpoint for <em>AssertionError</em></li>
+<li>Re-launch and try</li>
+<li><strong>Go!</strong></li>
+</ul>
+</li>
+</ul>
+<aside class="note"><section>
+
+<ul>
+<li>Explain how to use assertions</li>
+</ul>
+</aside></section></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Exercise follow-up part 2
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>Did you use the DSF Executor?<ul>
+<li>Which code runs on the Executor, which not?
+<br><br></li>
+</ul>
+</li>
+<li>Wrap first call to DSF service in Executor<ul>
+<li>Call <code>submit()</code> of the Executor</li>
+<li>Pass a <code>DsfRunnable()</code> whose <code>run()</code> does the work</li>
+<li><strong>Go!</strong></li>
+</ul>
+</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Follow-up part 2 review
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Which DSF concepts did we exercise?
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ol class="build">
+<li>APIs to integrate a debugger 'more easily' e.g., GDB</li>
+<li>View Model for presentation layer</li>
+<li>Data Model to communicate with backend (GDB)</li>
+<li>Services API to access Data</li>
+<li>No synchronization: DSF Executor <strong>must</strong> be used to access Data</li>
+<li>Services for one backend are grouped in a Session</li>
+<li>Heavy use of asynchronous programming for responsiveness</li>
+</ol></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Module 4
+    </h2>
+    <h3 >DSF Events and Exercises</h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>What are DSF events
+<br><br></li>
+<li>Sending and receving DSF events
+<br><br></li>
+<li>DSF Exercises 2 and 3</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    DSF Events
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>DSF uses events to notify listeners of different things e.g.,<ul>
+<li>Thread/Process started/exited</li>
+<li>Thread/Process suspend/resumed</li>
+<li>Breakpoint added/updated/removed</li>
+<li>etc</li>
+</ul>
+</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    DSF Events (2)
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul class="build">
+<li>Events are how the Data Model tells the View Model of changes<ul class="build">
+<li>e.g., Thread stops =&gt; Update Debug View</li>
+<li>View Model is an advanced topic not covered in this course
+<br><br></li>
+</ul>
+</li>
+<li>Events also notify services of other services' changes<ul class="build">
+<li>e.g., Clearing caches when execution resumes</li>
+</ul>
+</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    DSF Events details
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>Most events implement <code>IDMEvent</code> which provides an <code>IDMContext</code><ul>
+<li>e.g., When thread suspends, event specifies which thread
+<br><br></li>
+</ul>
+</li>
+<li>Event types usually found in the different service interfaces e.g.,<ul>
+<li><code>IRunControl</code>:<ul>
+<li><code>ISuspendedDMEvent</code>, <code>IContainerSuspendedDMEvent</code></li>
+<li><code>IResumedDMEvent</code>, <code>IContainerResumedDMEvent</code>
+<br><br></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Not all services trigger events<ul>
+<li><code>IStack</code> has not events</li>
+</ul>
+</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Sending DSF Events
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><p><br><br><br>
+- To send an event a service calls <code>DsfSession#dispatchEvent()</code></p></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Receiving DSF Events
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>To receive a DSF events a client must:<ul>
+<li>Declare a <strong>public</strong> method of any name</li>
+<li>Method takes the event of interest as a parameter</li>
+<li>Annotate method with <code>@DsfServiceEventHandler</code></li>
+<li>Register with the DSF Session using <code>DsfSession#addServiceEventListener()</code></li>
+<li>Registration must be done on the Executor
+<br><br></li>
+</ul>
+</li>
+<li>The method is called on the DSF Executor</li>
+</ul>
+<aside class="note"><section>
+
+<ul>
+<li><code>dispatchEvent()</code> calls event listeners in a <strong>separate</strong> Runnable on the Executor.<ul>
+<li>This allows sender to finish its work before events are received by the listeners.</li>
+<li>Event listener methods always called in the Executor thread.</li>
+</ul>
+</li>
+</ul>
+</aside></section></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Receiving event example
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>The following method from <em>SomeClass</em> will be called for every suspended event</li>
+</ul>
+<pre><code>    @DsfServiceEventHandler
+    public void anyName(ISuspendedDMEvent e) {
+        System.out.println(&quot;Received &quot; + e.toString());
+    }
+</code></pre>
+
+<ul>
+<li>as long as we register the class with the session</li>
+</ul>
+<pre><code>    getSession().addServiceEventListener(SomeClass.this, null);
+</code></pre>
+
+<ul>
+<li>Remember that registration must be done on Executor</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Help with the Executor
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul class="build">
+<li>DSF provides Java Annotations to guide with Executor use <ul class="build">
+<li><code>@ThreadSafe</code><ul class="build">
+<li>Safe for any thread (synchronization used)</li>
+</ul>
+</li>
+<li><code>@ConfinedToDsfExecutor(executor)</code><ul class="build">
+<li>Must use specified executor</li>
+</ul>
+</li>
+<li><code>@ThreadSafeAndProhibitedFromDsfExecutor(executor)</code><ul class="build">
+<li>Safe for any thread <strong>except</strong> the specified executor
+<br><br></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>They are hierarchical, so apply to children (e.g., methods of class)
+<br><br></li>
+<li>Unfortunetly, there is no compiler support so they are effectively just comments (that are sometimes missing)</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    DSF Event Exercise
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>Show "method:line" each time a thread stops instead of polling<ul>
+<li>Reset branch to commit starting with<ul>
+<li><strong>DSF2_START</strong> or <strong>DSF2_ADVANCED</strong></li>
+<li>Polling job has been removed for you</li>
+<li>"method:line" only shown when FrameSpy first enabled
+<br><br></li>
+</ul>
+</li>
+<li>To test:<ul>
+<li>make sure your debug session is in Non-Stop mode</li>
+<li>step program and check new "method:line"  each step
+<br><br></li>
+</ul>
+</li>
+<li><strong>Go!</strong></li>
+</ul>
+</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Event Exercise Review
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>Registering for DSF events<ul>
+<li>addServiceEventListener() <strong>using</strong> the Executor</li>
+<li>Must pass <code>FrameSpyView.this</code> (or another listener class)
+<br><br></li>
+</ul>
+</li>
+<li>Unregister for DSF events when FrameSpy disabled<ul>
+<li>removeServiceEventListener() <strong>using</strong> the Executor</li>
+<li>Must pass <code>FrameSpyView.this</code> (or listener used)</li>
+</ul>
+</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Event Exercise Review (2)
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><p><br><br>
+- Receiving the event</p>
+<pre><code>@DsfServiceEventHandler
+public void anyName(ISuspendedDMEvent event) {
+    // Fetch frame info and print it
+}
+</code></pre></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Event Exercise for All-Stop
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li><code>ISuspendedDMEvent</code> is used for Non-stop only
+<br><br></li>
+<li><code>IContainerSuspendedDMEvent</code> for All-stop<ul>
+<li>Represents the process stopping</li>
+<li>The top frame of which thread should we use?
+<br><br></li>
+</ul>
+</li>
+<li>This event specifies which thread caused the stop<ul>
+<li>Use that <strong>triggerring</strong> thread (context)</li>
+<li>(Look at declaration of <code>IContainerSuspendedDMEvent</code>)</li>
+<li>Reset to <strong>DSF2_ANSWERS</strong></li>
+<li><strong>Go!</strong></li>
+</ul>
+</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    All-Stop Exercise Review
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Handling a new session
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>FrameSpy has an important limitation now<ul>
+<li>enable FrameSpy</li>
+<li>stop the session and start a new one</li>
+<li>step the new session</li>
+<li><strong>FrameSpy no longer prints</strong></li>
+</ul>
+</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Handling a new session (2)
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><p><br><br>
+<br><br>
+<br><br></p>
+<h1><center><strong>Why?</strong></center></h1></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Handling a new session (3)
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul class="build">
+<li>When new session starts, we are not registered for its events
+<br><br></li>
+<li>How to know <strong>when</strong> new session starts so we can register?</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    DsfSession to the rescue
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>DsfSession notifies registered listeners of start/end of all sessions<ul>
+<li><code>addSessionStartedListener()</code>, <code>removeSessionStartedListener()</code></li>
+<li><code>addSessionEndedListener()</code>, <code>removeSessionEndedListener()</code>
+<br><br></li>
+</ul>
+</li>
+<li>DsfSession provides access to all running sessions:<ul>
+<li><code>getActiveSessions()</code>, <code>getSession(id)</code></li>
+</ul>
+</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Multiple Session Exercise
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>Register for event for each new DSF session<ul>
+<li>Reset to <strong>DSF3_START</strong> or <strong>DSF3_ADVANCED</strong>
+<br><br></li>
+<li>Listen for new session and register with them
+<br><br></li>
+<li>Unregister when FrameSpy gets disabled
+<br><br></li>
+<li><strong>Go!</strong></li>
+</ul>
+</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Sessions Exercise Review
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><p><br><br>
+<br><br>
+<br><br>
+<br><br></p>
+<h1><center>Getting to know DSF-GDB</center></h1></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Module 5
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>What is DSF-GDB
+<br><br></li>
+<li>A little history
+<br><br></li>
+<li>DSF-GDB's service structure
+<br><br></li>
+<li>DSF Exercises 4, 5 and 6</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    What is DSF-GDB
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>Integration of GDB using DSF<ul>
+<li>Cannot use run DSF by itself
+<br><br></li>
+</ul>
+</li>
+<li>Extra features on top of base DSF<ul>
+<li>Tracepoints</li>
+<li>Visualizer</li>
+<li>OS Resources</li>
+</ul>
+</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    History of DSF-GDB
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>How it started
+<br><br></li>
+<li>Ericsson's involvement
+<br><br></li>
+<li>GDB's evolution
+<br><br></li>
+<li>Default CDT Debugger integration
+<br><br></li>
+<li>Where we stand today</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    DSF-GDB's services
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>DSF provides API for services<ul>
+<li><code>IStack</code>, <code>IBreakpoints</code>, <code>IExpressions</code>, etc
+<br><br></li>
+</ul>
+</li>
+<li>DSF-GDB provides an implementation
+<br><br></li>
+<li>Hierarchy of DSF-GDB services<ul>
+<li>Press <em>F4</em> on <code>IDsfService</code></li>
+<li><code>MI[service]</code> vs <code>GDB[service]</code> (historical)</li>
+<li><code>GDB[service][version]</code></li>
+<li><code>GDB[service]_HEAD</code></li>
+</ul>
+</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    New Service Exercise
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul class="build">
+<li>Write a new service providing the current time<ul class="build">
+<li>Reset to <strong>DSF4_START</strong> or <strong>DSF4_ADVANCED</strong>
+<br><br></li>
+<li><strong>FrameSpyService.java</strong> already created for you
+<br><br></li>
+<li>Make it into a DSF service that can be found by name
+<br><br></li>
+<li>Provide methods:<ul class="build">
+<li>Synchronous <code>getLocalTimeOfDayString</code> method</li>
+<li>Asynchronous <code>getTargetTimeOfDayString</code> method
+<br><br></li>
+</ul>
+</li>
+<li><strong>Go!</strong></li>
+</ul>
+</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    New Service Review
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul class="build">
+<li><code>AbstractDsfService</code> can be used as a base class for services
+<br><br><ul class="build">
+<li>Need to implement <code>getBundleContext()</code>
+<br><br></li>
+<li>Need to advertise a service using <code>register()</code><ul class="build">
+<li>Any name can be used but class or interface name is good
+<br><br></li>
+</ul>
+</li>
+<li><code>initialize()</code> and <code>shutdown()</code> should be enhanced
+<br><br></li>
+<li>Some method providing the service functionality is needed</li>
+</ul>
+</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Asynchronous vs Synchronous API
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>Slowest part of the CDT debugger is communication with GDB<ul>
+<li>DSF provides infrastructure for async communication</li>
+<li>New async API can use that infrastructure</li>
+<li>New sync API <strong>cannot</strong>
+<br><br></li>
+</ul>
+</li>
+<li>Async API can be used synchronously but not other way around</li>
+</ul>
+<aside class="note"><section>
+
+<ul>
+<li>Explain when to implement the different two getTimeOfDay() versions</li>
+</ul>
+</aside></section></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Using new service
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>Prepend every printout in FrameSpyView with the time of day<ul>
+<li>Reset to <strong>DSF4_UPDATE_START</strong>
+<br><br></li>
+<li>FrameSpyView to show:  [time] method:line
+<br><br></li>
+<li>If you test it, it will <strong>not</strong> work (yet)
+<br><br></li>
+<li><strong>Go!</strong></li>
+</ul>
+</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Instantiating new service
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul class="build">
+<li>We can't find the service because we didn't instantiate it
+<br><br></li>
+<li>We need one instance for <strong>each</strong> DSF session
+<br><br></li>
+<li>A DSF-GDB session instantiates its services<ul class="build">
+<li>We haven't hooked into a DSF-GDB session (yet)</li>
+<li>We need to manager our new service ourselves</li>
+<li>Remember <code>addSessionStartedListener()</code> and friends?</li>
+</ul>
+</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Instantiation Exercise
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>Implement a managing class to create/dispose of the new service<ul>
+<li>Reset to <strong>DSF5_START</strong> or <strong>DSF5_ADVANCED</strong>
+<br><br></li>
+<li>Done for you:<ul>
+<li>Singleton <strong>FrameSpyServiceManager.java</strong></li>
+<li><code>initialize()</code> and <code>dispose()</code> called by <code>Activator</code>
+<br><br></li>
+</ul>
+</li>
+<li>Instantiate and <code>initialize()</code> a FrameSpyService for each new DSF session
+<br><br></li>
+<li>When done FrameSpyView should show:  [time] method:line
+<br><br></li>
+<li><strong>Go!</strong></li>
+</ul>
+</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Service Shutdown
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>We instantiate a service for each new DSF session
+<br><br></li>
+<li>What about shutting down those instances?<ul>
+<li>Each time a DSF session ends</li>
+</ul>
+</li>
+<li>DSF-GDB automatically shutsdown <strong>all</strong> DSF services<ul>
+<li>Anything registered and implementing <code>IDsfService</code></li>
+<li>We don't need to take care of it ourselves</li>
+<li>Refer to DSF-GDB's <strong>ShutdownSequence.java</strong></li>
+</ul>
+</li>
+</ul>
+<aside class="note"><section>
+
+<p>Ideal to finish a day here</p>
+</aside></section></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Frame Argument count
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul class="build">
+<li>Provide the number of arguments when printing "method:line"<ul class="build">
+<li>Reset to <strong>DSF6_START</strong> or <strong>DSF6_ADVANCED</strong>
+<br><br></li>
+<li>Provide API (method) in your service for arguments count</li>
+<li>Async or Sync? <ul class="build">
+<li>Is the info needed in GDB?</li>
+<li>Are you going to call any async APIs?
+<br><br></li>
+</ul>
+</li>
+<li>Use <code>IStack</code> service to get list of frame arguments
+<br><br></li>
+<li>Update FrameSpyView to show:  [time] method:line (# args)
+<br><br></li>
+<li><strong>Go!</strong></li>
+</ul>
+</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Exercise Review
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><p><br><br>
+<br><br>
+<br><br></p>
+<h1><center>Modifying DSF-GDB's behaviour</center></h1></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Module 6
+    </h2>
+    <h3 >Changing the Debug View</h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>Extending an existing service
+<br><br></li>
+<li>Launch Delegates and Launch Configuration Types
+<br><br></li>
+<li>Service Factories
+<br><br></li>
+<li>DSF Exercises 7 and 8</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Building on DSF-GDB
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>New service does not do anything <em>debugging</em>
+<br><br></li>
+<li>For a new debugging feature<ul>
+<li>Use existing DSF-GDB services</li>
+<li>Re-work obtained information</li>
+<li>Provide new information to view
+<br><br></li>
+</ul>
+</li>
+<li>Services can use other services</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Extending a service
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul class="build">
+<li>For stack frames, replace method name "main" with "entry"<ul class="build">
+<li>Reset to <strong>DSF7.1_START</strong> or <strong>DSF7.1_ADVANCED</strong>
+<br><br></li>
+<li><strong>FrameSpyStackService.java</strong> extend existing Stack service
+<br><br></li>
+<li>Override <code>getFrameData()</code> 
+<br><br></li>
+<li>"Return" an <code>IFrameDMData</code> whose <code>getFunction()</code> returns "entry" instead of "main"
+<br><br></li>
+<li><strong>Go!</strong></li>
+</ul>
+</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    New Service Instantiation
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>Like before we now have a new class we must instantiate
+<br><br></li>
+<li>Can we use <code>FrameSpyServiceManager?</code><ul>
+<li><code>FrameSpyStackService</code> extends existing <code>GDBStack_HEAD</code> service</li>
+<li><code>GDBStack_HEAD</code> is already being instantiated by DSF-GDB</li>
+<li>Instantiating ours would create <strong>two</strong> IStack services
+<br><br></li>
+</ul>
+</li>
+<li>We need to instantiate our service <em>instead</em> of the original one</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    The two approaches to extend DSF-GDB
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ol>
+<li>Creating a new view and a new service<ul>
+<li>Does not affect the rest of the debugging views</li>
+<li>We can do this to any DSF-GDB session</li>
+<li>This was our first set of exercises
+<br><br></li>
+</ul>
+</li>
+<li>Replacing a service and changing an existing view<ul>
+<li>Does affect normal debugger behaviour</li>
+<li>Should be chosen by user explicitly</li>
+<li>Aimed at specific scenarios</li>
+<li>This is what we need now
+<br><br></li>
+</ul>
+</li>
+<li>So, how do we <em>replace</em> a service?</li>
+</ol></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    First solution
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>New <em>Launch Configuration Type</em><ul>
+<li>Current ones<ol class="lower-roman">
+<li><em>C/C++ Application</em></li>
+<li><em>C/C++ Attach to Application</em></li>
+<li><em>C/C++ Postmortem Debugger</em></li>
+<li><em>C/C++ Remote Application</em>
+<br><br></li>
+</ol>
+</li>
+<li>Add a new one such as "IMA2l-Chip Debugger"
+<br><br></li>
+<li>Launch Config Types need a Launch Delegate
+<br><br></li>
+<li>When chosen by user, we know to replace IStack service</li>
+</ul>
+</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Second solution
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>New <em>Launch Delegate</em> to existing <em>Launch Configuration Type</em><ul>
+<li>Current ones for <em>C/C++ Application</em><ol class="lower-roman">
+<li><em>GDB (DSF) Debug Process Launcher</em></li>
+<li><em>Legacy Create Process Launcher</em> (will be removed)
+<br><br></li>
+</ol>
+</li>
+<li>Add a new one such as "IMA2l-Chip Local Launcher"
+<br><br></li>
+<li>When chosen by user, we know to replace IStack service</li>
+</ul>
+</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Differences
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>Both solutions are almost the same<ul>
+<li>Both need a new launch delegate</li>
+<li>The first also provide a new launch config type</li>
+<li>The second re-uses existing launch config types
+<br><br></li>
+</ul>
+</li>
+<li>Base choice on the UI presented to the user<ul>
+<li>Let's go over the two UIs
+<br><br></li>
+</ul>
+</li>
+<li>Code differences are minor</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Launch Delegate exercise
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul class="build">
+<li>Create a new Launch Delegate for <em>C/C++ Application</em><ul class="build">
+<li>Reset to <strong>DSF7.2_START</strong>
+<br><br></li>
+<li><strong>FrameSpyLaunchDelegate.java</strong> extends <code>GdbLaunchDelegate</code>
+<br><br></li>
+<li>Update <em>Extensions</em> tab of <em>plugin.xml</em><ul class="build">
+<li>Fill-in <code>org.eclipse.debug.core.launchDelegates</code></li>
+<li>"Main" Launch tab has been provided for you
+<br><br></li>
+</ul>
+</li>
+<li><strong>Go!</strong></li>
+</ul>
+</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Launch Delegate Review
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>When creating a "C/C++ Application" launch, we can now select our delegate
+<br><br></li>
+<li>But the new delegate does exactly what DSF-GDB does
+<br><br></li>
+<li>It still does not instantiate <code>FrameSpyStackService</code></li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    New Services Factory
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>Now that we have a new delegate, we can create a new <em>Services Factory</em>
+<br><br></li>
+<li>A DSF Service Factory is used to create the different services<ul>
+<li>Let's have a look at <code>GdbDebugServicesFactory</code>
+<br><br></li>
+</ul>
+</li>
+<li>When user chooses new delegate, they will get new IStack service</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Services Factory Exercise
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul class="build">
+<li>Create a new Services Factory for our Launch Delegate<ul class="build">
+<li>Reset to <strong>DSF7.3_START</strong>
+<br><br></li>
+<li><strong>FrameSpyServicesFactory.java</strong> extends <code>GdbDebugServicesFactory</code>
+<br><br></li>
+<li>This new service factory instantiates <code>FrameSpyStackService</code>
+<br><br></li>
+<li>Our delegate uses <code>FrameSpyServicesFactory</code><ul class="build">
+<li>by overridding <code>newServiceFactory()</code>
+<br><br></li>
+</ul>
+</li>
+<li><strong>Go!</strong>
+<br><br></li>
+<li>You should be able to see "entry" instead of "main"</li>
+</ul>
+</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Current status
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>We have a new delegate <code>FrameSpyLaunchDelegate</code>
+<br><br></li>
+<li>We have a new service factory <code>FrameSpyServicesFactory</code>
+<br><br></li>
+<li>We have a new service <code>FrameSpyStackService</code>
+<br><br></li>
+<li>New delegate uses new service which replaces "main" with "entry"</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Service_HEAD pattern
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>Why did our new service extend <code>GDBStack_HEAD</code>?
+<br><br></li>
+<li>Recent improvement allows extenders to stay on newest GDB version
+<br><br></li>
+<li>Let's look at an example<ul>
+<li>F4 on <code>GDBControl_HEAD</code></li>
+</ul>
+</li>
+<li><code>GDBService_HEAD</code> always points at newest service version
+<br><br></li>
+<li>Favors stability of latest GDB version at the detriment of older ones</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Launch Config Type exercise
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>Create a new Launch Configuration Type for our delegate<ul>
+<li>Reset to <strong>DSF8_START</strong>
+<br><br></li>
+<li>Use extension points in <em>plugin.xml</em></li>
+<li><code>o.e.debug.core.launchConfigurationTypes</code></li>
+<li><code>o.e.debug.core.launchConfigurationTypeImages</code></li>
+<li><code>o.e.debug.core.launchConfigurationTabGroups</code>
+<br><br></li>
+<li>Assign our launch delegate to new launch config type
+<br><br></li>
+<li>Assign our launch tab to new launch tab group
+<br><br></li>
+<li><strong>Go!</strong></li>
+</ul>
+</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    What we've seen
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>We've created a new view that used existing services
+<br><br></li>
+<li>We've created a new service that the new view can use
+<br><br></li>
+<li>We've created a replacement service for our own delegate
+<br><br></li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Module 7
+    </h2>
+    <h3 >Changing GDB's Initialization</h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>Launch order
+<br><br></li>
+<li>FinalLaunchSequence
+<br><br></li>
+<li>Extending the FinalLaunchSequence
+<br><br></li>
+<li>DSF Exercise 9</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Modifying GDB initialization
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>DSF-GDB initializes GDB based on parameters of the launch config, e.g., <ul>
+<li>Enable non-stop mode</li>
+<li>Connect to a remote target</li>
+<li>Open a core file
+<br><br></li>
+</ul>
+</li>
+<li>In some situations, we may want to modify how GDB is initialized, e.g.,<ul>
+<li>Remove step that connects to remote target</li>
+<li>Modify which .gdbinit file is read</li>
+<li>Send a new command before connecting to target</li>
+</ul>
+</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    DSF-GDB launch sequence
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><p>1.
+1.
+1.
+1.</p></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Adding a step at initialization
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li><strong>Goal</strong>: Turn on GDB verbosity (debug printouts) from the beginning<ol>
+<li>Need to send GDB the MI command: <code>-gdb-set verbose on</code></li>
+<li>Need to send it before other commands sent to GDB
+<br><br></li>
+</ol>
+</li>
+<li><strong>Exercises</strong>:<ol>
+<li>Provide API in <code>FrameSpyService</code> to send new command</li>
+<li>Extend DSF-GDB's initialization class: (<code>FinalLaunchSequence</code>)</li>
+<li>Use extended initialization class instead of DSF-GDB's one</li>
+</ol>
+</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Communicating with GDB
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li><code>ICommandControlService</code></li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Sending a command to GDB
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>Add a method to FrameSpyService that will send the command "-gdb-set verbose on"<ul>
+<li>Reset to <strong>DSF9.1_START</strong> or <strong>DSF9.1_ADVANCED</strong>
+<br><br></li>
+<li><strong>Go!</strong></li>
+</ul>
+</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Extending GDB Initialization Sequence
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>
+<ul>
+<li>Reset to <strong>DSF9.2_START</strong> or <strong>DSF9.2_ADVANCED</strong>
+<br><br></li>
+<li><strong>Go!</strong></li>
+</ul>
+</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Using new initialization Sequence
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>
+<ul>
+<li>Reset to <strong>DSF9.3_START</strong> or <strong>DSF9.3_ADVANCED</strong>
+<br><br></li>
+<li><strong>Go!</strong></li>
+</ul>
+</li>
+</ul></article>
+  
+</slide>
+
+<slide  data-footer-fields="Ericsson | 2016-02-08 | " >
+  <hgroup >
+    <h2 >
+    Extra topics
+    </h2>
+    <h3 ></h3>
+  </hgroup>
+  
+  <article ><ul>
+<li>More advanced topics</li>
+</ul>
+<aside class="note"><section>
+
+<p>Debug features: Dynamic-printf, Visualizer, New CLI, Tracepoints, OS Resources, CommandCache usage</p>
+<p>Using Interfaces, DsfSession#registerModelAdapter()</p>
+<p>CommandFactory of DSF-GDB</p>
+<p>IDebugContextChangedListener</p>
+</aside></section></article>
+  
+</slide>
+
+
+
+<slide class="thank-you-slide">
+  <article class="auto-fadein">
+    <div class="thank-container">
+    <h2>
+      <svg width="350px" height="240px"><g><clipPath id="thankyou"><text y="90%" x="0" letter-spacing="-3px"><tspan id="ty-thank" x="0" y="0.9em">Thank</tspan><tspan id="ty-you" x="0" dy="0.8em">You</tspan></text></clipPath><rect width="100%" height="100%"
+      
+      fill="url(#largeBlend3-svg)"
+      
+       clip-path="url(#thankyou)"></rect></g></svg>
+    </h2>
+    <p></p>
+    </div>
+  </article>
+  <p class="auto-fadein contact">
+  
+    <span><img style="height: 18px;padding-bottom:4px" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEEAAAAwCAMAAAB5V+cTAAAAhFBMVEUAAABCPD9DPT9DPD5DPT9DPT9BOz1DPT9DPT9DPT9CPD5DPT9CPD9DPT9DPT9DPT9CPD5CPD5CPD5DPD9DPT9DPT9DPT9DPT9CPD5CPD5DPT9CPD5DPT9CPD5CPD5DPT9CPD5DPT9DPT9DPT9DPT9DPT5DPD5DPT9DPT9DPT9DPD5DPT+5IFOsAAAAK3RSTlMACsINx/wD+PG0FZRb7eHdPikZecqZ5s5TJXE4ri8ghUK804x+YUvXpp1pV9AIrwAAAj1JREFUSMedlouSojAQRZtHGB6jMIyCqOBz1bX///82CSvX2uyQwC2qkCo9JCfdiUTlJRc8L6JaN0RdIpjn59RRJm9x6M9JGDNzRpUiHFJvetKDIlQk+ENeWUpTk2YfLORFzLViJc1EwFeixl4zS0IYfC6ZV8UkQLFiXn4G4V8CFbV6jsg1kXpnfSQQ+jF9e44A71vN+4so8FloQu/F2We6lt/9XaqxPO9rTei5C8V1dXgN+umU3kCQc8vh0+Kw+gVnLwL8RnaH5+PrMWhTEGSavfZpc3hqB95hcXojvHyu01GHQjvsg9XEO7aGT6MOAxojULSRPuvi/w5rODQJyC6ET9PhjchC0D6F9Bn8Awjg0Eqg9KJ8lvSeUjl8dOREgE/ToRMBPo/D81E5fEbkQIBPX/uEwzscuhGoG3xqh35LUwlBJlj51A6Z9+VUQvcQLCQjuSWsP5xaVwI0xFe1JHIAi+01RkPaCFiKpaxfded8o13qgrYTUA71sR9L7O/69dQbk4WAkkQ9lbsSNSUbf5yAtkBNI3pNkmaEgNZEX5m9tSpGCHCI3jb7O99EPxDgcFWM7tOLrfczIc3g0Ah8XlKD8O4wS+1n/qMzCBii9ezUZ5vfmoTeYT5+3uBsu98MgkTDofO5B0LvcN+QJRCmSxwEpdhwaPGpzv+B4GGZnYK92OsJqydKzSnYi2+KIEsgZg535B40ULVgof+RiqT1pqdNBEsIZYpw9ufkrAgZdSfm+RFJR9SsKzH39/mlpD8f0n+h6YmZRwAAAABJRU5ErkJggg=="></span>
+    <a href="mailto:marc.khouzam@ericsson.com">marc.khouzam@ericsson.com</a>
+    <br>
+    
+    <span><img style="height: 18px;padding-bottom:4px" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEEAAAAwCAMAAAB5V+cTAAAAhFBMVEUAAABCPD9DPT9DPD5DPT9DPT9BOz1DPT9DPT9DPT9CPD5DPT9CPD9DPT9DPT9DPT9CPD5CPD5CPD5DPD9DPT9DPT9DPT9DPT9CPD5CPD5DPT9CPD5DPT9CPD5CPD5DPT9CPD5DPT9DPT9DPT9DPT9DPT5DPD5DPT9DPT9DPT9DPD5DPT+5IFOsAAAAK3RSTlMACsINx/wD+PG0FZRb7eHdPikZecqZ5s5TJXE4ri8ghUK804x+YUvXpp1pV9AIrwAAAj1JREFUSMedlouSojAQRZtHGB6jMIyCqOBz1bX///82CSvX2uyQwC2qkCo9JCfdiUTlJRc8L6JaN0RdIpjn59RRJm9x6M9JGDNzRpUiHFJvetKDIlQk+ENeWUpTk2YfLORFzLViJc1EwFeixl4zS0IYfC6ZV8UkQLFiXn4G4V8CFbV6jsg1kXpnfSQQ+jF9e44A71vN+4so8FloQu/F2We6lt/9XaqxPO9rTei5C8V1dXgN+umU3kCQc8vh0+Kw+gVnLwL8RnaH5+PrMWhTEGSavfZpc3hqB95hcXojvHyu01GHQjvsg9XEO7aGT6MOAxojULSRPuvi/w5rODQJyC6ET9PhjchC0D6F9Bn8Awjg0Eqg9KJ8lvSeUjl8dOREgE/ToRMBPo/D81E5fEbkQIBPX/uEwzscuhGoG3xqh35LUwlBJlj51A6Z9+VUQvcQLCQjuSWsP5xaVwI0xFe1JHIAi+01RkPaCFiKpaxfded8o13qgrYTUA71sR9L7O/69dQbk4WAkkQ9lbsSNSUbf5yAtkBNI3pNkmaEgNZEX5m9tSpGCHCI3jb7O99EPxDgcFWM7tOLrfczIc3g0Ah8XlKD8O4wS+1n/qMzCBii9ezUZ5vfmoTeYT5+3uBsu98MgkTDofO5B0LvcN+QJRCmSxwEpdhwaPGpzv+B4GGZnYK92OsJqydKzSnYi2+KIEsgZg535B40ULVgof+RiqT1pqdNBEsIZYpw9ufkrAgZdSfm+RFJR9SsKzH39/mlpD8f0n+h6YmZRwAAAABJRU5ErkJggg=="></span>
+      <a href="mailto:marc-andre.laperle@ericsson.com">marc-andre.laperle@ericsson.com</a>
+      <br>
+    
+  
+  
+  
+  </p>
+</slide>
+
+
+
+  
+  <slide class="logoslideanimate nobackground">
+    <article class="flexbox vcenter">
+      <div class="logo svganimate">
+  
+        <svg xmlns="http://www.w3.org/2000/svg" width="85" height="70" viewBox="-0.291, -0.32, 54, 48" x="917" y="50" fill="#002561"><g class="logolines"><path d="M19.128,12.461c-1.63,0.598-3.435-0.238-4.031-1.869c-0.598-1.629,0.239-3.433,1.867-4.03l17.372-6.369c1.629-0.598,3.434,0.239,4.032,1.869c0.597,1.629-0.239,3.433-1.869,4.029L19.128,12.461z"/><path d="M19.128,21.865c-1.63,0.597-3.435-0.24-4.031-1.869c-0.598-1.629,0.239-3.434,1.867-4.031l17.372-6.369c1.629-0.597,3.434,0.239,4.032,1.868c0.597,1.629-0.239,3.435-1.869,4.031L19.128,21.865z"/><path d="M19.128,31.268c-1.63,0.598-3.435-0.24-4.031-1.869c-0.598-1.629,0.239-3.435,1.867-4.031l17.372-6.369c1.629-0.597,3.434,0.239,4.032,1.868c0.597,1.629-0.239,3.434-1.869,4.031L19.128,31.268z"/></g><g class="logotext"><path d="M0 39.08h5.827v1.584h-3.77v1.377h3.615v1.643H2.058v1.42h3.83v1.598H0z"/><path d="M14.882 39.08h2.073v7.625h-2.073z"/><path d="M24.52 39.324l-.14 1.633c-1.675-.97-4.243-.66-4.288 1.883-.047 2.54 2.645 2.91 4.35 2.047l.107 1.666c-3.013.938-6.61-.018-6.595-3.713.014-3.623 3.643-4.625 6.565-3.516"/><path d="M30.623 39.207l-.14 1.588c-1.046-.576-3.03-.592-3.03.312 0 1.34 3.537.372 3.537 3.237 0 2.816-3.365 2.85-5.55 2.195l.155-1.683c1.367.64 3.306.778 3.306-.328 0-1.215-3.55-.53-3.55-3.256 0-2.23 2.766-2.83 5.273-2.067"/><path d="M36.878 39.207l-.137 1.588c-1.047-.576-3.028-.592-3.028.312 0 1.34 3.536.372 3.536 3.237 0 2.816-3.367 2.85-5.55 2.195l.153-1.683c1.367.64 3.306.778 3.306-.328 0-1.215-3.55-.53-3.55-3.256 0-2.23 2.767-2.83 5.272-2.067"/><path d="M46.425 39.08h2.626l2.51 4.918V39.08h1.904v7.625H50.99l-2.644-5.012v5.012h-1.92z"/><path d="M41.645 38.896c2.154.002 3.797 1.263 3.797 4.013 0 2.628-1.65 3.98-3.797 3.98-2.142.002-3.783-1.32-3.783-3.98 0-2.752 1.632-4.014 3.783-4.014m-1.663 4.012c0 1.162.498 2.48 1.662 2.478 1.162-.002 1.65-1.313 1.658-2.478.01-1.05-.496-2.473-1.658-2.475-1.164 0-1.662 1.313-1.662 2.475"/><path d="M9.315 42.293h1.138c.513.01.974-.3.97-.862-.005-.496-.413-.85-.94-.843H9.317v1.706zM7.332 39.08h3.736c1.015 0 2.428.445 2.428 2.03 0 1.013-.46 1.58-1.333 1.845.04-.004.498.195.688.77.008.018 1.07 2.975 1.082 2.98H11.73l-.785-2.29c-.12-.355-.382-.587-.754-.587-.322 0-.83-.02-.83 0v2.877H7.333V39.08z"/></g></svg>
+      </div>
+    </article>
+  </slide>
+
+<slide class="backdrop"></slide>
+
+</slides>
+</body>
+</html>

@@ -126,7 +126,7 @@ Examples of tool integrations:
 ---
 title: The Eclipse Platform
 
-<img src="images/sdk-arch.jpg"/>
+<center><img src="images/sdk-arch.jpg"/></center>
 
 ---
 
