@@ -1595,7 +1595,9 @@ title: What we've seen
 title: Module 7
 subtitle: Changing GDB's Initialization
 
-- Launch order
+- DSF-GDB Launch steps
+<br><br>
+- Communicating directly with GDB
 <br><br>
 - FinalLaunchSequence
 <br><br>
@@ -1617,12 +1619,13 @@ title: Modifying GDB initialization
     - Send a new command before connecting to target
 
 ---
-title: DSF-GDB launch sequence
+title: DSF-GDB launch steps
 
-1.
-1.
-1.
-1.
+1. <code>GdbLaunchDelegate#launch()</code> called by platform
+    - <code>FrameSpyLaunchDelegate#launch()</code> for our extension
+1. <code>ServicesLaunchSequence</code> triggered to start services
+    - This uses the Services Factory we saw earlier
+1. <code>FinalLaunchSequence</code> triggered to initialize GDB
 
 ---
 title: Adding a step at initialization
@@ -1639,29 +1642,118 @@ title: Adding a step at initialization
 ---
 title: Communicating with GDB
 
-- <code>ICommandControlService</code>
+- <code>ICommandControl#queueCommand()</code> used to send a command to GDB
+<br><br>
+~~~~
+ICommandControl#queueCommand(
+            new MIExecContinue(threadContext),
+            new DataRequestMonitor<MIInfo>(getExecutor(), parentRm));
+~~~~
+~~~~
+ICommandControl#queueCommand(
+           new MIStackInfoDepth(threadContext),
+           new DataRequestMonitor<MIStackInfoDepthInfo>(getExecutor(), parentRm) {
+                @Override
+                protected void handleSuccess() {
+                    parentRm.setData(getData().getDepth());
+                    parentRm.done();
+                }
+            });
+~~~~
 
 ---
-title: Sending a command to GDB
+title: ICommandControl service
+
+- <code>ICommandControl</code> also provides APIs for:
+    - Getting notified of GDB commands status changes
+        - *Queued*, *Sent*, *Removed*, *Done*
+<br><br>
+    - Getting notified of asynchronous GDB events.
+        - <code>=breakpoint-created/deleted/modified</code>
+        - <code>=memory-changed</code>
+        - <code>\*stopped/\*running</code>
+        - etc
+
+---
+title: Sending a command to GDB exercise
 
 - Add a method to FrameSpyService that will send the command "-gdb-set verbose on"
     - Reset to **DSF9.1_START** or **DSF9.1_ADVANCED**
 <br><br>
     - **Go!**
+
+---
+title: When to trigger this new command
+
+- We want to enable debug logs
+<br><br>
+- We should send the command as early as possible
+
+---
+title: The ReflectionSequence class
+
+<br><br>
+- Used by <code>FinalLaunchSequence</code> to be extendable
+<br><br>
+- Born out of necessity
+<br><br>
+- Support grouping of steps.
+    - In practice, only <code>GROUP_TOP_LEVEL</code> is used
+
+---
+title: The ReflectionSequence class (2)
+
+- <code>getExecutionOrder()</code> returns array of steps using method **names**
+~~~~
+return new String[] { "stepGDBVersion",
+                      "stepSetEnvironmentDirectory",
+                      "stepSetBreakpointPending",
+                    ...
+~~~~
+
+- <code>getExecutionOrder()</code> can be overridden to add/remove steps
+<br><br>
+- Steps are implemented by methods with specific **name** and tagged with <code>@Execute</code>
+<br><br>
+
 ---
 title: Extending GDB Initialization Sequence
 
-- 
+1. Have <code>FrameSpyFinalLaunchSequence</code> extend <code>FinalLaunchSequence</code>
+<br><br>
+1. Add a new <code>stepSetVerbose()</code> to this initialization sequence
+<br><br>
     - Reset to **DSF9.2_START** or **DSF9.2_ADVANCED**
 <br><br>
     - **Go!**
 ---
+title: Instantiating the new sequence
+
+<br><br>
+<br><br>
+- As for previous steps, we need to instantiate our new sequence
+
+---
 title: Using new initialization Sequence
 
-- 
+1. Have <code>FrameSpyControlService</code> extend the existing ICommandControl service
+<br><br>
+1. Override <code>getCompleteInitializationSequence()</code> to choose new launch sequence
+<br><br>
     - Reset to **DSF9.3_START** or **DSF9.3_ADVANCED**
 <br><br>
     - **Go!**
+
+---
+title: Final Recap
+
+- We've created a new view that used existing services
+<br><br>
+- We've created a new service that the new view can use
+<br><br>
+- We've created a replacement service for our own delegate
+<br><br>
+- We've modified GDB's initialization sequence
 
 ---
 title: Extra topics
