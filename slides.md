@@ -107,7 +107,19 @@ subtitle: Eclipse Platform and Plug-in Development
 ---
 title: The Eclipse Platform
 
-The Platform defines the set of frameworks and common services that collectively make up infrastructure required to support the use of Eclipse as a component model, as a **Rich Client Platform (RCP)** and as a comprehensive **tool integration platform**.
+Frameworks and Common services for:
+
+- Rich Client Platform (RCP)
+- Tool integration
+
+<br/>
+Examples of rich client applications:
+
+- Eclipse for Java Developpers, Eclipse SDK, Stand-alone C/C++ Debugger, Trace Compass, etc.
+
+Examples of tool integrations:
+
+- CDT, EGit, Trace Compass plugins
 
 ---
 title: The Eclipse Platform
@@ -218,7 +230,7 @@ subtitle: Features
 - Native look
 - Quite fast!
 - Button, Text, Browser, Group, Table, Tree, etc.
-- Parent is specified in constructor (versus add child to parent container explicitly)<
+- Parent is specified in constructor (versus add child to parent container explicitly)
 - Can be used as a stand-alone Java library (without anything else Eclipse)
 
 ---
