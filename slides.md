@@ -157,7 +157,7 @@ title: Workspace
 	- IFile
  	- IFolder
 	- IProject
-- Resoure names and their paths in the workspace to not have to match the location on the filesystem
+- Resource names and their paths in the workspace to not have to match the location on the filesystem
 
 ---
 title: Workspace
