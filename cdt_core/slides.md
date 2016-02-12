@@ -8,9 +8,8 @@
 % thankyou_blend: largeblend3       #largeblend[123] or fullblend
 % mail: marc-andre.laperle@ericsson.com
 % lync: marc-andre.laperle@ericsson.com
-% footer: Ericsson Internal
-% footer: Rev PA1
-% footer: 2015-12-15
+% footer: Ericsson
+% footer: 2015-02-12
 % logoslide: false
 % useBuilds: true
 % animate: false         #animate logoslide (chrome only)
@@ -74,14 +73,19 @@ We will make use of all three approaches in the exercises.
 
 ---
 
-title: Exercices
+title: Exercises
 
-Project 1: We will create a checker that will warn if the file is longer than a set number of lines. This will only use normal Java libraries to analyze the code.
+**Project 1**
 
-Project 2: We will create a checker that will warn if code is too complex. We will consider code too complex when it has deep nesting of if/else/for/while. This will use the AST.
+Warn if the file is longer than a set number of lines. This will only use normal Java libraries to analyze the code.
 
-Project 3: We will create a checker that will display an error if a method override another method but with the wrong return type.
+**Project 2**
 
+Warn if code is too complex. We will consider code too complex when it has deep nesting of if/else/for/while. This will use the AST.
+
+**Project 3**
+
+Error if a method override another method but with the wrong return type.
 
 ---
 
@@ -89,45 +93,86 @@ title: Project 1
 
 Description:
 
-Create a checker that will warn if the file is longer than a set number of lines. This will only use normal Java libraries to analyze the code.
+Warn if the file is longer than a set number of lines. This will only use normal Java libraries to analyze the code.
 
 ---
 
 title: Project 1
 subtitle: Step 1: Creating the checker skeleton
 
-- Create a new plugin with cdt.codan.core dependency
-- Create a new checker (extension), re-use AbstractCheckerWithProblemPreferences
+- Reset to **CODAN1.1**
+- Already created a new plugin with cdt.codan.core dependency (done for you)
+- Create a new checker in the plugin.xml extension tab
+	- Fill the 'class' field (use class hyperlink). In class creation dialog, remove IChecker interface, use AbstractCheckerWithProblemPreferences as superclass. We can call the class LineCountChecker
+	- Fill id (unique) and name
+- **Go!**
+
+You should have a new LineCountChecker class that extends AbstractCheckerWithProblemPreferences and overrides the processResource method
+
+~~~~
+	@Override
+	public boolean processResource(IResource resource) throws OperationCanceledException {
+		return false;
+	}
+~~~~
 
 ---
 
 title: Project 1
-subtitle: Step 2:
+subtitle: Step 2: Detect the problem
 
-- Check if it should report problem with shouldProduceProblems
+- Reset to **CODAN1.2**
+- Check if it should report problem with shouldProduceProblems and early return
+- Check if the resource is a IFile instance and cast to it. 
+~~~~
+if (resource instanceof IFile) {
+   IFile file = (IFile) resource;
+}
+~~~~
 - From the IFile, count the number of lines by reading lines one by one.
 - Print total to console
 
-Test it: Run it and check console
+Test it: Run it and check console (right-click on complex.cpp, Run C/C++ Code analysis)
 
 ---
 
 title: Project 1
-subtitle: Step 3:
+subtitle: Step 3: Report the problem
 
+- Reset to **CODAN1.3**
 - Create a problem to will be reported (extension)
-- Report the problem (when a certain number of lines is reached)
+	- Fill the name, **id** (unique)
+	- Category: click browse, look for code style
+	- messagePattern: File is too long!
+	- marker type: click browse, look for codan problem
+- Report the problem (when 100 lines is reached)
+~~~~
+reportProblem(FILE_TOO_LONG_PROBLEM_ID, file, 1); // id has to be the same as the problem id in plugin.xml
+~~~~
 
-Test it: Run it and a warning should appear!
+Test it: Run it on complex.cpp and a warning should appear!
 
 ---
-
 title: Project 1
-subtitle: Step 4:
+subtitle: Step 4: Add a preference
 
-- Add a preference for the number of lines (addPreference). Use it
-- Let the user know what the limit is. Use {0} in message to set parameter.
+- Reset to **CODAN1.4**
+- Add a preference for the number of lines. Call addPreference in initPreferences.
+- Use the preference value instead of '100' in the code that detects the problem
+~~~~
+@Override
+public void initPreferences(IProblemWorkingCopy problem) {
+	super.initPreferences(problem);
+	addPreference(problem, PARAM_MAX_LINE_COUNT, "Max line count", Integer.toString(100));
+}
 
+
+final IProblem problem = getProblemById(FILE_TOO_LONG_PROBLEM_ID, file);
+String parameter = (String) getPreference(problem, PARAM_MAX_LINE_COUNT);
+int maxLineCount = Integer.parseInt(parameter);
+
+~~~~
+- BONUS: Let the user know what the limit is in the problem message. Use {0} in messagePattern to set a parameter and call reportProblem with another parameter.
 ---
 
 title: What is the AST?
@@ -172,41 +217,75 @@ How to use a visitor:
 
 title: AST Example
 
-*Tiny example*
+~~~~{java}
+class MethodFinder extends ASTVisitor {
+	{
+		shouldVisitDeclarators = true;
+	}
+
+	@Override
+	public int visit(IASTDeclarator declarator) {
+		// do something with the declarator
+		return PROCESS_CONTINUE;
+	}
+
+	@Override
+	public int leave(IASTDeclarator declarator) {
+		return PROCESS_CONTINUE;
+	}
+}
+
+void analyseFile(IASTTranslationUnit translationUnit) {
+	translationUnit.accept(new MethodFinder());
+}
+~~~~
 
 ---
 
 title: Project 2
 
-Create a checker that will warn if code is too complex. We will consider code too complex when it has deep nesting of if/else/for/while. This time, we will make use of CDT's AST to analyze the code. We will be able to analyze based on nodes in a tree instead of plain text.
+Warn if code is too complex. We will consider code too complex when it has deep nesting of if/else/for/while. This time, we will make use of CDT's AST to analyze the code. We will be able to analyze based on nodes in a tree instead of plain text.
+
+~~~~
+void complexFunction() {
+	int i = 0;
+	if (i == 0) {
+		if (i == 0) {
+			if (i == 0) {
+				if (i == 0) {
+				...
+~~~~
 
 ---
 
 title: Project 2
-subtitle: Step 1:
+subtitle: Step 1: Create the visitor
 
-- Create a new checker (extension). This time we can use AbstractIndexAstChecker
-- Open the AST view to explore the various node types. What should be useful?
+- Reset to **CODAN2.1**
+
+- ComplexityChecker class is already created but this time, it uses AbstractIndexAstChecker
+- With complex.cpp opened, open the DOM AST view to explore the various node types. What should be useful?
 - Create a visitor (extend ASTVisitor), make the root accept it. Visit only interesting nodes.
+	- Hint: if/for/while statements (IASTIfStatement, etc) have the same parent class
+	- Override the visit() method for the type of node desired
+	- Set the boolean 'shouldVisitSomething' to true in the ASTVisitor instance
+- **Go!**
 
 ---
-
 title: Project 2
-subtitle: Step 2:
+subtitle: Step 2: Track complexity and report
 
-- Increment level of complexity when visiting a chosen node, decrement on leave
+- Reset to **CODAN2.2**
+
+- Increment level of complexity (int) when visiting a 'complexity' node, decrement on leave
 - Create and report the problem. Use the node's location to report at the correct line.
-
----
-
-title: Project 2
-subtitle: Step 3:
-
+	- To get the line of the stement, you can use statement.getFileLocation().getStartingLineNumber()
 - Prevent more errors in deeper levels of children. I.e. do not "continue" after reporting
+	- To do this, 'skip' this node by returning PROCESS_SKIP
 - Bonus: Create a preference for the complexity level
+- **Go!**
 
 ---
-
 title: What is the DOM?
 
 Document Object Model.
@@ -219,8 +298,6 @@ Example of AST nodes vs binding: In a source file, printf is used in several pla
 
 - Each individual call to printf is a node in the AST
 - All printf nodes have a name that resolve to the same binding: an IFunction
-
-*picture*
 
 ---
 
@@ -241,76 +318,67 @@ title: Project 3
 
 We will create a checker that will display an error if a method override another method but with the wrong return type.
 
-Example: *picture or code*
+~~~~
+class Base {
+	virtual int bar();
+	virtual ~Base();
+};
 
----
-
-title: Project 3
-subtitle: Step 1:
-
-- Create a new checker (extension). This time we can use AbstractIndexAstChecker
-- Open the AST view to explore the various node types. What should be useful?
-- Create a visitor (extend ASTVisitor), make the root accept it.
-
----
-title: Project 3
-subtitle: Approaches
-
-There are multiple ways. 
-
-Approach A
-
-1. For each class name we find in the AST
-2. Get its binding (ICPPClassType)
-3. Get it's methods (ICPPMethod)
-4. For each method, check for name return type conflict with the base methods.
-5. Report error (where?)
-
-We would like to report errors where the method declarators are but a ICPPMethod alone doesn't know about its location in the AST. We could find the location back from the index but we can save ourselves from this extra step.
+class Child : public Base {
+	float bar();
+};
+~~~~
 
 ---
 title: Project 3
-
-Approach B
+subtitle: Approach
 
 1. For each method declarator node in the AST
 2. Get its binding (ICPPMethod)
-(That way, we have both the AST node of the method and it's semantic object)
 3. Get its owner class (ICPPClassType)
-4. Check for name return type conflict with the base method
+4. Check for name return type conflict with the base methods
 5. Report the error at the location of the AST node
 
----
-title: Project 3
-subtitle: Step 2:
-
-Find a potential method to analyze
-- Visit only interesting nodes of the AST (declarators)
-- Get its binding. Make sure it's a method and its owner
+(There are multiple ways do to this)
 
 ---
 title: Project 3
-subtitle: Step 3:
+subtitle: Step 1: Create the visitor
 
-Find all potential conflicts
-- Get the owner (class type) of the method
-- Get **all** the base methods in the class. Cheat: Copy from ClassTypeHelper. Like ClassTypeHelper.getAllDeclaredMethods, but without getDeclaredMethods (the class own methods).
+- Reset to **CODAN3.1**
+- ReturnTypeChecker class is already created, it uses AbstractIndexAstChecker
+- Create visitor. Visit only interesting nodes of the AST (IASTDeclarator)
+	- Override the visit(IASTDeclarator)
+	- Set the boolean 'shouldVisitDeclarators' to true in the ASTVisitor instance
+- Get its binding using getName().getBinding() 
+	- Make sure it's a method instance (ICPPMethod) then call checkConflictingReturn
+- **Go!**
 
 ---
 title: Project 3
-subtitle: Step 4:
+subtitle: Step 2: Detect conflicting return type
 
-Detect the conflict
+- Reset to **CODAN3.2**
+- Get the class owner (class type) of the method
+- Get all base methods by calling getAllBaseMethods (provided)
 - Iterate through all base methods
-- Check that the base method name is the same and is virtual
-- Check that the return types are the same
+	- Check that the base method name is the same and is virtual
+	- Check that the return types are not the same
+- **Go!**
 
 ---
 title: Project 3
-subtitle: Step 5:
+subtitle: Step 3: Report problem
 
-- Create and report the problem. Use the node's location to report at the correct line.
-- Tell the user which type it should be. ASTTypeUtil.getType should help
+- Reset to **CODAN3.3**
+- Create (extension) and report the problem (reportProblem)
+	- Fill the name, **id** (unique)
+	- Category: click browse, look for Compiler Errors
+	- messagePattern: Invalid return type for overriden method.
+	- marker type: click browse, look for semantic problem
+	- Use the node to report at the correct line.
+- BONUS: Let the user know which type it should be in the problem message. Use {0} in messagePattern to set a parameter and call reportProblem with additional parameter. ASTTypeUtil.getType should help get the type name.
+- **Go!**
 
 ---
 title: Code Examples
