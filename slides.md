@@ -647,12 +647,47 @@ title: Exercise Review
 subtitle: What we accomplished
 
 - Create a plug-in
-- Create a view
-- Use SWT widgets
-- Use commands and handlers
-- Use menu extension (context menu and toolbar)
-- Use the preference store
-- Use Jobs and Progress Monitors
+    - *File > New > Plug-in project*
+
+<center><img src="images/manifest_tabs.png"/></center>
+
+---
+title: Exercise Review (2)
+subtitle: What we accomplished
+build_lists: false
+
+- Creating a view
+    - *extension point="org.eclipse.ui.views"*
+    - Extending *ViewPart* and filling *createPartControl()*
+
+- Using SWT widgets
+    - Using *Button*, *Label*
+    - Using the UI Thread for such things
+    - *Display.getDefault().syncExec()/asyncExec()*
+
+---
+title: Exercise Review (3)
+subtitle: What we accomplished
+build_lists: false
+
+- Using commands, handlers and menus
+    - *extension point="org.eclipse.ui.commands"*
+    - Extending *AbstractHandler#execute()* to do the work of the command
+    - *extension point="org.eclipse.ui.menus"*
+        - *toolbar:org.eclipse.cdt.example.framespy.view?after=additions*
+        - *popup:org.eclipse.cdt.example.framespy.view*
+    - Initializing a context-menu using *MenuManager*
+    
+---
+title: Exercise Review (4)
+subtitle: What we accomplished
+build_lists: false
+
+- Using the preference store
+    - *InstanceScope.INSTANCE.getNode(PLUGIN_ID)*
+- Using Jobs and Progress Monitors
+    - *Job#schedule()*
+    - *monitor.isCanceled()*
 
 ---
 
@@ -684,9 +719,11 @@ title: Building on our new view
 ---
 title: Debug Frame Spy Details
 
-1. Show list of method name and line number of each location program was interrupted
+1. Show list of `method:line` of each location the program was interrupted
 1. Show time of interrupt for each entry
 1. Show the number of arguments of the function for each entry
+
+<center><img src=images/FrameSpy.png></center>
 
 ---
 title: Eclipse Debug Platform
@@ -740,6 +777,16 @@ title: View Model
 - Show feature that limits number of stack frames
 - In practice, we don't change the view model very often.  So this course will not cover it.
 ++++
+
+---
+title: Using the CDT Debugger
+
+- Start your test Eclipse
+<br><br>
+- Use the debug icon to debug a C program
+<br><br>
+- Step, look at variables, set breakpoints, resume
+
 ---
 title: Data Model
 
@@ -906,7 +953,7 @@ title: Other RequestMonitors
 
 ---
 title: DSF concepts review
-build_lists: true
+build_lists: false
 
 1. APIs to integrate a debugger 'more easily' e.g., GDB
 1. View Model for presentation layer
@@ -918,7 +965,7 @@ build_lists: true
 
 ---
 title: DSF practical review
-build_lists: true
+build_lists: false
 
 1. Services extend <code>IDsfService</code>
 <br><br>
@@ -932,7 +979,7 @@ build_lists: true
 
 ---
 title: DSF Exercise 
-build_lists: true
+build_lists: false
 
 - FrameSpy to periodically print "method:line" for current frame 
     - Reset branch to commit starting with
@@ -949,7 +996,7 @@ build_lists: true
 ++++
 ---
 title: Exercise review
-build_lists: true
+build_lists: false
 
 - Finding the DSF session using debug context
     - Debug View and Debug Context
@@ -972,7 +1019,7 @@ title: Exercise review (2)
 
 ---
 title: Exercise follow-up part 1
-build_lists: true
+build_lists: false
 
 - What if you select the process element?
     - The top frame of which thread should we use?
@@ -1016,18 +1063,6 @@ title: Exercise follow-up part 2
 title: Follow-up part 2 review
 
 ---
-title: Which DSF concepts did we exercise?
-build_lists: true
-
-1. APIs to integrate a debugger 'more easily' e.g., GDB
-1. View Model for presentation layer
-1. Data Model to communicate with backend (GDB)
-1. Services API to access Data
-1. No synchronization: DSF Executor **must** be used to access Data
-1. Services for one backend are grouped in a Session
-1. Heavy use of asynchronous programming for responsiveness
-
----
 title: Module 4
 subtitle: DSF Events and Exercises
 
@@ -1048,7 +1083,7 @@ title: DSF Events
 
 ---
 title: DSF Events (2)
-build_lists: true
+build_lists: false
 
 - Events are how the Data Model tells the View Model of changes
     - e.g., Thread stops => Update Debug View
@@ -1113,7 +1148,7 @@ title: Receiving event example
 - Remember that registration must be done on Executor
 ---
 title: Help with the Executor
-build_lists: true
+build_lists: false
 
 - DSF provides Java Annotations to guide with Executor use 
     - <code>@ThreadSafe</code>
@@ -1203,7 +1238,7 @@ title: Handling a new session (2)
 
 ---
 title: Handling a new session (3)
-build_lists: true
+build_lists: false
 
 - When new session starts, we are not registered for its events
 <br><br>
@@ -1293,7 +1328,7 @@ title: DSF-GDB's services
 
 ---
 title: New Service Exercise
-build_lists: true
+build_lists: false
 
 - Write a new service providing the current time
     - Reset to **DSF4_START** or **DSF4_ADVANCED**
@@ -1310,7 +1345,7 @@ build_lists: true
 
 ---
 title: New Service Review
-build_lists: true
+build_lists: false
 
 - <code>AbstractDsfService</code> can be used as a base class for services
 <br><br>
@@ -1351,7 +1386,7 @@ title: Using new service
 
 ---
 title: Instantiating new service
-build_lists: true
+build_lists: false
 
 - We can't find the service because we didn't instantiate it
 <br><br>
@@ -1359,7 +1394,7 @@ build_lists: true
 <br><br>
 - A DSF-GDB session instantiates its services
     - We haven't hooked into a DSF-GDB session (yet)
-    - We need to manager our new service ourselves
+    - We need to manage our new service ourselves
     - Remember <code>addSessionStartedListener()</code> and friends?
 
 ---
@@ -1396,7 +1431,7 @@ Ideal to finish a day here
 
 ---
 title: Frame Argument count
-build_lists: true
+build_lists: false
 
 - Provide the number of arguments when printing "method:line"
     - Reset to **DSF6_START** or **DSF6_ADVANCED**
@@ -1437,23 +1472,33 @@ subtitle: Changing the Debug View
 ---
 title: Building on DSF-GDB
 
-- New service does not do anything *debugging*
-<br><br>
 - For a new debugging feature
-    - Use existing DSF-GDB services
-    - Re-work obtained information
-    - Provide new information to view
 <br><br>
-- Services can use other services
+    - Use existing DSF-GDB services
+<br><br>
+    - Re-work obtained information
+<br><br>
+    - Provide new information to view
+
+---
+title: Modifying DSF-GDB
+
+- To change an *existing* debugging feature
+<br><br>
+    - Override View Model code
+<br><br>
+    - Override Data Model code
+<br><br>
+- We will focus on overriding a service (i.e., the data model)
 
 ---
 title: Extending a service
-build_lists: true
+build_lists: false
 
 - For stack frames, replace method name "main" with "entry"
     - Reset to **DSF7.1_START** or **DSF7.1_ADVANCED**
 <br><br>
-    - **FrameSpyStackService.java** extend existing Stack service
+    - **FrameSpyStackService.java** extends existing Stack service
 <br><br>
     - Override <code>getFrameData()</code> 
 <br><br>
@@ -1462,6 +1507,7 @@ build_lists: true
     - **Go!**
 ---
 title: New Service Instantiation
+build_lists: true
 
 - Like before we now have a new class we must instantiate
 <br><br>
@@ -1473,7 +1519,7 @@ title: New Service Instantiation
 - We need to instantiate our service *instead* of the original one
 
 ---
-title: The two approaches to extend DSF-GDB
+title: Two approaches to extend DSF-GDB
 
 1. Creating a new view and a new service
     - Does not affect the rest of the debugging views
@@ -1485,8 +1531,8 @@ title: The two approaches to extend DSF-GDB
     - Should be chosen by user explicitly
     - Aimed at specific scenarios
     - This is what we need now
-<br><br>
-- So, how do we *replace* a service?
+
+So, how do we *replace* a service?
 
 ---
 title: First solution
@@ -1521,17 +1567,16 @@ title: Differences
 
 - Both solutions are almost the same
     - Both need a new launch delegate
-    - The first also provide a new launch config type
+    - The first also provides a new launch config type
     - The second re-uses existing launch config types
 <br><br>
 - Base choice on the UI presented to the user
-    - Let's go over the two UIs
 <br><br>
 - Code differences are minor
 
 ---
 title: Launch Delegate exercise
-build_lists: true
+build_lists: false
 
 - Create a new Launch Delegate for *C/C++ Application*
     - Reset to **DSF7.2_START**
@@ -1565,7 +1610,7 @@ title: New Services Factory
 
 ---
 title: Services Factory Exercise
-build_lists: true
+build_lists: false
 
 - Create a new Services Factory for our Launch Delegate
     - Reset to **DSF7.3_START**
@@ -1613,8 +1658,8 @@ title: Launch Config Type exercise
 <br><br>
     - Use extension points in *plugin.xml*
     - <code>o.e.debug.core.launchConfigurationTypes</code>
-    - <code>o.e.debug.core.launchConfigurationTypeImages</code>
-    - <code>o.e.debug.core.launchConfigurationTabGroups</code>
+    - <code>o.e.debug.ui.launchConfigurationTypeImages</code>
+    - <code>o.e.debug.ui.launchConfigurationTabGroups</code>
 <br><br>
     - Assign our launch delegate to new launch config type
 <br><br>
