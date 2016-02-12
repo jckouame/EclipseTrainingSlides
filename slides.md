@@ -435,7 +435,7 @@ title: Exercise: Create the command and handler
 
 - Reset to **PLUG3**
 - Add a command extension to toggle log on/off
-- Create a defaultHandler class (tip: use hyperlink to create class). Make it extend AbstractHandler
+- Create a defaultHandler class (tip: use hyperlink to create class). Make it extend AbstractHandler (the one in 'core')
 - Implement the execute method to make it print something to the console
 - <b>Go!</b>
 ---
@@ -463,9 +463,13 @@ title: Exercise: Add toolbar button
 Let's add the command to the view toolbar.
 
 - Reset to **PLUG4**
-- Create the menus extension
+- Create the menus extension (Extension tab, org.eclipse.ui.menus extension)
 - Add a menuContribution, set the locationURI so that it gets displayed in the view toolbar, after additions
-- Add a command under the contribution. Set the id, icon and style (push)
+	- locationUri: toolbar:my.view.id?after=additions
+- Right-click on menuContribution, Add a command. Set the id, icon and style
+	- id: the id of your command
+	- icon: enablespy.gif
+	- style: push
 - <b>Go!</b>
 
 It would be nice in the context menu as well. <img src="images/quick_fix.png" width="50" height="40"/>
@@ -476,15 +480,18 @@ title: Exercise: Context menu
 Let's add the same command in the context menu.
 
 - Reset to **PLUG5**
-- Add a new menuContribution. Because it needs different locationURI. 
-- Add the command. Set the id, icon and style (push)
-- Create a context menu in the view:
+- Add a new menuContribution (right-click on org.eclipse.ui.menus). Because it needs different locationURI. 
+	- locationUri= popup:my.view.id
+- Add the command (right-click on menuContribution). Set the id, icon and style (push)
+- Create a context menu in the view, to be populated:
 ~~~~{java}
+// put in createPartControl
 fMenuManager = new MenuManager();
 Menu menu = fMenuManager.createContextMenu(composite);
 composite.setMenu(menu);
 getViewSite().registerContextMenu(fMenuManager, null);
 ...
+// put in dispose (override the method)
 fMenuManager.dispose();
 ~~~~
 
@@ -498,9 +505,13 @@ Let's add a label that displays that.
 
 - Reset to **PLUG6**
 - Add a Label (a SWT widget) at the view creation.
+	- Label label = new Label(c, SWT.NONE)
+	- label.setText(Boolean.FALSE.toString());
 - When the command executes:
 	- Set the toggle state (you can add a method to the view)
+	- In the handler, get the view with FrameSpyView part = (FrameSpyView) HandlerUtil.getActivePartChecked(event);
 	- Update the label text
+		- label.setText
 
 - <b>Go!</b>
 
@@ -526,10 +537,25 @@ title: Exercise: Persist the toggle state
 	- Get the InstanScope
 	- Get the node
 	- Set the key/value
+
+Saving the preferences in our FrameSpyView.togleState method
+~~~~
+IEclipsePreferences preferences = InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID);
+preferences.put(TOGGLE_STATE_PREF_KEY, Boolean.toString(fToggledState));
+~~~~
+
+---
+title: Exercise: Persist the toggle state
+
 - When the view is created:
 	- Get the InstanScope
 	- Get the node
 	- Get value using key, set the label text
+
+~~~~
+IEclipsePreferences preferences = InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID);
+preferences.get(TOGGLE_STATE_PREF_KEY, Boolean.toString(false)); // set to false in case it was never set
+~~~~
 
 - <b>Go!</b>
 
@@ -552,14 +578,29 @@ In Eclipse code, Jobs and Threads are both commonly used, depending on the situa
 For the first implementation of our logging feature, we will poll every one second using a job.
 
 ---
+title: Eclipse Jobs
+
+~~~~
+job = new Job("Frame Spy Polling Job") {
+	@Override
+	protected IStatus run(IProgressMonitor monitor) {
+		return Status.OK_STATUS;
+	}
+
+};
+job.schedule();
+~~~~
+
+---
 title: Exercise: Creating a polling job
 
 - Reset to **PLUG8**
 - When toggle state is on, create and schedule a job
 	- Give the job a nice name to be shown in the Progress View
-- In the job run() method, sleep for 1 sec
-- After the 1 sec, reschedule the job (only if the toggle state is still on!).
+- In the job run() method, sleep for 1 sec. Use Thread.sleep
+- After the 1 sec, reschedule the job (only if the toggle state is still on!). Use schedule()
 - Print something to the console every tick "polling..."
+- If the toggle state becomes 'off' cancel the job. Use job.cancel().
 - <b>Go!</b>
 
 ---
