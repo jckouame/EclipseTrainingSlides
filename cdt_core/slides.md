@@ -101,8 +101,9 @@ title: Project 1
 subtitle: Step 1: Creating the checker skeleton
 
 - Reset to **CODAN1.1**
-- Already created a new plugin with cdt.codan.core dependency (done for you)
-- Create a new checker in the plugin.xml extension tab
+- Already created a new plugin
+- In MANIFEST.MF, add cdt.codan.core dependency
+- Create a new checker in extension tab
 	- Fill the 'class' field (use class hyperlink). In class creation dialog, remove IChecker interface, use AbstractCheckerWithProblemPreferences as superclass. We can call the class LineCountChecker
 	- Fill id (unique) and name
 - **Go!**
@@ -122,7 +123,7 @@ title: Project 1
 subtitle: Step 2: Detect the problem
 
 - Reset to **CODAN1.2**
-- Check if it should report problem with shouldProduceProblems and early return
+- Check if it should report problem with call to shouldProduceProblems() (method in the base class) and early return
 - Check if the resource is a IFile instance and cast to it. 
 ~~~~
 if (resource instanceof IFile) {
@@ -132,7 +133,7 @@ if (resource instanceof IFile) {
 - From the IFile, count the number of lines by reading lines one by one.
 - Print total to console
 
-Test it: Run it and check console (right-click on complex.cpp, Run C/C++ Code analysis)
+Test it: Start your second Eclipse (Run CDT). Import the testCodeAnalysis project. Rright-click on complex.cpp, Run C/C++ Code analysis. You should see the print-out on the console.
 
 ---
 
@@ -150,7 +151,7 @@ subtitle: Step 3: Report the problem
 reportProblem(FILE_TOO_LONG_PROBLEM_ID, file, 1); // id has to be the same as the problem id in plugin.xml
 ~~~~
 
-Test it: Run it on complex.cpp and a warning should appear!
+Test it: Run it on loooong.cpp and a warning should appear!
 
 ---
 title: Project 1
@@ -165,7 +166,6 @@ public void initPreferences(IProblemWorkingCopy problem) {
 	super.initPreferences(problem);
 	addPreference(problem, PARAM_MAX_LINE_COUNT, "Max line count", Integer.toString(100));
 }
-
 
 final IProblem problem = getProblemById(FILE_TOO_LONG_PROBLEM_ID, file);
 String parameter = (String) getPreference(problem, PARAM_MAX_LINE_COUNT);
@@ -352,14 +352,17 @@ subtitle: Step 1: Create the visitor
 	- Set the boolean 'shouldVisitDeclarators' to true in the ASTVisitor instance
 - Get its binding using getName().getBinding() 
 	- Make sure it's a method instance (ICPPMethod) then call checkConflictingReturn
+	- print to console the name of the ICPPMethod, using getName
 - **Go!**
+
+Open classes/Child.cpp to set the results (on the console)
 
 ---
 title: Project 3
 subtitle: Step 2: Detect conflicting return type
 
 - Reset to **CODAN3.2**
-- Get the class owner (class type) of the method
+- Get the class owner using **getClassOwner** (class type) of the method
 - Get all base methods by calling getAllBaseMethods (provided)
 - Iterate through all base methods
 	- Check that the base method name is the same and is virtual
