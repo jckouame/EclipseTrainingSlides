@@ -325,11 +325,11 @@ slides > slide.dark {
 /* line 180, ../scss/default.scss */
 slides > slide:not(.nobackground):after {
   font-size: 12pt;
-  content: attr(data-slide-num) "/" attr(data-total-slides);
+  content: attr(data-footer-fields) "Page " attr(data-slide-num) "/" attr(data-total-slides);
   position: absolute;
   bottom: 20px;
-  right: 60px;
-  line-height: 1.9;
+  left: 60px;
+  line-height: 1.9
 }
 /* line 191, ../scss/default.scss */
 /*slides > slide.title-slide:after {
