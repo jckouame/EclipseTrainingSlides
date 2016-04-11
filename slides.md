@@ -759,7 +759,7 @@ title: DSF Overview
 - Also designed for efficiency (slow or remote targets)
 - Figure shows typical debugger integration using DSF
 
-<center><img src=img/DSFOverview.png></center>
+<center><img src=images/DSFOverview.png></center>
 
 ---
 title: View Model
@@ -845,8 +845,8 @@ title: DSF Executor thread
 - Accessing data from different threads requires synchronization
 - DSF uses a single-threaded executor to avoid synchronization
 <center>
-<img src=img/synchronization_1.png>
-<img src=img/synchronization_2.png>
+<img src=images/synchronization_1.png>
+<img src=images/synchronization_2.png>
 </center>
 
 ---
