@@ -250,10 +250,10 @@ slides > slide {
   font-family: 'Open Sans', Arial, sans-serif;
   font-size: 34px;
   color: #797979;
-  width: 900px;
-  height: 700px;
-  margin-left: -450px;
-  margin-top: -350px;
+  width: 1400px;
+  margin-left: -700px;
+  height: 1090px;
+  margin-top: -545px;
   padding: 40px 60px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
@@ -389,8 +389,10 @@ slides.layout-faux-widescreen > slide {
 /* line 245, ../scss/default.scss */
 slides.layout-widescreen > slide,
 slides.layout-faux-widescreen > slide {
-  margin-left: -550px;
-  width: 1100px;
+  width: 1580px;
+  margin-left: -790px;
+  height: 900px;
+  margin-top: -450px;
 }
 /* line 250, ../scss/default.scss */
 slides.layout-widescreen > slide.far-past,
