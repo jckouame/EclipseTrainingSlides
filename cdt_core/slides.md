@@ -1,19 +1,6 @@
 % title: Exploring CDT Core
-% title_class:                      #empty, largeblend[123] or fullblend
 % subtitle: The brain behind the C/C++ Editor
-% subtitle_class:
-% title_slide_class:
-% title_slide_image:
 % author: Marc-André Laperle
-% thankyou_blend: largeblend3       #largeblend[123] or fullblend
-% mail: marc-andre.laperle@ericsson.com
-% lync: marc-andre.laperle@ericsson.com
-% footer: Ericsson
-% footer: 2015-02-12
-% logoslide: false
-% useBuilds: true
-% animate: false         #animate logoslide (chrome only)
-% aspect_ratio: 16:9     #16:9, 16:10 or 4:3
 
 ---
 title: The C/C++ Editor
@@ -30,7 +17,7 @@ Has many features:
 - Markers
 - etc
 
-<div style="position: absolute; left: 450px; top: 150px;">
+<div style="position: absolute; left: 650px; top: 150px;">
 <img src="images/cdt-editor.png" height="400" width="400"/>
 </div>
 
@@ -110,12 +97,12 @@ subtitle: Step 1: Creating the checker skeleton
 
 You should have a new LineCountChecker class that extends AbstractCheckerWithProblemPreferences and overrides the processResource method
 
-~~~~
+<pre class="prettyprint">
 	@Override
 	public boolean processResource(IResource resource) throws OperationCanceledException {
 		return false;
 	}
-~~~~
+</pre>
 
 ---
 
@@ -125,11 +112,13 @@ subtitle: Step 2: Detect the problem
 - Reset to **CODAN1.2**
 - Check if it should report problem with call to shouldProduceProblems() (method in the base class) and early return
 - Check if the resource is a IFile instance and cast to it. 
-~~~~
+
+<pre class="prettyprint">
 if (resource instanceof IFile) {
    IFile file = (IFile) resource;
 }
-~~~~
+</pre>
+
 - From the IFile, count the number of lines by reading lines one by one.
 - Print total to console
 
@@ -147,9 +136,10 @@ subtitle: Step 3: Report the problem
 	- messagePattern: File is too long!
 	- marker type: click browse, look for codan problem
 - Report the problem (when 100 lines is reached)
-~~~~
+
+<pre class="prettyprint">
 reportProblem(FILE_TOO_LONG_PROBLEM_ID, file, 1); // id has to be the same as the problem id in plugin.xml
-~~~~
+</pre>
 
 Test it: Run it on loooong.cpp and a warning should appear!
 
@@ -160,7 +150,8 @@ subtitle: Step 4: Add a preference
 - Reset to **CODAN1.4**
 - Add a preference for the number of lines. Call addPreference in initPreferences.
 - Use the preference value instead of '100' in the code that detects the problem
-~~~~
+
+<pre class="prettyprint">
 @Override
 public void initPreferences(IProblemWorkingCopy problem) {
 	super.initPreferences(problem);
@@ -170,8 +161,8 @@ public void initPreferences(IProblemWorkingCopy problem) {
 final IProblem problem = getProblemById(FILE_TOO_LONG_PROBLEM_ID, file);
 String parameter = (String) getPreference(problem, PARAM_MAX_LINE_COUNT);
 int maxLineCount = Integer.parseInt(parameter);
+</pre>
 
-~~~~
 - BONUS: Let the user know what the limit is in the problem message. Use {0} in messagePattern to set a parameter and call reportProblem with another parameter.
 ---
 
@@ -217,7 +208,7 @@ How to use a visitor:
 
 title: AST Example
 
-~~~~{java}
+<pre class="prettyprint" data-lang="java">
 class MethodFinder extends ASTVisitor {
 	{
 		shouldVisitDeclarators = true;
@@ -238,7 +229,7 @@ class MethodFinder extends ASTVisitor {
 void analyseFile(IASTTranslationUnit translationUnit) {
 	translationUnit.accept(new MethodFinder());
 }
-~~~~
+</pre>
 
 ---
 
@@ -246,7 +237,7 @@ title: Project 2
 
 Warn if code is too complex. We will consider code too complex when it has deep nesting of if/else/for/while. This time, we will make use of CDT's AST to analyze the code. We will be able to analyze based on nodes in a tree instead of plain text.
 
-~~~~
+<pre class="prettyprint">
 void complexFunction() {
 	int i = 0;
 	if (i == 0) {
@@ -254,7 +245,7 @@ void complexFunction() {
 			if (i == 0) {
 				if (i == 0) {
 				...
-~~~~
+</pre>
 
 ---
 
@@ -318,7 +309,7 @@ title: Project 3
 
 We will create a checker that will display an error if a method override another method but with the wrong return type.
 
-~~~~
+<pre class="prettyprint">
 class Base {
 	virtual int bar();
 	virtual ~Base();
@@ -327,17 +318,17 @@ class Base {
 class Child : public Base {
 	float bar();
 };
-~~~~
+</pre>
 
 ---
 title: Project 3
 subtitle: Approach
 
-1. For each method declarator node in the AST
-2. Get its binding (ICPPMethod)
-3. Get its owner class (ICPPClassType)
-4. Check for name return type conflict with the base methods
-5. Report the error at the location of the AST node
+- For each method declarator node in the AST
+- Get its binding (ICPPMethod)
+- Get its owner class (ICPPClassType)
+- Check for name return type conflict with the base methods
+- Report the error at the location of the AST node
 
 (There are multiple ways do to this)
 
@@ -387,7 +378,7 @@ subtitle: Step 3: Report problem
 title: Code Examples
 subtitle: Source Hover (CSourceHover.java)
 
-~~~~{java}
+<pre class="prettyprint" data-lang="java">
 public IStatus runOnAST(ILanguage lang, IASTTranslationUnit ast) {
 	if (ast != null) {
 		try {
@@ -414,13 +405,12 @@ public IStatus runOnAST(ILanguage lang, IASTTranslationUnit ast) {
 								}
 							}
 						}
-~~~~
+</pre>
 
 
 ---
 
-~~~~{java}
-
+<pre class="prettyprint" data-lang="java">
 	if (binding instanceof IProblemBinding) {
 		// Report problem as source comment.
 		if (DEBUG) {
@@ -438,14 +428,13 @@ public IStatus runOnAST(ILanguage lang, IASTTranslationUnit ast) {
 		fSource= computeSourceForBinding(ast, binding);
 	}
 }
-
-~~~~
+</pre>
 
 ---
 title: Code Examples
 subtitle: Implement method (ImplementMethodRefactoring.java)
 
-~~~~{java}
+<pre class="prettyprint" data-lang="java">
 private List<IASTSimpleDeclaration> findUnimplementedMethodDeclarations(IProgressMonitor pm) throws OperationCanceledException, CoreException {
 	final SubMonitor sm = SubMonitor.convert(pm, 2);
 	IASTTranslationUnit ast = getAST(tu, sm.newChild(1));
@@ -470,12 +459,11 @@ private List<IASTSimpleDeclaration> findUnimplementedMethodDeclarations(IProgres
 	});
 	return list;
 }
-
-~~~~
+</pre>
 
 ---
 
-~~~~{java}
+<pre class="prettyprint" data-lang="java">
 private boolean isUnimplementedMethodBinding(IBinding binding, IProgressMonitor pm) {
 	if (binding instanceof ICPPFunction) {
 		if (binding instanceof ICPPMethod) {
@@ -494,12 +482,11 @@ private boolean isUnimplementedMethodBinding(IBinding binding, IProgressMonitor 
 	
 	return false;
 }
-
-~~~~
+</pre>
 
 ---
 
-~~~~{java}
+<pre class="prettyprint" data-lang="java">
 private IASTDeclaration createFunctionDefinition(IASTTranslationUnit unit, IASTSimpleDeclaration methodDeclaration, InsertLocation insertLocation) throws CoreException {
 	IASTDeclSpecifier declSpecifier = methodDeclaration.getDeclSpecifier().copy(CopyStyle.withLocations);
 	ICPPASTFunctionDeclarator functionDeclarator = (ICPPASTFunctionDeclarator) methodDeclaration.getDeclarators()[0];
@@ -513,14 +500,13 @@ private IASTDeclaration createFunctionDefinition(IASTTranslationUnit unit, IASTS
 	createdMethodDeclarator = nodeFactory.newFunctionDeclarator(qName);
 	createdMethodDeclarator.setConst(functionDeclarator.isConst());
 	createdMethodDeclarator.setRefQualifier(functionDeclarator.getRefQualifier());
-
-~~~~
+</pre>
 
 ---
 title: Code Examples
 subtitle: Override markers (OverrideIndicatorManager.java)
 
-~~~~{java}
+<pre class="prettyprint" data-lang="java">
 class MethodFinder extends ASTVisitor {
 	{
 		shouldVisitDeclarators = true;
@@ -563,11 +549,11 @@ class MethodFinder extends ASTVisitor {
 		}
 		return PROCESS_CONTINUE;
 	}
-~~~~
+</pre>
 
 ---
 
-~~~~{java}
+<pre class="prettyprint" data-lang="java">
 ICPPMethod overriddenMethod = testForOverride(method, declarator);
 if (overriddenMethod != null) {
 	try {
@@ -584,13 +570,13 @@ if (overriddenMethod != null) {
 		IASTFileLocation fileLocation = declarator.getFileLocation();
 		Position position = new Position(fileLocation.getNodeOffset(), fileLocation.getNodeLength());
 		annotationMap.put(indicator, position);
-~~~~
+</pre>
 
 ---
 title: Code Examples
 subtitle: Semantic highlighting (SemanticHighlightings.java)
 
-~~~~{java}
+<pre class="prettyprint" data-lang="java">
 /**
  * Semantic highlighting for namespaces.
  */
@@ -609,5 +595,5 @@ private static final class NamespaceHighlighting extends SemanticHighlightingWit
 		return false;
 	}
 }
+</pre>
 
-~~~~
