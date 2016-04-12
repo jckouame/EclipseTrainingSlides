@@ -1,6 +1,8 @@
 % title: Exploring CDT Core
 % subtitle: The brain behind the C/C++ Editor
 % author: Marc-André Laperle
+% thankyou: Thank you
+% thankyou_details:
 
 ---
 title: The C/C++ Editor
@@ -324,6 +326,7 @@ class Child : public Base {
 title: Project 3
 subtitle: Approach
 
+
 - For each method declarator node in the AST
 - Get its binding (ICPPMethod)
 - Get its owner class (ICPPClassType)
@@ -409,6 +412,7 @@ public IStatus runOnAST(ILanguage lang, IASTTranslationUnit ast) {
 
 
 ---
+title: Code Examples (cont)
 
 <pre class="prettyprint" data-lang="java">
 	if (binding instanceof IProblemBinding) {
@@ -462,6 +466,7 @@ private List<IASTSimpleDeclaration> findUnimplementedMethodDeclarations(IProgres
 </pre>
 
 ---
+title: Code Examples (cont)
 
 <pre class="prettyprint" data-lang="java">
 private boolean isUnimplementedMethodBinding(IBinding binding, IProgressMonitor pm) {
@@ -485,6 +490,7 @@ private boolean isUnimplementedMethodBinding(IBinding binding, IProgressMonitor 
 </pre>
 
 ---
+title: Code Examples (cont)
 
 <pre class="prettyprint" data-lang="java">
 private IASTDeclaration createFunctionDefinition(IASTTranslationUnit unit, IASTSimpleDeclaration methodDeclaration, InsertLocation insertLocation) throws CoreException {
@@ -552,6 +558,7 @@ class MethodFinder extends ASTVisitor {
 </pre>
 
 ---
+title: Code Examples (cont)
 
 <pre class="prettyprint" data-lang="java">
 ICPPMethod overriddenMethod = testForOverride(method, declarator);
