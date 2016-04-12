@@ -1,7 +1,6 @@
 % title: Eclipse Plug-in Development
 % title_class:                  #empty, largeblend[123] or fullblend
 % subtitle: Extending the CDT Debugger
-% footer: foot
 % author: Marc Khouzam
 % author: Marc-André Laperle
 % thankyou: Thank you
@@ -13,26 +12,23 @@ class: nobackground
 build_lists: false
 content_class:
 
-- Monday: Plug-in development
+- Day 1: Plug-in development
     - Module 1: Eclipse Platform and plug-in development
     - Module 2: Implementing a first plug-in
-- Tuesday: Getting to know DSF
+- Day 2: Getting to know DSF
     - Module 3: DSF concepts and exercises
     - Module 4: DSF events and exercises
-- Wednesday: Getting to know DSF-GDB
-    - Module 5: DSF-GDB concepts and exercises
-    - User meeeting
 
 ---
 title: Agenda (cont)
 build_lists: false
 
-- Thursday: Modifying DSF-GDB's behaviour
+- Day 3: Getting to know DSF-GDB
+    - Module 5: DSF-GDB concepts and exercises
+    - User meeeting
+- Day 4: Modifying DSF-GDB's behaviour
     - Module 6: Changing the Debug View
     - Module 7: Changing GDB's initialization
-- Friday: Trace Compass + CDT Editor/Codan
-    - Module 8: Trace Compass introduction and demo
-    - Module 9: Extending the CDT Editor using Codan
     <br><br>
 ##<center>Let's get started!</center>
 [//]: (This is a comment)
@@ -42,17 +38,15 @@ title: Approach to course
 
 - A mix of theory and hands-on exercises
 - Teams of 2
-- After exercise, a team will describe their result
 - Ask questions often and give feeback
 - 9h to 16h schedule
-- One hour lunch?
+- One hour lunch
 - 15 minute break, morning and afternoon
 - Please tell us if you are confused during the course
 
 ---
 title: Start your Eclipse
 
-- *~/workspace-training/start.tcsh*
 - Select workspace: *~/workspace-training*
 
 ---
@@ -61,7 +55,7 @@ title: Start your Eclipse
 <br><br>
 <br><br>
 <br><br>
-#<center>Plug-in development</center>
+##<center>Plug-in development</center>
 
 ---
 title: Module 1
@@ -364,11 +358,11 @@ title: Exercise: Create a view
 ---
 title: SWT Basic widget creation
 
-~~~~{java}
+<pre class="prettyprint" data-lang="java">
 Text textBox = new Text(parentComposite, SWT.SOMESTYLE | SWT.OTHERSTYLE);
 textBox.set*Somesetter*
 textBox.add*Somelistener*
-~~~~
+</pre>
 
 Composite are containers of widgets that can be layed out.
 
@@ -420,9 +414,9 @@ It has an odd **locationURI** field: &nbsp;<span style="background-color:#eeeeee
 
 For example:
 
-~~~~
+<pre class="prettyprint">
 menu:org.eclipse.ui.main.menu?after=additions
-~~~~
+</pre>
 
 ---
 title: Exercise: Add toolbar button
@@ -451,7 +445,8 @@ Let's add the same command in the context menu.
 	- locationUri= popup:my.view.id
 - Add the command (right-click on menuContribution). Set the id, icon and style (push)
 - Create a context menu in the view, to be populated:
-~~~~{java}
+
+<pre class="prettyprint" data-lang="java">
 // put in createPartControl
 fMenuManager = new MenuManager();
 Menu menu = fMenuManager.createContextMenu(composite);
@@ -460,7 +455,7 @@ getViewSite().registerContextMenu(fMenuManager, null);
 ...
 // put in dispose (override the method)
 fMenuManager.dispose();
-~~~~
+</pre>
 
 - <b>Go!</b>
 ---
@@ -506,10 +501,11 @@ title: Exercise: Persist the toggle state
 	- Set the key/value
 
 Saving the preferences in our FrameSpyView.togleState method
-~~~~
+
+<pre class="prettyprint" data-lang="java">
 IEclipsePreferences preferences = InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID);
 preferences.put(TOGGLE_STATE_PREF_KEY, Boolean.toString(fToggledState));
-~~~~
+</pre>
 
 ---
 title: Exercise: Persist the toggle state
@@ -519,10 +515,10 @@ title: Exercise: Persist the toggle state
 	- Get the node
 	- Get value using key, set the label text
 
-~~~~
+<pre class="prettyprint" data-lang="java">
 IEclipsePreferences preferences = InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID);
 preferences.get(TOGGLE_STATE_PREF_KEY, Boolean.toString(false)); // set to false in case it was never set
-~~~~
+</pre>
 
 - <b>Go!</b>
 
@@ -547,7 +543,7 @@ For the first implementation of our logging feature, we will poll every one seco
 ---
 title: Eclipse Jobs
 
-~~~~
+<pre class="prettyprint" data-lang="java">
 job = new Job("Frame Spy Polling Job") {
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
@@ -556,7 +552,7 @@ job = new Job("Frame Spy Polling Job") {
 
 };
 job.schedule();
-~~~~
+</pre>
 
 ---
 title: Exercise: Creating a polling job
@@ -588,10 +584,10 @@ Changes to the UI (widgets) should always be done on the UI thread.
 
 The Display implements the event loop. There is only one instance in a running Eclipse.
  
-~~~~
+<pre class="prettyprint" data-lang="java">
 Display.getDefault().asyncExec // Execute code at the next reasonable opportunity. Caller continues in parallel.
 Display.getDefault().syncExec // Blocks calling thread until executed on UI thread
-~~~~
+</pre>
 
 With this knowledge we can fix the Invalid Thread Access. We can use asyncExec in this case. (**PLUG10**)
 ---
@@ -662,7 +658,7 @@ build_lists: false
 <br><br>
 <br><br>
 <br><br>
-#<center>Getting to know DSF</center>
+##<center>Getting to know DSF</center>
 
 ---
 title: Module 3
@@ -680,15 +676,15 @@ subtitle: DSF Concepts and Exercises
 ---
 title: Building on our new view
 
-1. Debug Frame Spy
+- Debug Frame Spy
     - New view logging each `method:line` at which the debugger stopped. 
 
 ---
 title: Debug Frame Spy Details
 
-1. Show list of `method:line` of each location the program was interrupted
-1. Show time of interrupt for each entry
-1. Show the number of arguments of the function for each entry
+- Show list of `method:line` of each location the program was interrupted
+- Show time of interrupt for each entry
+- Show the number of arguments of the function for each entry
 
 <center><img src=images/FrameSpy.png></center>
 
@@ -700,13 +696,6 @@ title: Eclipse Debug Platform
     - Debug views
     - Debug Actions, Toolbar, Menus
     - Debug Launching
-
-++Notes++
-- Debug perspective manual or automatic selection
-- *Windows->Show View->Other... and expand Debug folder*
-- Each view has toolbar actions, context-menu, view-menu
-- Launch configuration types, launch configurations
-++++
 
 ---
 title: What is DSF?
@@ -739,12 +728,6 @@ title: View Model
     - Limit number of stack frames
     - Only show processes if there is more than one
 
-++Notes++
-- Show feature that hides running threads
-- Show feature that limits number of stack frames
-- In practice, we don't change the view model very often.  So this course will not cover it.
-++++
-
 ---
 title: Using the CDT Debugger
 
@@ -766,9 +749,6 @@ title: Data Model
         - Formatted values (e.g., variables, registers)
         - etc
 
-++Notes++
-- Mention frontend vs backend terminology
-++++
 ---
 title: DSF Services
 
@@ -843,26 +823,34 @@ title:  Asynchronous (callback) programming
 title: RequestMonitor example
 
 - To call an asynchronous method, such as:
-~~~~
+
+<pre class="prettyprint" data-lang="java">
 void asyncCall(IDMContext dmc, RequestMonitor rm);
-~~~~
-- there are two main coding styles
-~~~~
+</pre>
+
+- there are two main coding styles:
+
 Declarative:
+
+<pre class="prettyprint" data-lang="java">
    RequestMonitor myRm =
            new RequestMonitor(getExecutor(), parentRm);
    asyncCall(dmc, myRm);
+</pre>
 
 In-line:
+
+<pre class="prettyprint" data-lang="java">
    asyncCall(dmc, new RequestMonitor(getExecutor(), parentRm));
-~~~~
+</pre>
 ---
 title: Declarative Style
 
 - First declare the RequestMonitor and what it should do
 <br><br>
 - Then call the asynchronous method, passing the RM
-~~~~
+
+<pre class="prettyprint" data-lang="java">
    RequestMonitor myRm =
            new RequestMonitor(getExecutor(), parentRm) {
                @Override
@@ -873,14 +861,16 @@ title: Declarative Style
            };
 
    asyncCall(dmc, myRm);
-~~~~
+</pre>
+
 ---
 title: In-line Style
 
 - Directly call the asynchronous method
 <br><br>
 - Declare and define the RM in-line 
-~~~~
+
+<pre class="prettyprint" data-lang="java">
    asyncCall(dmc, 
              new RequestMonitor(getExecutor(), parentRm) {
                  @Override
@@ -889,14 +879,16 @@ title: In-line Style
                      parentRm.done();
                  }
              });
+</pre>
 
-~~~~
 - *In-line* has the benefit of showing the execution flow
+
 ---
 title: DataRequestMonitor
 
 - Extention of <code>RequestMonitor</code> which *"returns"* data
-~~~~
+
+<pre class="prettyprint" data-lang="java">
    DataRequestMonitor<String> parentRm =
               new DataRequestMonitor<String>(getExecutor, null);
    asyncCallWithData(
@@ -908,7 +900,8 @@ title: DataRequestMonitor
           parentRm.done(resultString);
       }
    });
-~~~~
+</pre>
+
 ---
 title: Other RequestMonitors
 
@@ -922,27 +915,27 @@ title: Other RequestMonitors
 title: DSF concepts review
 build_lists: false
 
-1. APIs to integrate a debugger 'more easily' e.g., GDB
-1. View Model for presentation layer
-1. Data Model to communicate with backend (GDB)
-1. Services API to access Data
-1. No synchronization: DSF Executor **must** be used to access Data
-1. Services for one backend are grouped in a Session
-1. Heavy use of asynchronous programming for responsiveness
+- APIs to integrate a debugger 'more easily' e.g., GDB
+- View Model for presentation layer
+- Data Model to communicate with backend (GDB)
+- Services API to access Data
+- No synchronization: DSF Executor **must** be used to access Data
+- Services for one backend are grouped in a Session
+- Heavy use of asynchronous programming for responsiveness
 
 ---
 title: DSF practical review
 build_lists: false
 
-1. Services extend <code>IDsfService</code>
+- Services extend <code>IDsfService</code>
 <br><br>
-1. Contexts extend <code>IDMContext</code>
+- Contexts extend <code>IDMContext</code>
 <br><br>
-1. Context hierarchy searched with <code>DMContexts</code>
+- Context hierarchy searched with <code>DMContexts</code>
 <br><br>
-1. Executor can be found with <code>DsfSession#getExecutor()</code>
+- Executor can be found with <code>DsfSession#getExecutor()</code>
 <br><br>
-1. <code>RequestMonitor</code> and <code>DataRequestMonitor</code> for callbacks
+- <code>RequestMonitor</code> and <code>DataRequestMonitor</code> for callbacks
 
 ---
 title: DSF Exercise 
@@ -958,9 +951,6 @@ build_lists: false
 <br><br>
     - **Go!**
 
-++Notes++
-- Show how to launch a C/C++ debug session (use non-stop first)
-++++
 ---
 title: Exercise review
 build_lists: false
@@ -1010,10 +1000,6 @@ title: Exercise follow-up part 2
     - Make sure you have a breakpoint for *AssertionError*
     - Re-launch and try
     - **Go!**
-
-++Notes++
-- Explain how to use assertions
-++++
 
 ---
 title: Exercise follow-up part 2
@@ -1088,29 +1074,23 @@ title: Receiving DSF Events
 <br><br>
 - The method is called on the DSF Executor
 
-
-++Notes++
-- <code>dispatchEvent()</code> calls event listeners in a **separate** Runnable on the Executor.
-    - This allows sender to finish its work before events are received by the listeners.
-    - Event listener methods always called in the Executor thread.
-++++
 ---
 title: Receiving event example
 
 - The following method from *SomeClass* will be called for every suspended event
 
-~~~~
+<pre class="prettyprint" data-lang="java">
     @DsfServiceEventHandler
     public void anyName(ISuspendedDMEvent e) {
         System.out.println("Received " + e.toString());
     }
-~~~~
+</pre>
 
 - as long as we register the class with the session
 
-~~~~
+<pre class="prettyprint" data-lang="java">
     getSession().addServiceEventListener(SomeClass.this, null);
-~~~~
+</pre>
 
 - Remember that registration must be done on Executor
 ---
@@ -1161,12 +1141,12 @@ title: Event Exercise Review (2)
 <br><br>
 - Receiving the event
 
-~~~~
+<pre class="prettyprint" data-lang="java">
 @DsfServiceEventHandler
 public void anyName(ISuspendedDMEvent event) {
     // Fetch frame info and print it
 }
-~~~~
+</pre>
 
 ---
 title: Event Exercise for All-Stop
@@ -1201,7 +1181,7 @@ title: Handling a new session (2)
 <br><br>
 <br><br>
 <br><br>
-#<center>**Why?**</center>
+##<center>**Why?**</center>
 
 ---
 title: Handling a new session (3)
@@ -1242,7 +1222,7 @@ title: Sessions Exercise Review
 <br><br>
 <br><br>
 <br><br>
-#<center>Getting to know DSF-GDB</center>
+##<center>Getting to know DSF-GDB</center>
 
 ---
 title: Module 5
@@ -1335,10 +1315,6 @@ title: Asynchronous vs Synchronous API
 <br><br>
 - Async API can be used synchronously but not other way around
 
-++Notes++
-- Explain when to implement the different two getTimeOfDay() versions
-++++
-
 ---
 title: Using new service
 
@@ -1392,10 +1368,6 @@ title: Service Shutdown
     - We don't need to take care of it ourselves
     - Refer to DSF-GDB's **ShutdownSequence.java**
 
-++Notes++
-Ideal to finish a day here
-++++
-
 ---
 title: Frame Argument count
 build_lists: false
@@ -1421,7 +1393,7 @@ title: Exercise Review
 <br><br>
 <br><br>
 <br><br>
-#<center>Modifying DSF-GDB's behaviour</center>
+##<center>Modifying DSF-GDB's behaviour</center>
 
 
 ---
@@ -1488,12 +1460,12 @@ build_lists: true
 ---
 title: Two approaches to extend DSF-GDB
 
-1. Creating a new view and a new service
+- Creating a new view and a new service
     - Does not affect the rest of the debugging views
     - We can do this to any DSF-GDB session
     - This was our first set of exercises
 <br><br>
-1. Replacing a service and changing an existing view
+- Replacing a service and changing an existing view
     - Does affect normal debugger behaviour
     - Should be chosen by user explicitly
     - Aimed at specific scenarios
@@ -1674,35 +1646,37 @@ title: Modifying GDB initialization
 ---
 title: DSF-GDB launch steps
 
-1. <code>GdbLaunchDelegate#launch()</code> called by platform
+- <code>GdbLaunchDelegate#launch()</code> called by platform
     - <code>FrameSpyLaunchDelegate#launch()</code> for our extension
-1. <code>ServicesLaunchSequence</code> triggered to start services
+- <code>ServicesLaunchSequence</code> triggered to start services
     - This uses the Services Factory we saw earlier
-1. <code>FinalLaunchSequence</code> triggered to initialize GDB
+- <code>FinalLaunchSequence</code> triggered to initialize GDB
 
 ---
 title: Adding a step at initialization
 
 - **Goal**: Turn on GDB verbosity (debug printouts) from the beginning
-    1. Need to send GDB the MI command: <code>-gdb-set verbose on</code>
-    1. Need to send it before other commands sent to GDB
+    - Need to send GDB the MI command: <code>-gdb-set verbose on</code>
+    - Need to send it before other commands sent to GDB
 <br><br>
 - **Exercises**:
-    1. Provide API in <code>FrameSpyService</code> to send new command
-    1. Extend DSF-GDB's initialization class: (<code>FinalLaunchSequence</code>)
-    1. Use extended initialization class instead of DSF-GDB's one
+    - Provide API in <code>FrameSpyService</code> to send new command
+    - Extend DSF-GDB's initialization class: (<code>FinalLaunchSequence</code>)
+    - Use extended initialization class instead of DSF-GDB's one
 
 ---
 title: Communicating with GDB
 
 - <code>ICommandControl#queueCommand()</code> used to send a command to GDB
 <br><br>
-~~~~
+
+<pre class="prettyprint" data-lang="java">
 ICommandControl#queueCommand(
             new MIExecContinue(threadContext),
             new DataRequestMonitor<MIInfo>(getExecutor(), parentRm));
-~~~~
-~~~~
+</pre>
+
+<pre class="prettyprint" data-lang="java">
 ICommandControl#queueCommand(
            new MIStackInfoDepth(threadContext),
            new DataRequestMonitor<MIStackInfoDepthInfo>(getExecutor(), parentRm) {
@@ -1712,7 +1686,7 @@ ICommandControl#queueCommand(
                     parentRm.done();
                 }
             });
-~~~~
+</pre>
 
 ---
 title: ICommandControl service
@@ -1750,6 +1724,7 @@ title: The ReflectionSequence class
 <br><br>
 - Born out of necessity
 <br><br>
+
 - Support grouping of steps.
     - In practice, only <code>GROUP_TOP_LEVEL</code> is used
 
@@ -1757,12 +1732,13 @@ title: The ReflectionSequence class
 title: The ReflectionSequence class (2)
 
 - <code>getExecutionOrder()</code> returns array of steps using method **names**
-~~~~
+
+<pre class="prettyprint" data-lang="java">
 return new String[] { "stepGDBVersion",
                       "stepSetEnvironmentDirectory",
                       "stepSetBreakpointPending",
                     ...
-~~~~
+</pre>
 
 - <code>getExecutionOrder()</code> can be overridden to add/remove steps
 <br><br>
@@ -1772,9 +1748,9 @@ return new String[] { "stepGDBVersion",
 ---
 title: Extending GDB Initialization Sequence
 
-1. Have <code>FrameSpyFinalLaunchSequence</code> extend <code>FinalLaunchSequence</code>
+- Have <code>FrameSpyFinalLaunchSequence</code> extend <code>FinalLaunchSequence</code>
 <br><br>
-1. Add a new <code>stepSetVerbose()</code> to this initialization sequence
+- Add a new <code>stepSetVerbose()</code> to this initialization sequence
 <br><br>
     - Reset to **DSF9.2_START** or **DSF9.2_ADVANCED**
 <br><br>
@@ -1789,9 +1765,9 @@ title: Instantiating the new sequence
 ---
 title: Using new initialization Sequence
 
-1. Have <code>FrameSpyControlService</code> extend the existing ICommandControl service
+- Have <code>FrameSpyControlService</code> extend the existing ICommandControl service
 <br><br>
-1. Override <code>getCompleteInitializationSequence()</code> to choose new launch sequence
+- Override <code>getCompleteInitializationSequence()</code> to choose new launch sequence
 <br><br>
     - Reset to **DSF9.3_ADVANCED**
 <br><br>
@@ -1808,17 +1784,3 @@ title: Final Recap
 <br><br>
 - We've modified GDB's initialization sequence
 
----
-title: Extra topics
-
-- More advanced topics
-
-++Notes++
-Debug features: Dynamic-printf, Visualizer, New CLI, Tracepoints, OS Resources, CommandCache usage
-
-Using Interfaces, DsfSession#registerModelAdapter()
-
-CommandFactory of DSF-GDB
-
-IDebugContextChangedListener
-++++
