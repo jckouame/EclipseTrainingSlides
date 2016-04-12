@@ -1,3 +1,18 @@
+slides > slide {
+  width: 1400px;
+  margin-left: -700px;
+  height: 1090px;
+  margin-top: -545px;
+}
+
+slides.layout-widescreen > slide,
+slides.layout-faux-widescreen > slide {
+  width: 1580px;
+  margin-left: -790px;
+  height: 900px;
+  margin-top: -450px;
+}
+
 slide.img-top-center img {
     display: block;
     margin-left: auto;
