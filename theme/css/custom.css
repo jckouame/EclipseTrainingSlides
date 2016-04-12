@@ -13,6 +13,15 @@ slides.layout-faux-widescreen > slide {
   margin-top: -450px;
 }
 
+slides > slide:not(.nobackground):after {
+  font-size: 12pt;
+  content: "(C) Ericsson 2016 | Page " attr(data-slide-num) "/" attr(data-total-slides);
+  position: absolute;
+  bottom: 20px;
+  left: 60px;
+  line-height: 1.9
+}
+
 slide.img-top-center img {
     display: block;
     margin-left: auto;
