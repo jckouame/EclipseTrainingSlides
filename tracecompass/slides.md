@@ -311,3 +311,99 @@ title: Exercise: Read events from the trace
 	- When the request is **completed**, output something to the console
 - <b>Go!</b>
 
+
+---
+title: Module 7
+subtitle: Timing Analysis
+
+---
+title: Timing Analysis
+subtitle: Concept
+
+- We have two metrics to analyse, what is the data and **when** did it come.
+- Every event has **time** info (time stamp), let's take advantage of that.
+- Measure time between a **start** and **end** state
+	- Simple: Start and end **event**
+	- Often: State Machine to determine start and end
+	- **Start** and **End** time : <span style="border-style:solid; border-width: 5px;">**Segment**</span>
+
+
+- Represent Execution times, latencies, latency chains etc.
+
+---
+title: Timing Analysis
+subtitle: Why?
+
+- Locate timing problems
+- Analyse timing problems
+- Find root cause and solution
+- Potential delays (find problem before it occurs)
+- Difficult to debug if it happens sporadically
+
+---
+title: Timing Analysis
+subtitle: Example
+
+- System Call Latency, e.g. futex
+
+<center><img src="images/timing_systemcalls.png"/></center>
+
+---
+title: Timing Analysis
+subtitle: Example
+
+- IRQ Latency
+
+<center><img src="images/timing_irq.png"/></center>
+
+---
+title: Timing Analysis
+subtitle: Example
+
+- High Resolution Timer – cyclictest application of rt-tests
+- Latency between timer expiry till task starts
+
+<center><img src="images/timing_latencychain.png"/></center>
+
+- Latency = Δ1+ Δ2 + Δ3
+	- Event 1: Timer expires
+	- Event 2: Interrupt handler marks the task to react
+	- Event 3: Linux scheduler switches to the task
+	- Event 4: Application task begins executing
+
+---
+title: Timing Analysis
+subtitle: Generalization
+
+<center>
+<div style="display:table-cell; width:50%;"><img style="width:400px; height:auto" src="images/timing_states.png"/></div>
+<div style="display:table-cell; width:50%; text-align: left; vertical-align: middle">
+<ul>
+<li>Time between start and end</li>
+<li>Time for each transition</li>
+<li>Percentage sub-duration vs total</li>
+</ul>
+</div>
+<br/>
+</center>
+
+---
+title: Timing Analysis
+subtitle: Using states
+
+- State machine for timing analysis
+	- Implementation in Java as Trace Compass extension
+
+- Data-driven pattern matching (in XML)
+	- Defining timing analyses on-the-fly
+
+---
+title: Timing Analysis API
+subtitle: Segment
+
+---
+title: Module 8
+subtitle: Timing Analysis Views
+
+
+
