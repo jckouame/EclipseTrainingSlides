@@ -399,7 +399,34 @@ subtitle: Using states
 
 ---
 title: Timing Analysis API
-subtitle: Segment
+subtitle: ISegment
+
+- A segment provides a **start time** and an **end time**
+- What that duration means is specific to the analysis that will generate it
+- This interface is the basis of the "Timing" family of analysis and views
+
+<center><img src="images/timing_segment.png"/></center>
+
+---
+title: Timing Analysis API
+subtitle: ISegmentStore
+
+- Stores segments (`ISegment`)
+- Extends "well known" Java `Collection` interface
+	- `iterator()`, `add()`, `isEmpty()`, etc.
+- Adds the notion of intersection: `getIntersectingElements`(start, end)
+
+<center><img src="images/timing_segmentstore.png"/></center>
+
+---
+title: Timing Analysis API
+subtitle: AbstractSegmentStoreAnalysisModule
+
+- Similar to normal analysis but with the notion of segments
+- **Builds** segments and **stores** them: `buildAnalysisSegments()`
+- Provides the segment store (for views, etc): `getSegmentStore()`
+
+<center><img src="images/timing_segmentanalysis.png"/></center>
 
 ---
 title: Module 8
