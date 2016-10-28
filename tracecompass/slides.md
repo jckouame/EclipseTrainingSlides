@@ -433,4 +433,59 @@ title: Module 8
 subtitle: Timing Analysis Views
 
 
+---
+title: Timing Analysis Views
+subtitle: Overview
 
+- Several types of views can be added that make use of segment store analysis
+	- Latencies (table)
+	- Statistics
+	- Scatter chart
+	- Density
+
+- Most of those views follow a similar pattern:
+	- A abstract viewer to help create the widgets specific to the type of view
+	- An abstract view class to help create the container this type of view and that will create the chosen viewer
+	- This is similar to Time Graph views VS Time Graph Viewer
+
+---
+title: Timing Analysis Views
+subtitle: Overview
+
+- Viewers query analysis based on segment stores (see previous module!)
+
+PICTURE HERE?
+
+---
+title: Latencies view
+
+- The Latencies view displays segments in a simple table format.
+
+<center><img src="images/timingviews_latencies.png"/></center>
+	(Example based on System Calls analysis)
+
+---
+title: Statistics view
+
+- The Statistics view displays statistics for each segment type
+	- You can also navigate to the minimum and maximum of each segment type from this view (eg. longest `futex` system call)
+
+<center><img src="images/timingviews_statistics.png"/></center>
+
+---
+title: Scatter chart
+
+- The Scatther view displays the segment durations over time in a 2D plot chart
+	- Each dot reprensent the time it ended on the X-axis and its duration on the Y-axis
+	- Makes it possible to spot **outliners**
+
+<center><img src="images/timingviews_scatter.png"/></center>
+
+---
+title: Density view
+
+- The Density view displays the segment durations on the frenquency domain.
+	- Each bar reprensent the **duration** of the segment on the **X-axis** and the **count** of segments on the **Y-axis**
+<center><img src="images/timingviews_density.png" style="width:600px"/></center>
+<br/>
+- In other words, fast system calls are on the left and slow system calls are on the right
