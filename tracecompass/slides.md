@@ -246,7 +246,7 @@ public void traceClosed(TmfTraceClosedSignal signal) {
 ---
 title: Exercise: Listen to a signal
 
-- Reset to **TRACECOMPASS1**
+- Reset to **TRACECOMPASS1_START**
 - Create a class that will receive the signal, `EventReader`
 - Instantiate the class. For now, we will do this in the Activator class.
 - Register the class with the TmfTraceSignalManager
@@ -303,11 +303,11 @@ eventProvider.sendRequest(new TmfEventRequest(TmfEvent.class,
 ---
 title: Exercise: Read events from the trace
 
-- Reset to **TRACECOMPASS2**
+- Reset to **TRACECOMPASS2_START**
 - In the signal handler, get the trace object from the signal parameter
 - Send an even request to the trace:
 	- Create an anonymous class of type `TmfEventRequest`
-	- Override handleData and output each event to console
+	- Override handleData and output the time stamp of each event to console
 	- When the request is **completed**, output something to the console
 - <b>Go!</b>
 
