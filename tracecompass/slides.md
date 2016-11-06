@@ -436,6 +436,12 @@ subtitle: Using states
 	- Defining timing analyses on-the-fly
 
 ---
+title: Timing Analysis
+subtitle: Limitations
+
+- TODO: talk about memory limitations
+
+---
 title: Timing Analysis API
 subtitle: ISegment
 
