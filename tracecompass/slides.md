@@ -196,6 +196,12 @@ subtitle: Custom Text and XML Parsers
 
 ---
 title: Trace Compass Overview
+subtitle: Trace corellation (Experiments)
+
+- TODO: Explain experiments and what is useful about them
+
+---
+title: Trace Compass Overview
 subtitle: Integrations
 
 - LTTng (UST, Kernel)
@@ -204,6 +210,11 @@ subtitle: Integrations
 - Packet Capture
 - BTF (Best Trace Format)
 - GDB Trace Points
+
+---
+title: Common Trace Format (CTF)
+
+- TODO: Explain a bit of CTF here?
 
 ---
 title: Trace Compass Overview
@@ -220,6 +231,11 @@ subtitle: References
 - Documentation
 	- <a href="http://archive.eclipse.org/tracecompass/doc/org.eclipse.tracecompass.doc.user/User-Guide.html">Trace Compass User Guide</a>
 	- <a href="http://archive.eclipse.org/tracecompass/doc/org.eclipse.tracecompass.doc.dev/Developer-Guide.html">Trace Compass Developer Guide</a>
+
+---
+title: The example
+
+TODO: Explain the example application and trace here?
 
 ---
 title: Module 2
@@ -248,8 +264,8 @@ title: Exercise: Listen to a signal
 
 - Reset to **TRACECOMPASS1_START**
 - Create a class that will receive the signal, `EventReader`
-- Instantiate the class. For now, we will do this in the Activator class.
-- Register the class with the TmfTraceSignalManager
+- Instantiate the class. For now, we will do this in the `Activator` class.
+- Register the class with the `TmfTraceSignalManager`
 - Create a `public` method that will receive the signal:
 	- Annotate your method with `@TmfSignalHandler`
 	- It needs a `TmfTraceOpenedSignal` parameter
@@ -301,6 +317,23 @@ eventProvider.sendRequest(new TmfEventRequest(TmfEvent.class,
 ~~~
 
 ---
+title: Events
+
+`ITmfEvent`
+
+- Reprensents a single event in the trace
+- Contains a **name** (event type). Use `getName()` to retrieve it.
+- Contains a **time stamp**. Use `getTimestamp()` to retrieve it.
+- Contains **content** (fields). Use `getContent()` to retrieve it in the form of an `ITmfEventField`. Fields can then be retrived with `getField("myfield")` for example. Fields can also have sub-fields
+
+~~~java
+ITmfEventField field = event.getContent().getField("myfield");
+if (field != null) {
+    System.out.println(field.getFormattedValue());
+}
+~~~
+
+---
 title: Exercise: Read events from the trace
 
 - Reset to **TRACECOMPASS2_START**
@@ -308,9 +341,14 @@ title: Exercise: Read events from the trace
 - Send an even request to the trace:
 	- Create an anonymous class of type `TmfEventRequest`
 	- Override handleData and output the time stamp of each event to console
+		- **Bonus**: Print a specific field of the event
 	- When the request is **completed**, output something to the console
 - <b>Go!</b>
 
+---
+title: Module 2 Review
+
+TODO: Review notions and exercices
 
 ---
 title: Module 7
@@ -429,6 +467,21 @@ subtitle: AbstractSegmentStoreAnalysisModule
 <center><img src="images/timing_segmentanalysis.png"/></center>
 
 ---
+title: Exercise: Create segment store module
+
+- Reset to **TRACECOMPASS3_START**
+- `ProcessingLatencyModule` is created for you with some **TODOS**. plugin.xml is already filled.
+	- Populate the list of aspects (columns) to be used by some views. **Hint**: Reused some of the existing classes in the package.
+	- Create the analysis request. This class has the responsibility of filling the segment store.
+	- Complete the **processEvent** helper method. This should handle events one by one and adds segments to the segment store. Note that we need two event (start and end) so we need to keep track of ongoing ones. 
+	- Return all the list of aspects to be used: `Name` and `Content`
+
+---
+title: Module 7 Review
+
+TODO: Review notions and exercices
+
+---
 title: Module 8
 subtitle: Timing Analysis Views
 
@@ -454,15 +507,48 @@ subtitle: Overview
 
 - Viewers query analysis based on segment stores (see previous module!)
 
-PICTURE HERE?
+TODO: PICTURE HERE?
 
 ---
-title: Latencies view
+title: Latencies Table view
 
 - The Latencies view displays segments in a simple table format.
 
 <center><img src="images/timingviews_latencies.png"/></center>
 	(Example based on System Calls analysis)
+
+---
+title: Latencies Table view
+subtitle: API
+
+- `AbstractSegmentStoreTableView`
+	- An abstract class that helps create a table view.
+	- `createSegmentStoreViewer`: has to return an AbstractSegmentStoreTableViewer
+
+---
+title: Latencies Table view
+subtitle: API
+
+- `AbstractSegmentStoreTableViewer`
+	- An abstract class that helps create a table viewer.
+	- `createProviderColumns`: can be overidden to have greater influence on columns (order, etc).
+	- `getSegmentStoreProvider`: returns which analysis module will provide the segment store
+~~~java
+@Override
+protected ISegmentStoreProvider getSegmentStoreProvider(ITmfTrace trace) {
+    return TmfTraceUtils.getAnalysisModuleOfClass(trace, SystemCallLatencyAnalysis.class, SystemCallLatencyAnalysis.ID);
+}
+~~~
+
+---
+title: Exercise: Create a Latencies Table
+
+- Reset to **TRACECOMPASS4_START**
+- Create class `ProcessingLatencyTableViewer`, select super class (extends)  `AbstractSegmentStoreTableViewer`
+	- Implement method `getSegmentStoreProvider`
+- In plugin.xml, create the missing class `ProcessingLatencyTableView` (tip: click the hyperlink to bring up the New Class wizard). Select super class (extends)  `AbstractSegmentStoreTableView`.
+	- Implement `createSegmentStoreViewer` in `ProcessingLatencyTableView`
+- <b>Go!</b>
 
 ---
 title: Statistics view
@@ -471,6 +557,48 @@ title: Statistics view
 	- You can also navigate to the minimum and maximum of each segment type from this view (eg. longest `futex` system call)
 
 <center><img src="images/timingviews_statistics.png"/></center>
+
+---
+title: Statistics view
+subtitle: API
+
+- `AbstractSegmentStatisticsAnalysis`
+	- An abstract class that helps create a statistics module resuing an existing segment store provider (i.e. an other module).
+	- `getSegmentType`: returns the segment type to compute the statistics for.
+	- `getSegmentProviderAnalysis`: returns an existing segmentstore provider.
+
+~~~java
+@Override
+protected ISegmentStoreProvider getSegmentProviderAnalysis(ITmfTrace trace) {
+    return TmfTraceUtils.getAnalysisModuleOfClass(trace, SystemCallLatencyAnalysis.class, SystemCallLatencyAnalysis.ID);
+}
+~~~
+
+---
+title: Statistics view
+subtitle: API
+
+- `AbstractSegmentStoreStatisticsView`
+	- An abstract class that helps create a statistics view.
+	- `createSegmentStoreStatisticsViewer`: has to return an `AbstractSegmentStoreStatisticsViewer`
+
+- `AbstractSegmentStoreStatisticsViewer`
+	- An abstract class that helps create a statistics viewer.
+	- `createStatisticsAnalysiModule`: returns which analysis module will provide the statistics.
+	- `updateElements`: creates and updates items in the statistics tree. This is where a hierarchy can be created.
+
+---
+title: Exercise: Create a Statistics View
+
+- Reset to **TRACECOMPASS5_START**
+- Create a class `ProcessingLatencyStatisticsModule` with super class (extends) `AbstractSegmentStatisticsAnalysis`
+	- Implement `getSegmentType()`: In our example, it's the name of the segment
+	- Implement  `getSegmentProviderAnalysis`
+- `ProcessingLatencyStatisticsViewer` is created for you with some **TODOS**.
+	- Return a new instance of the statistics module (see previous steps)
+	- Build the statistics tree by creating new entries
+- In plugin.xml, create the missing class `ProcessingLatencyStatisticsView` (tip: click the hyperlink to bring up the New Class wizard). Select super class `AbstractSegmentStoreStatisticsView`.
+- <b>Go!</b>
 
 ---
 title: Scatter chart
@@ -482,6 +610,28 @@ title: Scatter chart
 <center><img src="images/timingviews_scatter.png"/></center>
 
 ---
+title: Scatter chart
+subtitle: API
+
+- `TmfChartView`
+	- An abstract class that helps create a view based on a chart (SWTChart)
+	- `createChartViewer`: has to return an `TmfXYChartViewer` (which `AbstractSegmentStoreScatterGraphViewer` extends).
+
+- `AbstractSegmentStoreScatterGraphViewer`
+	- An abstract class that helps create a scatter viewer.
+	- `getSegmentStoreProvider`: returns which analysis module will provide the segment store
+
+---
+title: Exercise: Create a Scatter View
+
+- Reset to **TRACECOMPASS6_START**
+- Create class `ProcessingLatencyScatterGraphViewer`, select super class (extends)  `AbstractSegmentStoreScatterGraphViewer`
+	- Implement method `getSegmentStoreProvider`
+- In plugin.xml, create the missing class `ProcessingLatencyScatterView` (tip: click the hyperlink to bring up the New Class wizard). Select super class (extends)  `TmfChartView`.
+	- Implement `createChartViewer` 
+- <b>Go!</b>
+
+---
 title: Density view
 
 - The Density view displays the segment durations on the frenquency domain.
@@ -489,3 +639,32 @@ title: Density view
 <center><img src="images/timingviews_density.png" style="width:600px"/></center>
 <br/>
 - In other words, fast system calls are on the left and slow system calls are on the right
+
+---
+title: Density view
+subtitle: API
+
+- `AbstractSegmentStoreDensityView`
+	- An abstract class that helps create a density view
+	- `createSegmentStoreTableViewer`: has to return an `AbstractSegmentStoreTableViewer` (can reuse the one from Latency table view!). Left part of the view.
+	- `createSegmentStoreDensityViewer`: has to return an `AbstractSegmentStoreDensityViewer`. Right part of the view.
+
+- `AbstractSegmentStoreDensityViewer`
+	- An abstract class that helps create a density viewer.
+	- `getSegmentStoreProvider`: returns which analysis module will provide the segment
+
+---
+title: Exercise: Create a Density View
+
+- Reset to **TRACECOMPASS7_START**
+- Create class `ProcessingLatencyDensityViewer`, select super class (extends)  `AbstractSegmentStoreDensityViewer`
+	- Implement method `getSegmentStoreProvider`
+- In plugin.xml, create the missing class `ProcessingLatencyDensityView` (tip: click the hyperlink to bring up the New Class wizard). Select super class (extends)  `AbstractSegmentStoreDensityView`.
+	- Implement `createSegmentStoreTableViewer` : Reuse the one from Latency Table view!
+	- Implement `createSegmentStoreDensityViewer`
+- <b>Go!</b>
+
+---
+title: Module 8 Review
+
+TODO: Review notions and exercices
