@@ -198,7 +198,13 @@ subtitle: Custom Text and XML Parsers
 title: Trace Compass Overview
 subtitle: Trace corellation (Experiments)
 
-- TODO: Explain experiments and what is useful about them
+- Trace Compass can open **multiple traces** together to view it **as one**
+	- This is called an **Experiment**
+- Useful for
+	- Traces coming from multiple nodes
+	- Different languages
+	- Different layers (network, etc)
+- Traces can be manually synchronized by time or use an automatic algorithm (extensible)
 
 ---
 title: Trace Compass Overview
@@ -214,8 +220,13 @@ subtitle: Integrations
 ---
 title: Common Trace Format (CTF)
 
-- TODO: Explain a bit of CTF here?
-
+- CTF is one of the trace format understood by Trace Compass
+- A **metadata** file describes the trace structure, event fields, environment, etc.
+	- CTF does not describe that structure, only the language to express it.
+- **Channel** files contain binary data, separate from the **metadata**. There is where the events are stored.
+- **LTTng** is a well known tracer that gernerates CTF traces for **Kernel** and **User Space (UST)** domains.
+- Trace Compass **reads** CTF traces directly using a Java-based parser.
+- Trace Compass **does not** produce CTF traces, tracers like LTTng do.
 ---
 title: Trace Compass Overview
 subtitle: References
@@ -291,7 +302,7 @@ automatic detection, etc)
 title: Event Provider
 
 - Event providers have the capability of handling event requests.
-- Ofen implemented in pair with ITmfTrace in each trace type
+- Often implemented in pair with `ITmfTrace` in each trace type
 - Of note, `getNext()` provides the next event in the trace
 
 <center><image src="images/tracecompass_tmfeventprodider_class.png"/></center>
@@ -302,7 +313,7 @@ title: Event Requests
 `TmfEventRequest`
 
 - Used to obtain series of events from an event provider (usually `ITmfTrace`)
-- **Asynchonous**: Send the request and receive events one by one when they are done being parsed
+- **Asynchronous**: Send the request and receive events one by one when they are done being parsed
 
 ~~~java
 eventProvider.sendRequest(new TmfEventRequest(TmfEvent.class,
@@ -348,7 +359,13 @@ title: Exercise: Read events from the trace
 ---
 title: Module 2 Review
 
-TODO: Review notions and exercices
+- **Signals** can be used to react to different things.
+- **ITmfTrace** is a central object that validates if files are of this trace type, provides trace attributes, seeks to locations and retrieves events.
+- **Event Requests** are a mean to obtain a series of event asynchronously.
+- **Events** have a name, a time stamp and content (fields). Fields can have sub-fields.
+- In the exercices:
+	- We have used **signals**
+	- We have retrieved **events** using **event requests** sent to the **trace** (`ITmfTrace`)
 
 ---
 title: Module 7
@@ -436,12 +453,6 @@ subtitle: Using states
 	- Defining timing analyses on-the-fly
 
 ---
-title: Timing Analysis
-subtitle: Limitations
-
-- TODO: talk about memory limitations
-
----
 title: Timing Analysis API
 subtitle: ISegment
 
@@ -461,6 +472,16 @@ subtitle: ISegmentStore
 - Adds the notion of intersection: `getIntersectingElements`(start, end)
 
 <center><img src="images/timing_segmentstore.png"/></center>
+
+---
+title: Timing Analysis API
+subtitle: Limitations
+
+- **WARNING**: Current segment store implementations are loaded **fully into memory**.
+- If your trace will generate many segments, Trace Compass might **run out of memory**.
+
+- This will likely be fixed in the near future versions of Trace Compass.
+
 
 ---
 title: Timing Analysis API
@@ -485,7 +506,12 @@ title: Exercise: Create segment store module
 ---
 title: Module 7 Review
 
-TODO: Review notions and exercices
+- **Segments** (`ISegment`) are defined by a start and an end time. They can represent things like execution times, latencies, etc.
+- Multiple segments can represent **latency chain**. For example multiple sub-steps of a process.
+- State systems can help generalize the creation of segments
+- **ISegmentStore** stores segments like a Java Collection but with interection methods
+- **AbstractSegmentStoreAnalysisModule** helps building segments, storing them and providing them to clients (views).
+- In the exercise: We have created a **segment-based analysis module** that creates segments and stores them in a segment store which will be available for our views.
 
 ---
 title: Module 8
@@ -516,15 +542,15 @@ subtitle: Overview
 TODO: PICTURE HERE?
 
 ---
-title: Latencies Table view
+title: Latency Table view
 
-- The Latencies view displays segments in a simple table format.
+- The Latency view displays segments in a simple table format.
 
 <center><img src="images/timingviews_latencies.png"/></center>
 	(Example based on System Calls analysis)
 
 ---
-title: Latencies Table view
+title: Latency Table view
 subtitle: API
 
 - `AbstractSegmentStoreTableView`
@@ -532,7 +558,7 @@ subtitle: API
 	- `createSegmentStoreViewer`: has to return an AbstractSegmentStoreTableViewer
 
 ---
-title: Latencies Table view
+title: Latency Table view
 subtitle: API
 
 - `AbstractSegmentStoreTableViewer`
@@ -547,7 +573,7 @@ protected ISegmentStoreProvider getSegmentStoreProvider(ITmfTrace trace) {
 ~~~
 
 ---
-title: Exercise: Create a Latencies Table
+title: Exercise: Create a Latency Table
 
 - Reset to **TRACECOMPASS4_START**
 - Create class `ProcessingLatencyTableViewer`, select super class (extends)  `AbstractSegmentStoreTableViewer`
@@ -673,4 +699,10 @@ title: Exercise: Create a Density View
 ---
 title: Module 8 Review
 
-TODO: Review notions and exercices
+- Many views can be built by reading a **segment store**.
+- In the exercises, we have created:
+	- **Latency Table** view
+	- **Statistics** view
+	- **Scatter chart** view
+	- **Density** view
+- Those views can be generated by follow a similar patter of creating a **viewer inside a view**, and specifying the segment store to use.
